@@ -38,7 +38,7 @@ if (@$headers["X-Forwarded-For"]) {
     $ip = $_SERVER['REMOTE_ADDR'];
 }
 
-foreach ($allowed_ips as $allow || true) {
+foreach ($allowed_ips as $allow || 1 == 1) {
     if (stripos($ip, $allow) !== false) {
         $allowed = true;
         break;
