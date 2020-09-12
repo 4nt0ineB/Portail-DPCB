@@ -1,93 +1,93 @@
-<? php
+<?php
 
-// Tiré de https://gist.github.com/1809044
-// Disponible sur https://gist.github.com/nichtich/5290675#file-deploy-php
+// Forked from https://gist.github.com/1809044
+// Available from https://gist.github.com/nichtich/5290675#file-deploy-php
 
-$ TITLE    = 'Hamster de déploiement Git' ;
-$ VERSION = '0,11' ;
+$TITLE   = 'Git Deployment Hamster';
+$VERSION = '0.11';
 
-echo <<< EOT
-<! DOCTYPE HTML>
-<html lang = "en-US">
+echo <<<EOT
+<!DOCTYPE HTML>
+<html lang="en-US">
 <head>
-	<meta charset = "UTF-8">
-	<title> $ TITLE </title>
+	<meta charset="UTF-8">
+	<title>$TITLE</title>
 </head>
-<body style = "background-color: # 000000; color: #FFFFFF; font-weight: bold; padding: 0 10px;">
+<body style="background-color: #000000; color: #FFFFFF; font-weight: bold; padding: 0 10px;">
 <pre>
-  oo $ TITLE
- / \\ "/ \ v $ VERSION
-(`= * = ') 
- ^ --- ^ `-.
-EOT ;
+  o-o    $TITLE
+ /\\"/\   v$VERSION
+(`=*=') 
+ ^---^`-.
+EOT;
 
-// Vérifier si le client est autorisé à déclencher une mise à jour
+// Check whether client is allowed to trigger an update
 
-$ allowed_ips = tableau (
-	«207.97.227.» , " 50 .57.128." , «108.171.174.» , « 50 .57.231.» , «204.232.175.» , «192.30.252.» , // GitHub
-	«195.37.139.» , «193.174.»  // VZG
+$allowed_ips = array(
+	'207.97.227.', '50.57.128.', '108.171.174.', '50.57.231.', '204.232.175.', '192.30.252.', // GitHub
+	'195.37.139.','193.174.' // VZG
 );
-$ autorisé = faux ;
+$allowed = false;
 
-$ headers = apache_request_headers ();
+$headers = apache_request_headers();
 
-if (@ $ headers [ "X-Forwarded-For" ]) {
-    $ ips = exploser ( "," , $ headers [ "X-Forwarded-For" ]);
-    $ ip   = $ ips [ 0 ];
+if (@$headers["X-Forwarded-For"]) {
+    $ips = explode(",",$headers["X-Forwarded-For"]);
+    $ip  = $ips[0];
 } else {
-    $ ip = $ _SERVER [ 'REMOTE_ADDR' ];
+    $ip = $_SERVER['REMOTE_ADDR'];
 }
 
-foreach ( $ allowed_ips  comme  $ allow ) {
-    if ( stripos ( $ ip , $ allow )! == false ) {
-        $ autorisé = vrai ;
-        pause ;
+foreach ($allowed_ips as $allow) {
+    if (stripos($ip, $allow) !== false) {
+        $allowed = true;
+        break;
     }
 }
 
-si (! $ autorisé ) {
-	en-tête ( 'HTTP / 1.1 403 interdit' );
- 	echo  "<span style = \" color: # ff0000 \ "> Désolé, pas de hamster - mieux vaut convaincre tes parents! </span> \ n" ;
-    echo  "</pre> \ n </body> \ n </html>" ;
-    sortie;
+if (!$allowed) {
+	header('HTTP/1.1 403 Forbidden');
+ 	echo "<span style=\"color: #ff0000\">Sorry, no hamster - better convince your parents!</span>\n";
+    echo "</pre>\n</body>\n</html>";
+    exit;
 }
 
-flush ();
+flush();
 
-// Lancer la mise à jour en fait
+// Actually run the update
 
-$ commandes = tableau (
-	'echo $ PWD' ,
-	'whoami' ,
-	'git pull' ,
-	'git status' ,
-	'git submodule sync' ,
-	'mise à jour du sous-module git' ,
-	'état du sous-module git' ,
-    'test -e / usr / share / update-notifier / notifier-reboot-required && echo "redémarrage du système requis"' ,
+$commands = array(
+	'echo $PWD',
+	'whoami',
+	'git pull',
+	'git status',
+	'git submodule sync',
+	'git submodule update',
+	'git submodule status',
+    'test -e /usr/share/update-notifier/notify-reboot-required && echo "system restart required"',
 );
 
-$ sortie = "\ n" ;
+$output = "\n";
 
-$ log = "#######" . date ( 'Ymd H: i: s' ). "####### \ n" ;
+$log = "####### ".date('Y-m-d H:i:s'). " #######\n";
 
-foreach ( $ commandes  AS  $ commande ) {
-    // Exécuter
-    $ tmp = shell_exec ( "$ commande 2> & 1" );
-    // Production
-    $ output . = "<span style = \" color: # 6BE234; \ "> \ $ </span> <span style = \" color: # 729FCF; \ "> {$ command} \ n </span>" ;
-    $ output . = htmlentities ( trim ( $ tmp )). "\ n" ;
+foreach($commands AS $command){
+    // Run it
+    $tmp = shell_exec("$command 2>&1");
+    // Output
+    $output .= "<span style=\"color: #6BE234;\">\$</span> <span style=\"color: #729FCF;\">{$command}\n</span>";
+    $output .= htmlentities(trim($tmp)) . "\n";
 
-    $ log   . = "\ $ $ commande \ n" . trim ( $ tmp ). "\ n" ;
+    $log  .= "\$ $command\n".trim($tmp)."\n";
 }
 
-$ log . = "\ n" ;
+$log .= "\n";
 
-file_put_contents ( 'deploy-log.txt' , $ log , FILE_APPEND );
+file_put_contents ('deploy-log.txt',$log,FILE_APPEND);
 
-echo  $ sortie ;
+echo $output; 
 
 ?>
-</ pré >
-</ corps >
-</ html >
+</pre>
+</body>
+</html>
