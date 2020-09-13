@@ -16,4 +16,4 @@ jobs:
         username: debian
         key: ${{secrets.PORTAIL_SECRET}}
         port: 22
-        script: cd /home/Portail-DPCB/" && git pull origin master
+        script: cd /var/www/portail-dpcb/" && git pull
