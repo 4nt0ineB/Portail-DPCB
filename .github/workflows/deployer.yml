@@ -1,21 +1,20 @@
 name: Deployment Workflow
 on:
-	push:
-		branches: [ master ]
+  push:
+    branches:
+    - master
 
 jobs:
-	job_one:
-		name: Deploy
-		runs-on: ubuntu-latest
-		steps:
-		- name: testing portail-dpcb.tech server ssh connection
-		  uses: appleboy/ssh-action@master
-		  with:
-		  	host: portail-dpcb.tech
-		  	username: debian
-		  	key: ${{secrets.PORTAIL_SECRET}}
-		  	port: 22
-		  	script: |
-		  		cd /home/Portail-DPCB/
-		  		git pull origin master
-		  		git status
+  job_one:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: testing portail-dpcb.tech server ssh connection
+      uses: appleboy/ssh-action@master
+      with:
+	host: portail-dpcb.tech
+	username: debian
+	key: ${{secrets.PORTAIL_SECRET}}
+	port: 22
+	script: |
+	cd /home/Portail-DPCB/
