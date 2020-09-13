@@ -12,8 +12,8 @@ jobs:
     - name: testing portail-dpcb.tech server ssh connection
       uses: appleboy/ssh-action@master
       with:
-        host: portail-dpcb.tech
+        host: ***REMOVED***
         username: debian
         key: ${{secrets.PORTAIL_SECRET}}
         port: 22
-        script: cd /home/Portail-DPCB/" && git pull origin master
+        script: cd /var/www/portail-dpcb/" && git pull
