@@ -12,7 +12,7 @@ jobs:
     - name: testing portail-dpcb.tech server ssh connection
       uses: appleboy/ssh-action@master
       with:
-        host: portail-dpcb.tech
+        host: 51.210.15.73
         username: debian
         key: ${{secrets.PORTAIL_SECRET}}
         port: 22
