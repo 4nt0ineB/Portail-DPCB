@@ -27,16 +27,16 @@
     </nav>
     <main class="page cv-page">
         <section class="portfolio-block cv">
-            <h2 class="text-center">Impayés du compte bancaire n°XXXXXXXXX</h2>
+            <h2 class="text-center">Remises</h2>
             <div class="container-fluid">
                 <div class="group" style="max-width: 90%;">
                     <div class="row">
                         <div class="col">
                             <div class="skills portfolio-info-card">
-                                <h2>Impayés du compte</h2>
+                                <h2>Tableau des remises</h2>
                                 <div class="row">
                                     <div class="skills portfolio-info-card" style="width: 100%;margin-bottom: 15px;padding: 25px;">
-                                        <p class="text-uppercase text-left text-dark" style="margin: 0;text-align: left;font-weight: bold;width: 100%;float: left;"><span style="text-decoration: underline;">RECHERCHE D'IMPAYéS</span></p>
+                                        <p class="text-uppercase text-left text-dark" style="margin: 0;text-align: left;font-weight: bold;width: 100%;float: left;"><span style="text-decoration: underline;">RECHERCHE DE REMISES</span></p>
                                         <div class="table-responsive">
                                             <table class="table">
                                                 <thead>
@@ -46,7 +46,7 @@
                                                     <tr>
                                                         <td><label>N° SIREN :&nbsp;</label><input type="text"></td>
                                                         <td><label style="font-style: normal;">Raison sociale :&nbsp;<input type="text"></label></td>
-                                                        <td><label style="font-style: normal;">N° d'impayé :&nbsp;</label><input type="number"></td>
+                                                        <td></td>
                                                     </tr>
                                                     <tr>
                                                         <td><label>Date de début :&nbsp;</label><input type="date"></td>
@@ -61,10 +61,17 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="btn-toolbar" style="margin-bottom: 10px;float: right;border-style: none;">
-                                            <div class="btn-group" role="group" style="border-width: 0px;border-style: none;"><button class="btn btn-primary" type="button" style="color: rgb(0,0,0);background: rgb(255,255,255);border: 1px solid rgb(0,0,0);border-bottom-left-radius: 10px;border-top-left-radius: 10px;box-shadow: 0px 0px 2px;">XLS</button>
-                                                <button
-                                                    class="btn btn-primary" type="button" style="background: rgb(255,255,255);color: rgb(0,0,0);border-style: solid;border-color: rgb(0,0,0);box-shadow: 0px 0px 3px;">CSV</button><button class="btn btn-primary" type="button" style="background: rgb(255,255,255);color: rgb(0,0,0);border-color: rgb(0,0,0);border-top-right-radius: 10px;border-bottom-right-radius: 10px;box-shadow: 0px 0px 3px;">PDF</button></div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-check text-right"><input class="form-check-input" type="radio" id="formCheck-1" name="choicetab" value="tabdetaille"><label class="form-check-label" for="formCheck-1">Tableau détaillé</label></div>
+                                                <div class="form-check text-right"><input class="form-check-input" type="radio" id="formCheck-2" checked="" name="choicetab" value="tabresume"><label class="form-check-label text-right" for="formCheck-2">Tableau résumé</label></div>
+                                                <div class="btn-toolbar"
+                                                    style="margin-bottom: 10px;float: right;border-style: none;">
+                                                    <div class="btn-group" role="group" style="border-width: 0px;border-style: none;"><button class="btn btn-primary" type="button" style="color: rgb(0,0,0);background: rgb(255,255,255);border: 1px solid rgb(0,0,0);border-bottom-left-radius: 10px;border-top-left-radius: 10px;box-shadow: 0px 0px 2px;">XLS</button>
+                                                        <button
+                                                            class="btn btn-primary" type="button" style="background: rgb(255,255,255);color: rgb(0,0,0);border-style: solid;border-color: rgb(0,0,0);box-shadow: 0px 0px 3px;">CSV</button><button class="btn btn-primary" type="button" style="background: rgb(255,255,255);color: rgb(0,0,0);border-color: rgb(0,0,0);border-top-right-radius: 10px;border-bottom-right-radius: 10px;box-shadow: 0px 0px 3px;">PDF</button></div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -75,21 +82,19 @@
                                                 <thead>
                                                     <tr>
                                                         <th>N° SIREN</th>
-                                                        <th>Date vente</th>
-                                                        <th>Date remise</th>
-                                                        <th>N° carte</th>
-                                                        <th>Réseau</th>
-                                                        <th>N° dossier impayé</th>
+                                                        <th>Raison sociale</th>
+                                                        <th>N° remise</th>
+                                                        <th>Date traitement</th>
+                                                        <th>Nb transactions</th>
                                                         <th>Devise</th>
-                                                        <th>Montant</th>
-                                                        <th>Libellé</th>
+                                                        <th>Montant total</th>
+                                                        <th>Sens</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
                                                         <td>Cell 1</td>
                                                         <td>Cell 2</td>
-                                                        <td>Text</td>
                                                         <td>Text</td>
                                                         <td>Text</td>
                                                         <td>Text</td>
