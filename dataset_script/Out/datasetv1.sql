@@ -121,7 +121,6 @@ INSERT INTO `DEVISE` (`nom_devise`,`libelle`) VALUES
 ('Naira', 'NGN'),
 ('Rial Omani', 'OMR'),
 ('Pakistan Rupee', 'PKR'),
-('No universal currency', ''),
 ('Balboa', 'PAB'),
 ('Kina', 'PGK'),
 ('Guarani', 'PYG'),
