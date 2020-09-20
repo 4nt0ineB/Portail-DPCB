@@ -180,7 +180,6 @@ Norwegian Krone;NOK
 Rial Omani;OMR
 Pakistan Rupee;PKR
 US Dollar;USD
-No universal currency;
 Balboa;PAB
 US Dollar;USD
 Kina;PGK
