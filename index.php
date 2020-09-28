@@ -11,30 +11,38 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css">
+    <link rel="stylesheet" href="style/style.css">
 </head>
 
 <body>
-    <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient" style="border-bottom-style: solid;border-bottom-color: rgba(0,0,0,0.16);text-shadow: 0px 0px 3px rgb(0,0,0);background: linear-gradient(87deg, rgb(92, 214, 230), rgb(151, 65, 236));">
-        <div class="container"><a class="navbar-brand logo" data-bs-hover-animate="bounce" href="#" style="font-family: 'Alegreya Sans SC', sans-serif;">UGE MANAGER</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navbarNav"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-            <div
-                class="collapse navbar-collapse" id="navbarNav">
+    <!-- Refresh auto la page chaque 1sec (ça évite de faire F5 à chaque fois avec xampp)-->
+    <script>
+        setInterval(function() {
+            location.reload(true);
+        }, 1000);
+    </script>
+
+    <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient">
+        <div class="container"><a class="navbar-brand logo" data-bs-hover-animate="bounce" href="#">PORTAIL-DPCB</a>
+            <button data-toggle="collapse" class="navbar-toggler" data-target="#navbarNav"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link active" data-bs-hover-animate="pulse" href="index.html">Se connecter</a></li>
-                    <li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="hire-me.html">En savoir +</a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="#">En savoir
+                            +</a></li>
                 </ul>
-        </div>
+            </div>
         </div>
     </nav>
     <main class="page contact-page">
         <section class="portfolio-block contact">
             <div class="container">
                 <div class="heading">
-                    <h2>SE CONNECTER AU PANEL DE GESTION</h2>
+                    <h2>Connexion</h2>
                 </div>
                 <form>
                     <div class="form-group"><label for="name">Nom d'utilisateur</label><input class="form-control item" type="text" id="name"></div>
                     <div class="form-group"><label for="email">Mot de passe</label><input class="form-control item" type="password" id="email"></div>
-                    <div class="form-group"><button class="btn btn-primary btn-block btn-lg" type="submit" style="text-shadow: 0px 0px 3px rgb(0,0,0);">SE CONNECTER</button></div>
+                    <div class="form-group"><button id="connection-button" class="btn btn-primary btn-block btn-lg" type="submit">SE CONNECTER</button></div>
                 </form>
             </div>
         </section>

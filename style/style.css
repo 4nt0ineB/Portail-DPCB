@@ -1,0 +1,15 @@
+/* Nav */
+.navbar {
+    border-bottom-style: solid;
+    border-bottom-color: rgba(0, 0, 0, 0.16);
+    text-shadow: 0px 0px 3px rgb(0, 0, 0);
+    background: linear-gradient(87deg, rgb(92, 214, 230), rgb(151, 65, 236));
+}
+
+.navbar-brand {
+    font-family: 'Alegreya Sans SC', sans-serif;
+}
+
+#connection-button {
+    text-shadow: 0px 0px 3px rgb(0, 0, 0);
+}
