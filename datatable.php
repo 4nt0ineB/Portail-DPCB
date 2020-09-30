@@ -90,7 +90,7 @@
                             <td>' . $r['reseau'] . '</td>
                             <td>' . $r['num_dossier'] . '</td>
                             <td>' . $r['libelle_devise'] . '</td>
-                            <td>' . $r['montant'] . '</td>
+                            <td>' . $r['montant_impaye'] . '</td>
                             <td>' . $r['libelle'] . '</td>
                             </tr>';
                         }
