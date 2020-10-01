@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html>
+<?php
+require_once("includes/mysql.php");
+session_start();
+if(!isset($_SESSION["logged"]) || $_SESSION["permission"] != "1") header("location: index.php"); //Vérifie si une session client est en cours sinon renvoi à l'index
+?>
 
 <head>
     <meta charset="utf-8">
@@ -22,7 +27,7 @@
                     class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="index.html">Se
+                    <li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="index.php">Se
                             connecter</a></li>
                     <li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="hire-me.html">En savoir
                             +</a></li>
@@ -52,15 +57,16 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td><label>N° SIREN :&nbsp;</label><input type="text"></td>
+                                                      <form method="post">
+                                                        <td><label>N° SIREN :&nbsp;</label><input type="text" name="siren"></td>
                                                         <td><label style="font-style: normal;">Raison sociale
-                                                                :&nbsp;<input type="text"></label></td>
+                                                                :&nbsp;<input type="text" name="sociale"></label></td>
                                                         <td><label style="font-style: normal;">N° d'impayé
-                                                                :&nbsp;</label><input type="number"></td>
+                                                                :&nbsp;</label><input type="number" name="impaye"></td>
                                                     </tr>
                                                     <tr>
-                                                        <td><label>Date de début :&nbsp;</label><input type="date"></td>
-                                                        <td><label>Date de fin :&nbsp;</label><input type="date"></td>
+                                                        <td><label>Date de début :&nbsp;</label><input type="date" name="debut"></td>
+                                                        <td><label>Date de fin :&nbsp;</label><input type="date" name=fin></td>
                                                         <td style="text-align: center;"><button class="btn btn-primary"
                                                                 type="button"
                                                                 style="text-align: center;background: rgba(255,255,255,0);color: rgb(0,0,0);box-shadow: 0px 0px 3px;border-style: none;">Rechercher</button>
@@ -72,6 +78,12 @@
                                         </div>
                                     </div>
                                 </div>
+                                <?php
+                                $id = $_SESSION["id_user"];
+                                $resultat = $db->query("SELECT * FROM `IMPAYE` i JOIN DEVISE ON i.id_devise = DEVISE.id_devise, (SELECT * FROM `REMISE` WHERE id_client = (SELECT id_client FROM CLIENT WHERE id_user = $id)) r  WHERE r.id_remise = i.id_remise");
+
+                                ?>
+
                                 <div class="row">
                                     <div class="col">
                                         <div class="btn-toolbar"
@@ -106,17 +118,21 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>Cell 1</td>
-                                                        <td>Cell 2</td>
-                                                        <td>Text</td>
-                                                        <td>Text</td>
-                                                        <td>Text</td>
-                                                        <td>Text</td>
-                                                        <td>Text</td>
-                                                        <td>Text</td>
-                                                        <td>Text</td>
-                                                    </tr>
+                                                  <?php
+                                                  while ($r = $resultat->fetch()) {
+                                                      echo '<tr>
+                                                      <td>' . $r['siren'] . '</td>
+                                                      <td>' . $r['date_vente'] . '</td>
+                                                      <td>' . $r['date_remise'] . '</td>
+                                                      <td>' . $r['num_carte'] . '</td>
+                                                      <td>' . $r['reseau'] . '</td>
+                                                      <td>' . $r['num_dossier'] . '</td>
+                                                      <td>' . $r['libelle_devise'] . '</td>
+                                                      <td>' . number_format($r['montant_impaye'], 2, '.', ' ') . '</td>
+                                                      <td>' . $r['libelle'] . '</td>
+                                                      </tr>';
+                                                  }
+                                                  ?>
                                                     <tr></tr>
                                                 </tbody>
                                             </table>
