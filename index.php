@@ -49,10 +49,11 @@
                     <div class="form-group"><button id="connection-button" class="btn btn-primary btn-block btn-lg" type="submit" name="send">SE CONNECTER</button></div>
                     <div id="box">
                         <?php
-                        if (isset($_SESSION["logged"])) // si une session est déjà lancée
-                        {
-                            header("location: index.php"); // redirection vers l'index
-                        }
+                        if (isset($_SESSION["logged"]) && $_SESSION["permission"] == 1) header("location: tresorerie.php"); //si une session client est déjà lancée redirige vers la page de tresorerie
+
+                        if (isset($_SESSION["logged"]) && $_SESSION["permission"] == 2) header("location: product_owner.php"); //si une session product owner est déjà lancée redirige vers la page du product_owner
+
+                        if (isset($_SESSION["logged"]) && $_SESSION["permission"] == 3) header("location: admin.php"); //si une session admin est déjà lancée redirige vers la page admin
 
                         if (isset($_REQUEST['send'])) //si le formulaire est envoyé avec un clic bouton -> "submitBtnLogin"
                         {
@@ -113,7 +114,7 @@
                             {
                         ?>
                                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                    <strong>Oups !</strong> <?php echo $error // on affiche la variable ; 
+                                    <strong>Oups !</strong> <?php echo $error // on affiche la variable ;
                                                             ?>
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
@@ -126,7 +127,7 @@
                         {
                             ?>
                             <div class="alert alert-success" role="alert">
-                                <?php echo $loginMsg; // on affiche ce message 
+                                <?php echo $loginMsg; // on affiche ce message
                                 ?>
                             </div>
                         <?php
