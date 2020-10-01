@@ -52,7 +52,7 @@
                                                 class="btn btn-primary dropdown-toggle dropdown-toggle-split"
                                                 data-toggle="dropdown" aria-expanded="true" type="button"
                                                 style="background: rgb(255,255,255);color: rgb(0,0,0);border-style: solid;border-color: rgb(0,0,0);"></button>
-                                            <div class="dropdown-menu show"><a class="dropdown-item" href="#">Voir les
+                                            <div class="dropdown-menu"><a class="dropdown-item" href="#">Voir les
                                                     impayés</a><a class="dropdown-item" href="#">Voir le résumé de
                                                     toutes les transactions</a><a class="dropdown-item"
                                                     href="#">Autre</a></div>
