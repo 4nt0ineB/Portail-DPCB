@@ -147,12 +147,12 @@ require_once("includes/mysql.php");
 
                                 	if (isset($siren) and isset($raison) and isset($date)){
                                 		$resultat = $db->query("SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` 
-                                			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren WHERE CLIENT.raison = '$raison' AND CLIENT.siren = '$siren' AND date_vente = '$date' GROUP BY CLIENT.siren");
+                                			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren WHERE CLIENT.raison LIKE '%$raison%' AND CLIENT.siren = '$siren' AND date_vente = '$date' GROUP BY CLIENT.siren");
                                 	}
 
                                 	if (isset($siren) and isset($raison)){
                                 		$resultat = $db->query("SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` 
-                                			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren WHERE CLIENT.raison = '$raison' AND CLIENT.siren = '$siren' GROUP BY CLIENT.siren");
+                                			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren WHERE CLIENT.raison LIKE '%$raison%' AND CLIENT.siren = '$siren' GROUP BY CLIENT.siren");
                                 	}
 
                                 	if (isset($siren) and isset($date)){
@@ -162,7 +162,7 @@ require_once("includes/mysql.php");
 
                                 	if (isset($raison) and isset($date)){
                                 		$resultat = $db->query("SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` 
-                                			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren WHERE CLIENT.raison = '$raison' AND date_vente = '$date' GROUP BY CLIENT.siren");
+                                			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren WHERE CLIENT.raison LIKE '%$raison%' AND date_vente = '$date' GROUP BY CLIENT.siren");
                                 	}
 
                                 	else if (isset($siren)){
@@ -173,7 +173,7 @@ require_once("includes/mysql.php");
 
                                 	else if (isset($raison)){
                                 		$resultat = $db->query("SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` 
-                                			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren WHERE CLIENT.raison = '$raison' GROUP BY CLIENT.siren");
+                                			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren WHERE CLIENT.raison LIKE '%$raison%' GROUP BY CLIENT.siren");
                                 	}
 
                                 	else if (isset($date)){
