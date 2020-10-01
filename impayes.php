@@ -62,13 +62,14 @@ if(!isset($_SESSION["logged"]) || $_SESSION["permission"] != "1") header("locati
                                                         <td><label style="font-style: normal;">Raison sociale
                                                                 :&nbsp;<input type="text" name="sociale"></label></td>
                                                         <td><label style="font-style: normal;">N° d'impayé
-                                                                :&nbsp;</label><input type="number" name="impaye"></td>
+                                                                :&nbsp;</label><input type="number" name="num_impaye"></td>
                                                     </tr>
                                                     <tr>
+                                                      <form method="post">
                                                         <td><label>Date de début :&nbsp;</label><input type="date" name="debut"></td>
                                                         <td><label>Date de fin :&nbsp;</label><input type="date" name=fin></td>
                                                         <td style="text-align: center;"><button class="btn btn-primary"
-                                                                type="button"
+                                                                type="submit"
                                                                 style="text-align: center;background: rgba(255,255,255,0);color: rgb(0,0,0);box-shadow: 0px 0px 3px;border-style: none;">Rechercher</button>
                                                         </td>
                                                     </tr>
@@ -80,7 +81,41 @@ if(!isset($_SESSION["logged"]) || $_SESSION["permission"] != "1") header("locati
                                 </div>
                                 <?php
                                 $id = $_SESSION["logged"];
-                                $resultat = $db->query("SELECT * FROM `IMPAYE` i JOIN DEVISE ON i.id_devise = DEVISE.id_devise, (SELECT * FROM `REMISE` WHERE id_client = (SELECT id_client FROM CLIENT WHERE id_user = $id)) r  WHERE r.id_remise = i.id_remise");
+
+                                if (isset($_POST['siren'])){
+                                  if ($_POST['siren'] != ""){
+                                    $siren = $_POST['siren'];
+                                  }
+                                }
+
+                                if (isset($_POST['sociale'])){
+                                  if ($_POST['sociale'] != ""){
+                                    $sociale = $_POST['sociale'];
+                                  }
+                                }
+
+                                if (isset($_POST['num_impaye'])){
+                                  if ($_POST['num_impaye'] != ""){
+                                    $num_impaye = $_POST['num_impaye'];
+                                  }
+                                }
+
+                                if (isset($_POST['debut'])){
+                                  if ($_POST['debut'] != ""){
+                                    $debut = $_POST['debut'];
+                                  }
+                                }
+
+                                if (isset($_POST['fin'])){
+                                  if ($_POST['fin'] != ""){
+                                    $fin = $_POST['fin'];
+                                  }
+                                }
+                                $requete = "SELECT * FROM `IMPAYE` i JOIN DEVISE ON i.id_devise = DEVISE.id_devise, (SELECT * FROM `REMISE` WHERE id_client = (SELECT id_client FROM CLIENT WHERE id_user = $id)) r  WHERE r.id_remise = i.id_remise";
+                                if(isset($siren)) $requete .= " AND i.siren LIKE '%$siren%'";
+                                if(isset($sociale)) $requete .= " AND raison LIKE '%$sociale%'";
+                                if(isset($num_impaye)) $requete .= " AND num_dossier LIKE '%$num_impaye%'";
+                                $resultat = $db->query($requete);
 
                                 ?>
 
