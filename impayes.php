@@ -79,7 +79,7 @@ if(!isset($_SESSION["logged"]) || $_SESSION["permission"] != "1") header("locati
                                     </div>
                                 </div>
                                 <?php
-                                $id = $_SESSION["id_user"];
+                                $id = $_SESSION["logged"];
                                 $resultat = $db->query("SELECT * FROM `IMPAYE` i JOIN DEVISE ON i.id_devise = DEVISE.id_devise, (SELECT * FROM `REMISE` WHERE id_client = (SELECT id_client FROM CLIENT WHERE id_user = $id)) r  WHERE r.id_remise = i.id_remise");
 
                                 ?>
