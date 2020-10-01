@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
-
+<?php 
+require_once("includes/mysql.php");
+?>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -12,9 +14,29 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css">
     <link rel="stylesheet" href="style/style.css">
+     <!-- CDN Datatable -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+
+    <!-- plugins Datatable -->
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.6.4/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.bootstrap4.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.print.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.colVis.min.js"></script>
+
+    <!-- css pour l'option "column visibility" des plugins -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.bootstrap4.min.css">
+
 </head>
 
 <body>
+	
     <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient">
         <div class="container"><a class="navbar-brand logo" data-bs-hover-animate="bounce" href="#"
                 style="font-family: 'Alegreya Sans SC', sans-serif;">UGE MANAGER</a><button data-toggle="collapse"
@@ -52,19 +74,23 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td><label>N° SIREN :&nbsp;</label><input type="text"></td>
+                                                    	<form action="/product_owner.php" method="post"> 
+                                                        <td><label>N° SIREN :&nbsp;</label><input type="text" name="siren"></td>
                                                         <td><label style="font-style: normal;">Raison sociale
-                                                                :&nbsp;<input type="text"></label></td>
-                                                        <td><label>Date :&nbsp;</label><input type="date"></td>
+                                                                :&nbsp;<input type="text" name="raison"></label></td>
+                                                        <td><label>Date :&nbsp;</label><input type="date" name="date"></td>
+                                                   		
                                                     </tr>
                                                     <tr></tr>
                                                     <tr></tr>
                                                 </tbody>
                                             </table>
-                                        </div><button class="btn btn-primary" type="button"
+                                        </div><button class="btn btn-primary" type="submit"
                                             style="text-align: center;background: rgba(255,255,255,0);color: rgb(0,0,0);box-shadow: 0px 0px 3px;border-style: none;">Rechercher</button>
+                                        </form>
                                     </div>
                                 </div>
+                            
                                 <div class="row">
                                     <div class="col">
                                         <div class="btn-toolbar"
@@ -74,17 +100,88 @@
                                                     class="btn btn-primary" type="button"
                                                     style="color: rgb(0,0,0);background: rgb(255,255,255);border: 1px solid rgb(0,0,0);border-bottom-left-radius: 10px;border-top-left-radius: 10px;box-shadow: 0px 0px 2px;">XLS</button>
                                                 <button class="btn btn-primary" type="button"
-                                                    style="background: rgb(255,255,255);color: rgb(0,0,0);border-style: solid;border-color: rgb(0,0,0);box-shadow: 0px 0px 3px;">CSV</button><button
+                                                    style="background: rgb(255,255,255);color: rgb(0,0,0);border-style: solid;border-color: rgb(0,0,0);box-shadow: 0px 0px 3px;">CSV</button>
+                                                    <button
                                                     class="btn btn-primary" type="button"
-                                                    style="background: rgb(255,255,255);color: rgb(0,0,0);border-color: rgb(0,0,0);border-top-right-radius: 10px;border-bottom-right-radius: 10px;box-shadow: 0px 0px 3px;">PDF</button>
+                                                    style="background: rgb(255,255,255);color: rgb(0,0,0);border-color: rgb(0,0,0);border-top-right-radius: 10px;border-bottom-right-radius: 10px;box-shadow: 0px 0px 3px;">PDF</button> 
+                                                    <!-- <button
+                                                    class="btn btn-secondary buttons-pdf buttons-html15" tabindex="0" type="button" aria-controls="datatable"
+                                                    style="background: rgb(255,255,255);color: rgb(0,0,0);border-color: rgb(0,0,0);border-top-right-radius: 10px;border-bottom-right-radius: 10px;box-shadow: 0px 0px 3px;">
+                                                    <span>PDF </span> -->
+                                                    </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <?php
+
+                                	if (isset($_POST['siren'])){
+                                		if ($_POST['siren'] != ""){
+                                			$siren = $_POST['siren'];
+                                		}
+                                	}
+
+
+                                	if (isset($_POST['raison'])){
+                                		if ($_POST['raison'] != ""){
+                                			$raison = $_POST['raison'];
+                                			//echo $raison;
+                                		}
+                                	}
+
+                                	if (isset($_POST['date'])){
+										if ($_POST['date'] != ""){
+											$date = $_POST['date'];
+										}
+                                	} 
+
+                                	if (isset($siren) and isset($raison) and isset($date)){
+                                		$sth = $db->query("SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` 
+                                			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren WHERE CLIENT.raison = '$raison' AND CLIENT.siren = '$siren' AND date_vente = '$date' GROUP BY CLIENT.siren");
+                                	}
+
+                                	if (isset($siren) and isset($raison)){
+                                		$sth = $db->query("SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` 
+                                			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren WHERE CLIENT.raison = '$raison' AND CLIENT.siren = '$siren' GROUP BY CLIENT.siren");
+                                	}
+
+                                	if (isset($siren) and isset($date)){
+                                		$sth = $db->query("SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` 
+                                			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren WHERE CLIENT.siren = '$siren' AND date_vente = '$date' GROUP BY CLIENT.siren");
+                                	}
+
+                                	if (isset($raison) and isset($date)){
+                                		$sth = $db->query("SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` 
+                                			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren WHERE CLIENT.raison = '$raison' AND date_vente = '$date' GROUP BY CLIENT.siren");
+                                	}
+
+                                	else if (isset($siren)){
+                                		$sth = $db->query("SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` 
+                                			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren WHERE CLIENT.siren = '$siren' GROUP BY CLIENT.siren");
+                                	}
+
+
+                                	else if (isset($raison)){
+                                		$sth = $db->query("SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` 
+                                			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren WHERE CLIENT.raison = '$raison' GROUP BY CLIENT.siren");
+                                	}
+
+                                	else if (isset($date)){
+                                		$sth = $db->query("SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren WHERE date_vente = '$date' GROUP BY CLIENT.siren");
+                                	}
+                                	
+
+                                	else {
+                                		$sth = $db->query("SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren GROUP BY CLIENT.siren");
+                                	}
+                                	
+
+
+                                ?>
                                 <div class="row">
                                     <div class="col">
                                         <div class="table-responsive">
-                                            <table class="table">
+                                            <table id="datatable" class="table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
                                                         <th>N° SIREN</th>
@@ -95,14 +192,18 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>Cell 1</td>
-                                                        <td>Cell 2</td>
-                                                        <td>Text</td>
-                                                        <td>Text</td>
-                                                        <td>Text</td>
-                                                    </tr>
-                                                    <tr></tr>
+                                                	<?php
+                                                		foreach ($sth->fetchAll() as $value) {
+ 															echo '<tr
+ 															<td>' . "" . '</td>
+ 															<td>' . $value['siren'] . '</td>
+ 															<td>' . $value['raison'] . '</td>
+ 															<td>' . $value['nombreTransaction'] . '</td>
+ 															<td>EUR</td>
+ 															<td>' . $value['montantTransaction'] . '</td>
+ 															</tr>';
+                                                		}
+                                                	?>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -131,6 +232,33 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/pikaday.min.js"></script>
     <script src="assets/js/script.min.js"></script>
+    <?php
+    	/*
+		$sth = $db->prepare("SELECT id_client FROM CLIENT");
+		$sth->execute();
+		$result = $sth->fetchAll();
+		print_r($result);
+		*/
+		//$sth = $db->prepare("SELECT DISTINCT(CLIENT.siren),`raison`,COUNT(id_transaction),SUM(montant_transaction) FROM `CLIENT` JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren GROUP BY CLIENT.siren");
+
+		// Trois conditions differentes le num siren, la raison et pour finir la date (voir comment gerer ça)
+		/*
+		if (isset($_POST['siren']) and isset($_POST['raison']) and isset($_POST['date']) ){
+			$siren = $_POST['siren'];
+			echo $siren;
+
+			
+		}
+		*/
+
+		/*
+		if (isset($raison)){
+			echo $raison;
+		}
+		*/
+	?>
 </body>
+<!-- <script type=" text/javascript" charset="utf8" src="assets/js/tableplugins.js">
+                    </script> -->
 
 </html>
