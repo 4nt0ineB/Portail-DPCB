@@ -74,7 +74,7 @@ require_once("includes/mysql.php");
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                    	<form action="/product_owner.php" method="post"> 
+                                                    	<form method="post"> 
                                                         <td><label>N° SIREN :&nbsp;</label><input type="text" name="siren"></td>
                                                         <td><label style="font-style: normal;">Raison sociale
                                                                 :&nbsp;<input type="text" name="raison"></label></td>
