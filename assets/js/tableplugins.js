@@ -31,7 +31,11 @@ $(document).ready(function () {
                     "1": "1 ligne sélectionnée"
                 }
             }
-        }
+        },
+         rowReorder: {
+            selector: 'td:nth-child(2)'
+        },
+        responsive: true
     });
 
     table.buttons().container()
