@@ -11,7 +11,8 @@ include('includes/fonctions.php')
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>CV - UGE</title>
+    <title>Portail</title>
+    <link rel="icon" href="assets/img/favicon2.png">
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC">
@@ -53,7 +54,7 @@ include('includes/fonctions.php')
 
 <body>
     <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient" style="border-bottom-style: solid;border-bottom-color: rgba(0,0,0,0.16);text-shadow: 0px 0px 3px rgb(0,0,0);background: linear-gradient(87deg, rgb(92, 214, 230), rgb(151, 65, 236));">
-        <div class="container"><a class="navbar-brand logo" data-bs-hover-animate="bounce" href="#" style="font-family: 'Alegreya Sans SC', sans-serif;">UGE MANAGER</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navbarNav"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+        <div class="container"><a class="navbar-brand logo" data-bs-hover-animate="bounce" href="#" style="font-family: 'Alegreya Sans SC', sans-serif;">PORTAIL-DPCB</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navbarNav"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="nav navbar-nav ml-auto">
                     <li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="index.html">Se
