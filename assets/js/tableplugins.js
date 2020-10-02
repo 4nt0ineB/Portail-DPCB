@@ -1,6 +1,5 @@
 $(document).ready(function () {
     var table = $('#datatable').DataTable({
-        lengthChange: false,
         buttons: ['copy', 'excel', 'pdf', 'colvis'],
         "language": { // traduction en français de la table
             "sEmptyTable": "Aucune donnée disponible dans le tableau",
@@ -32,7 +31,7 @@ $(document).ready(function () {
                 }
             }
         },
-         rowReorder: {
+        rowReorder: {
             selector: 'td:nth-child(2)'
         },
         responsive: true
@@ -40,5 +39,6 @@ $(document).ready(function () {
 
     table.buttons().container()
         .appendTo('#datatable_wrapper .col-md-6:eq(0)');
+
 
 });
