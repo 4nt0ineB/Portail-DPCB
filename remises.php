@@ -84,6 +84,7 @@ include('includes/fonctions.php')
                                                     <tr></tr>
                                                 </thead>
                                                 <tbody>
+                                                	<form method="post">
                                                     <tr>
                                                         <td><label>N° SIREN :&nbsp;</label><input type="text" name="siren"></td>
                                                         <td><label style="font-style: normal;" name="raison">Raison sociale
@@ -93,12 +94,13 @@ include('includes/fonctions.php')
                                                     <tr>
                                                         <td><label>Date de début :&nbsp;</label><input type="date" name="datedebut"></td>
                                                         <td><label>Date de fin :&nbsp;</label><input type="date" name="datefin"></td>
-                                                        <td style="text-align: center;"><button class="btn btn-primary"
+                                                        <td style="text-align: center;"><button type="sumbit" class="btn btn-primary"
                                                                 type="button"
                                                                 style="text-align: center;background: rgba(255,255,255,0);color: rgb(0,0,0);box-shadow: 0px 0px 3px;border-style: none;">Rechercher</button>
                                                         </td>
                                                     </tr>
                                                     <tr></tr>
+                                                </form>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -124,13 +126,34 @@ include('includes/fonctions.php')
                         <?php
 
                         $id = $_SESSION["logged"];
-                        $requete = "SELECT * FROM REMISE,DEVISE WHERE id_client=$id AND REMISE.id_devise = DEVISE.id_devise;";
+                        $requete = "SELECT * FROM REMISE,DEVISE ";
 
                         if (isset($_POST['siren'])) $siren = secure_sqlformat($_POST['siren']);
                         if (isset($_POST['raison'])) $raison = secure_sqlformat(strip_tags($_POST['raison']));
                         if (isset($_POST['datedebut']))  $datedebut = $_POST['datedebut'];
                         if (isset($_POST['datefin']))  $datefin = $_POST['datefin'];
 
+                        if ((!empty($siren)) || (!empty($raison)) || (!empty($datedebut)) || (!empty($datefin))){ $requete .= "WHERE";} else { $requete.=" WHERE id_client=$id AND REMISE.id_devise = DEVISE.id_devise";} // si un des champs du formulaire est remplis on met un WHERE
+
+                        if (!empty($siren)) {
+                            $requete .= " REMISE.siren = '$siren'";
+                            if ((!empty($raison))  || (!empty($datedebut)) || (!empty($datefin))) $requete .= " AND"; // si le champ raison ou date existe on ajoute un AND
+                        }
+                        if (!empty($raison)) {
+                            $requete .= " REMISE.raison LIKE '%$raison%'";
+                            if (!empty($date)) $requete .= " AND"; // si le champ date existe on ajoute un AND
+                        }
+                        if (!empty($datedebut) && empty($datefin)) {
+                            $requete .= " REMISE.date_traitement >= '$datedebut'";
+                        }
+                        if (!empty($datefin) && empty($datedebut)) {
+                            $requete .= " REMISE.date_traitement <= '$datefin'";
+                        }
+                        if (!empty($datefin) && !empty($datedebut)) {
+                            $requete .= " REMISE.date_traitement <= '$datefin' AND REMISE.date_traitement >= '$datedebut'";
+                        }
+
+                        $requete.=" AND id_client=$id AND REMISE.id_devise = DEVISE.id_devise";
 
                         $resultat = $db->query($requete);
 
@@ -139,7 +162,7 @@ include('includes/fonctions.php')
                                                             <td>' . $r['siren'] . '</td>
                                                             <td>' . $r['raison'] . '</td>
                                                             <td>' . $r['num_remise'] . '</td>
-                                                            <td>' . $r['date_traitement'] . '</td>
+                                                            <td>' . date_format(date_create($r['date_traitement']),"d/m/yy") . '</td>
                                                             <td>' . $r['nbr_transaction'] . '</td>
                                                             <td>' . $r['libelle_devise'] . '</td>
                                                             <td>' . $r['montant_remise'] . '</td>
