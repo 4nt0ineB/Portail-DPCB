@@ -101,34 +101,49 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>N° SIREN</th>
-                                                        <th>Raison sociale</th>
-                                                        <th>N° remise</th>
-                                                        <th>Date traitement</th>
-                                                        <th>Nb transactions</th>
-                                                        <th>Devise</th>
-                                                        <th>Montant total</th>
-                                                        <th>Sens</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>Cell 1</td>
-                                                        <td>Cell 2</td>
-                                                        <td>Text</td>
-                                                        <td>Text</td>
-                                                        <td>Text</td>
-                                                        <td>Text</td>
-                                                        <td>Text</td>
-                                                        <td>Text</td>
-                                                    </tr>
-                                                    <tr></tr>
-                                                </tbody>
-                                            </table>
+                                         <table id="datatable" class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>N° SIREN</th>
+                            <th>Raison sociale</th>
+                            <th>N° remise</th>
+                            <th>Date traitement</th>
+                            <th>Nb transactions</th>
+                            <th>Devise</th>
+                            <th>Montant total</th>
+                            <th>Sens</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        /*while ($r = $resultat->fetch()) {
+                            echo '<tr>
+                            <td>' . $r['siren'] . '</td>
+                            <td>' . $r['date_vente'] . '</td>
+                            <td>' . $r['date_remise'] . '</td>
+                            <td>' . $r['num_carte'] . '</td>
+                            <td>' . $r['reseau'] . '</td>
+                            <td>' . $r['num_dossier'] . '</td>
+                            <td>' . $r['libelle_devise'] . '</td>
+                            <td>' . number_format($r['montant_impaye'], 2, '.', ' ') . '</td>
+                            <td>' . $r['libelle'] . '</td>
+                            </tr>';
+                        }
+                        */
+
+                        while ($r = $resultat->fetch()){
+                                                            echo '<tr
+                                                            <td>' . "" . '</td>
+                                                            <td>' . $r['siren'] . '</td>
+                                                            <td>' . $r['raison'] . '</td>
+                                                            <td>' . $r['nombreTransaction'] . '</td>
+                                                            <td>EUR</td>
+                                                            <td>' . $r['montantTransaction'] . '</td>
+                                                            </tr>';
+                                                        }
+                        ?>
+                    </tbody>
+                </table>
                                         </div>
                                     </div>
                                 </div>
