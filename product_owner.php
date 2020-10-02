@@ -96,31 +96,6 @@ include('includes/fonctions.php')
                                         </form>
                                     </div>
                                 </div>
-
-                                <!-- <div class="row">
-                                    <div class="col">
-                                        <div class="btn-toolbar"
-                                            style="margin-bottom: 10px;float: right;border-style: none;">
-                                            <div class="btn-group" role="group"
-                                                style="border-width: 0px;border-style: none;"><button
-                                                    class="btn btn-primary" type="button"
-                                                    style="color: rgb(0,0,0);background: rgb(255,255,255);border: 1px solid rgb(0,0,0);border-bottom-left-radius: 10px;border-top-left-radius: 10px;box-shadow: 0px 0px 2px;">XLS</button>
-                                                <button class="btn btn-primary" type="button"
-                                                    style="background: rgb(255,255,255);color: rgb(0,0,0);border-style: solid;border-color: rgb(0,0,0);box-shadow: 0px 0px 3px;">CSV</button>
-                                                    <button
-                                                    class="btn btn-primary" type="button"
-                                                    style="background: rgb(255,255,255);color: rgb(0,0,0);border-color: rgb(0,0,0);border-top-right-radius: 10px;border-bottom-right-radius: 10px;box-shadow: 0px 0px 3px;">PDF</button> -->
-                                <!-- <button
-                                                    class="btn btn-secondary buttons-pdf buttons-html15" tabindex="0" type="button" aria-controls="datatable"
-                                                    style="background: rgb(255,255,255);color: rgb(0,0,0);border-color: rgb(0,0,0);border-top-right-radius: 10px;border-bottom-right-radius: 10px;box-shadow: 0px 0px 3px;">
-                                                    <span>PDF </span> -->
-                                <!--
-                                                    </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            -->
                                 <?php
 
                                 $requete = "SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` 
@@ -165,20 +140,6 @@ include('includes/fonctions.php')
                                     </thead>
                                     <tbody>
                                         <?php
-                                        /*while ($r = $resultat->fetch()) {
-                            echo '<tr>
-                            <td>' . $r['siren'] . '</td>
-                            <td>' . $r['date_vente'] . '</td>
-                            <td>' . $r['date_remise'] . '</td>
-                            <td>' . $r['num_carte'] . '</td>
-                            <td>' . $r['reseau'] . '</td>
-                            <td>' . $r['num_dossier'] . '</td>
-                            <td>' . $r['libelle_devise'] . '</td>
-                            <td>' . number_format($r['montant_impaye'], 2, '.', ' ') . '</td>
-                            <td>' . $r['libelle'] . '</td>
-                            </tr>';
-                        }
-                        */
 
                                         while ($r = $resultat->fetch()) {
                                             echo '<tr
@@ -193,9 +154,6 @@ include('includes/fonctions.php')
                                         ?>
                                     </tbody>
                                 </table>
-                                <!-- <script type=" text/javascript" charset="utf8" src="assets/js/tableplugins.js"> -->
-                                </script>
-
 
                             </div>
                         </div>
@@ -217,16 +175,6 @@ include('includes/fonctions.php')
             <div class="social-icons"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i class="icon ion-social-instagram-outline"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a></div>
         </div>
     </footer>
-    <!--
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/pikaday.min.js"></script>
-    <script src="assets/js/script.min.js"></script>
--->
 
 </body>
-<!-- <script type=" text/javascript" charset="utf8" src="assets/js/tableplugins.js">
-                    </script> -->
-
 </html>
