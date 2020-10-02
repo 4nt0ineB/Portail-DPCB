@@ -111,10 +111,16 @@ if(!isset($_SESSION["logged"]) || $_SESSION["permission"] != "1") header("locati
                                     $fin = $_POST['fin'];
                                   }
                                 }
+                                $today = date("Y-m-d");
+                                $no_debut = "0000-01-01";
                                 $requete = "SELECT * FROM `IMPAYE` i JOIN DEVISE ON i.id_devise = DEVISE.id_devise, (SELECT * FROM `REMISE` WHERE id_client = (SELECT id_client FROM CLIENT WHERE id_user = $id)) r  WHERE r.id_remise = i.id_remise";
                                 if(isset($siren)) $requete .= " AND i.siren LIKE '%$siren%'";
                                 if(isset($sociale)) $requete .= " AND raison LIKE '%$sociale%'";
                                 if(isset($num_impaye)) $requete .= " AND num_dossier LIKE '%$num_impaye%'";
+                                if(isset($fin) && isset($debut)) $requete .= " AND date_vente BETWEEN '$debut' AND '$fin'";
+                                else if(isset($debut)) $requete .= " AND date_vente BETWEEN '$debut' AND '$today'";
+                                else if(isset($fin)) $requete .= " AND date_vente BETWEEN '$no_debut' AND '$fin'";
+
                                 $resultat = $db->query($requete);
 
                                 ?>
