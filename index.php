@@ -85,6 +85,7 @@
                                                 if ($_SESSION["permission"] == "1") {
                                                     header("refresh:2; tresorerie.php");   // après 2 secondes on redirige le client sur sa trésorerie
                                                 } else if ($_SESSION["permission"] == "2") {
+                                                    echo $_SESSION["permission"];
                                                     header("refresh:2; product_owner.php"); // en redirige le product owner sur la page de vue des trésorerie client
                                                 } else if ($_SESSION["permission"] == "3") {
                                                     header("refresh:2; admin.php"); // cette page n'existe pas encore

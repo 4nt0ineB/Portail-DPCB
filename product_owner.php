@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html>
-<?php 
+<?php
+session_start();
+if (!isset($_SESSION["logged"]) || $_SESSION["permission"] != "2") header("location: index.php"); //Vérifie si une session product owner est en cours sinon renvoi à l'index
 require_once("includes/mysql.php");
+include('includes/fonctions.php')
 ?>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>CV - UGE</title>
-   
+
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC">
@@ -15,8 +19,8 @@ require_once("includes/mysql.php");
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css">
     <link rel="stylesheet" href="style/style.css">
-	
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
@@ -44,12 +48,9 @@ require_once("includes/mysql.php");
 </head>
 
 <body>
-	
+
     <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient">
-        <div class="container"><a class="navbar-brand logo" data-bs-hover-animate="bounce" href="#"
-                style="font-family: 'Alegreya Sans SC', sans-serif;">UGE MANAGER</a><button data-toggle="collapse"
-                class="navbar-toggler" data-target="#navbarNav"><span class="sr-only">Toggle navigation</span><span
-                    class="navbar-toggler-icon"></span></button>
+        <div class="container"><a class="navbar-brand logo" data-bs-hover-animate="bounce" href="#" style="font-family: 'Alegreya Sans SC', sans-serif;">UGE MANAGER</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navbarNav"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="nav navbar-nav ml-auto">
                     <li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="index.html">Se
@@ -70,10 +71,8 @@ require_once("includes/mysql.php");
                             <div class="skills portfolio-info-card">
                                 <h2>Comptes clients</h2>
                                 <div class="row">
-                                    <div class="skills portfolio-info-card"
-                                        style="width: 100%;margin-bottom: 15px;padding: 25px;">
-                                        <p class="text-uppercase text-left text-dark"
-                                            style="margin: 0;text-align: left;font-weight: bold;width: 100%;float: left;">
+                                    <div class="skills portfolio-info-card" style="width: 100%;margin-bottom: 15px;padding: 25px;">
+                                        <p class="text-uppercase text-left text-dark" style="margin: 0;text-align: left;font-weight: bold;width: 100%;float: left;">
                                             <span style="text-decoration: underline;">RECHERCHE DE COMPTES</span></p>
                                         <div class="table-responsive">
                                             <table class="table">
@@ -82,23 +81,22 @@ require_once("includes/mysql.php");
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                    	<form method="post"> 
-                                                        <td><label>N° SIREN :&nbsp;</label><input type="text" name="siren"></td>
-                                                        <td><label style="font-style: normal;">Raison sociale
-                                                                :&nbsp;<input type="text" name="raison"></label></td>
-                                                        <td><label>Date :&nbsp;</label><input type="date" name="date"></td>
-                                                   		
+                                                        <form method="post">
+                                                            <td><label>N° SIREN :&nbsp;</label><input type="number" name="siren" min="0"></td>
+                                                            <td><label style="font-style: normal;">Raison sociale
+                                                                    :&nbsp;<input type="text" name="raison"></label></td>
+                                                            <td><label>Date :&nbsp;</label><input type="date" name="date"></td>
+
                                                     </tr>
                                                     <tr></tr>
                                                     <tr></tr>
                                                 </tbody>
                                             </table>
-                                        </div><button class="btn btn-primary" type="submit"
-                                            style="text-align: center;background: rgba(255,255,255,0);color: rgb(0,0,0);box-shadow: 0px 0px 3px;border-style: none;">Rechercher</button>
+                                        </div><button class="btn btn-primary" type="submit" style="text-align: center;background: rgba(255,255,255,0);color: rgb(0,0,0);box-shadow: 0px 0px 3px;border-style: none;" name="send">Rechercher</button>
                                         </form>
                                     </div>
                                 </div>
-                            
+
                                 <!-- <div class="row">
                                     <div class="col">
                                         <div class="btn-toolbar"
@@ -112,11 +110,11 @@ require_once("includes/mysql.php");
                                                     <button
                                                     class="btn btn-primary" type="button"
                                                     style="background: rgb(255,255,255);color: rgb(0,0,0);border-color: rgb(0,0,0);border-top-right-radius: 10px;border-bottom-right-radius: 10px;box-shadow: 0px 0px 3px;">PDF</button> -->
-                                                    <!-- <button
+                                <!-- <button
                                                     class="btn btn-secondary buttons-pdf buttons-html15" tabindex="0" type="button" aria-controls="datatable"
                                                     style="background: rgb(255,255,255);color: rgb(0,0,0);border-color: rgb(0,0,0);border-top-right-radius: 10px;border-bottom-right-radius: 10px;box-shadow: 0px 0px 3px;">
                                                     <span>PDF </span> -->
-                                                    <!--
+                                <!--
                                                     </button>
                                             </div>
                                         </div>
@@ -125,85 +123,49 @@ require_once("includes/mysql.php");
                             -->
                                 <?php
 
-                                	if (isset($_POST['siren'])){
-                                		if ($_POST['siren'] != ""){
-                                			$siren = $_POST['siren'];
-                                		}
-                                	}
+                                $requete = "SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` 
+                                			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren";
 
 
-                                	if (isset($_POST['raison'])){
-                                		if ($_POST['raison'] != ""){
-                                			$raison = $_POST['raison'];
-                                			//echo $raison;
-                                		}
-                                	}
-
-                                	if (isset($_POST['date'])){
-										if ($_POST['date'] != ""){
-											$date = $_POST['date'];
-										}
-                                	} 
-
-                                	if (isset($siren) and isset($raison) and isset($date)){
-                                		$resultat = $db->query("SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` 
-                                			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren WHERE CLIENT.raison LIKE '%$raison%' AND CLIENT.siren = '$siren' AND date_vente = '$date' GROUP BY CLIENT.siren");
-                                	}
-
-                                	if (isset($siren) and isset($raison)){
-                                		$resultat = $db->query("SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` 
-                                			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren WHERE CLIENT.raison LIKE '%$raison%' AND CLIENT.siren = '$siren' GROUP BY CLIENT.siren");
-                                	}
-
-                                	if (isset($siren) and isset($date)){
-                                		$resultat = $db->query("SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` 
-                                			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren WHERE CLIENT.siren = '$siren' AND date_vente = '$date' GROUP BY CLIENT.siren");
-                                	}
-
-                                	if (isset($raison) and isset($date)){
-                                		$resultat = $db->query("SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` 
-                                			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren WHERE CLIENT.raison LIKE '%$raison%' AND date_vente = '$date' GROUP BY CLIENT.siren");
-                                	}
-
-                                	else if (isset($siren)){
-                                		$resultat = $db->query("SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` 
-                                			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren WHERE CLIENT.siren = '$siren' GROUP BY CLIENT.siren");
-                                	}
+                                if (isset($_POST['siren'])) $siren = secure_sqlformat($_POST['siren']);
+                                if (isset($_POST['raison'])) $raison = secure_sqlformat(strip_tags($_POST['raison']));
+                                if (isset($_POST['date']))  $date = $_POST['date'];
 
 
-                                	else if (isset($raison)){
-                                		$resultat = $db->query("SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` 
-                                			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren WHERE CLIENT.raison LIKE '%$raison%' GROUP BY CLIENT.siren");
-                                	}
+                                if ((!empty($siren)) || (!empty($raison)) || (!empty($date))) $requete .= " WHERE"; // si un des champs du formulaire est remplis on met un WHERE
 
-                                	else if (isset($date)){
-                                		$resultat = $db->query("SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren WHERE date_vente = '$date' GROUP BY CLIENT.siren");
-                                	}
-                                	
+                                if (!empty($siren)) {
+                                    $requete .= " CLIENT.siren = '$siren'";
+                                    if ((!empty($raison))  || (!empty($date))) $requete .= " AND"; // si le champ raison ou date existe on ajoute un AND
+                                }
+                                if (!empty($raison)) {
+                                    $requete .= " CLIENT.raison LIKE '%$raison%'";
+                                    if (!empty($date)) $requete .= " AND"; // si le champ date existe on ajoute un AND
+                                }
+                                if (!empty($date)) {
+                                    $requete .= " date_vente = '$date'";
+                                }
 
-                                	else {
-                                		$resultat = $db->query("SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren GROUP BY CLIENT.siren");
-                                	}
-                                	
-
+                                $requete .= " GROUP BY CLIENT.siren";
+                                $resultat = $db->query($requete);
 
                                 ?>
                                 <!-- <div class="row">
                                     <div class="col">
                                         <div class="table-responsive"> -->
-                    <table id="datatable" class="table table-striped table-bordered">
-                    <thead>
-                        <tr>
-                            <th>N° SIREN</th>
-                            <th>Raison sociale</th>
-                            <th>Nombre de transactions</th>
-                            <th>Devise</th>
-                            <th>Montant total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        /*while ($r = $resultat->fetch()) {
+                                <table id="datatable" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>N° SIREN</th>
+                                            <th>Raison sociale</th>
+                                            <th>Nombre de transactions</th>
+                                            <th>Devise</th>
+                                            <th>Montant total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        /*while ($r = $resultat->fetch()) {
                             echo '<tr>
                             <td>' . $r['siren'] . '</td>
                             <td>' . $r['date_vente'] . '</td>
@@ -218,8 +180,8 @@ require_once("includes/mysql.php");
                         }
                         */
 
-                        while ($r = $resultat->fetch()){
-                                                            echo '<tr
+                                        while ($r = $resultat->fetch()) {
+                                            echo '<tr
                                                             <td>' . "" . '</td>
                                                             <td>' . $r['siren'] . '</td>
                                                             <td>' . $r['raison'] . '</td>
@@ -227,13 +189,13 @@ require_once("includes/mysql.php");
                                                             <td>EUR</td>
                                                             <td>' . $r['montantTransaction'] . '</td>
                                                             </tr>';
-                                                        }
-                        ?>
-                    </tbody>
-                </table>
-<!-- <script type=" text/javascript" charset="utf8" src="assets/js/tableplugins.js"> -->
-                    </script> 
-                                        
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                                <!-- <script type=" text/javascript" charset="utf8" src="assets/js/tableplugins.js"> -->
+                                </script>
+
 
                             </div>
                         </div>
@@ -246,15 +208,13 @@ require_once("includes/mysql.php");
         </section>
     </main>
     <script type=" text/javascript" charset="utf8" src="assets/js/tableplugins.js">
-                    </script> 
+    </script>
 
 
     <footer class="page-footer">
         <div class="container">
             <div class="links"><a href="#">A propos</a><a href="#">Contactez-nous</a></div>
-            <div class="social-icons"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i
-                        class="icon ion-social-instagram-outline"></i></a><a href="#"><i
-                        class="icon ion-social-twitter"></i></a></div>
+            <div class="social-icons"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i class="icon ion-social-instagram-outline"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a></div>
         </div>
     </footer>
     <!--
