@@ -1,11 +1,13 @@
-<!DOCTYPE html>
-<html>
 <?php
 session_start();
 if (!isset($_SESSION["logged"]) || $_SESSION["permission"] != "2") header("location: index.php"); //Vérifie si une session product owner est en cours sinon renvoi à l'index
 require_once("includes/mysql.php");
 include('includes/fonctions.php')
 ?>
+
+<!DOCTYPE html>
+<html>
+
 
 <head>
     <meta charset="utf-8">
@@ -54,18 +56,8 @@ include('includes/fonctions.php')
 
 <body>
 
-    <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient">
-        <div class="container"><a class="navbar-brand logo" data-bs-hover-animate="bounce" href="#" style="font-family: 'Alegreya Sans SC', sans-serif;">PORTAIL-DPCB</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navbarNav"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="index.html">Se
-                            connecter</a></li>
-                    <li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="hire-me.html">En savoir
-                            +</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <!-- Import de la nav-->
+    <?php include('includes/nav.php'); ?>
     <main class="page cv-page">
         <section class="portfolio-block cv">
             <h2 class="text-center">Trésorerie des comptes clients</h2>
