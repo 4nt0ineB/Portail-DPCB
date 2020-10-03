@@ -1,5 +1,8 @@
 $(document).ready(function () {
     var table = $('#datatable').DataTable({
+        /* scrollY: 500,
+        paging: false, */ // pour mettre une scroll bar à la place
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
         buttons: ['copy', 'excel', 'pdf', 'colvis'],
         "language": { // traduction en français de la table
             "sEmptyTable": "Aucune donnée disponible dans le tableau",
