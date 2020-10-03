@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (!isset($_SESSION["logged"])) header("location: index.php"); //Vérifie si une session est en cours sinon renvoi à l'index
+require_once("includes/mysql.php");
+include('includes/fonctions.php')
+?>
+
+
 <!DOCTYPE html>
 <html>
 
@@ -15,18 +23,8 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient" style="border-bottom-style: solid;border-bottom-color: rgba(0,0,0,0.16);text-shadow: 0px 0px 3px rgb(0,0,0);background: linear-gradient(87deg, rgb(92, 214, 230), rgb(151, 65, 236));">
-        <div class="container"><a class="navbar-brand logo" data-bs-hover-animate="bounce" href="#" style="font-family: 'Alegreya Sans SC', sans-serif;">PORTAIL-DPCB</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navbarNav"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="index.html">Se
-                            connecter</a></li>
-                    <li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="hire-me.html">En savoir
-                            +</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <!-- Import de la nav-->
+    <?php include('includes/nav.php'); ?>
     <main class="page cv-page">
         <section class="portfolio-block cv">
             <h2 class="text-center">Détail du compte bancaire n°XXXXXXXXX</h2>
