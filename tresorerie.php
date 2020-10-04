@@ -27,16 +27,31 @@ include('includes/fonctions.php')
     <?php include('includes/nav.php'); ?>
     <main class="page cv-page">
         <section class="portfolio-block cv">
-            <h2 class="text-center">Détail du compte bancaire n°XXXXXXXXX</h2>
+            <h2 class="text-center"><span style="color: #7C71F5;">
+                    <?php
+                    $id = $_SESSION["logged"];
+                    $query = $db->query("SELECT raison FROM USER NATURAL JOIN CLIENT WHERE id_user = $id")->fetch();
+                    echo $query['raison'];
+                    ?>
+                </span></h2>
             <div class="container">
                 <div class="group">
                     <div class="row">
                         <div class="col">
                             <div class="skills portfolio-info-card">
                                 <h2>Résumé du compte</h2>
-                                <p class="text-uppercase text-center text-success border-success" data-toggle="tooltip" data-bs-tooltip="" title="Votre solde" style="font-size: 40px;text-shadow: 0px 0px 4px rgb(150,150,150);">+300,00€</p>
+                                <p class="text-uppercase text-center text-success border-success" data-toggle="tooltip" data-bs-tooltip="" title="Votre solde" style="font-size: 40px;text-shadow: 0px 0px 4px rgb(150,150,150);">
+                                    <?php
+                                    $idu = $_SESSION['logged'];
+                                    $r = $db->query("SELECT SUM(montant_remise) solde FROM REMISE WHERE id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu)")->fetch();
+                                    echo number_format($r["solde"], 2, ',', ' ') . "€";
+
+                                    ?>
+                                </p>
                                 <p class="text-center" style="height: 23px;margin-top: -24px;font-size: 14px;"><em>Votre
                                         solde</em><br></p>
+
+                                <!--
                                 <div class="row">
                                     <div class="col" style="text-align: center;">
                                         <div class="btn-group open" style="border-style: none;"><button class="btn btn-primary" type="button" style="background: rgb(255,255,255);color: rgb(0,0,0);border: 1px solid rgb(0,0,0) ;">Actions</button><button class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-expanded="true" type="button" style="background: rgb(255,255,255);color: rgb(0,0,0);border-style: solid;border-color: rgb(0,0,0);"></button>
@@ -46,16 +61,21 @@ include('includes/fonctions.php')
                                         </div>
                                     </div>
                                 </div>
+                                -->
                                 <h1 style="font-size: 20px;border-width: 1px;border-style: none;border-bottom-style: dotted;">
-                                    Vos dernières transactions</h1>
+                                    Détails</h1>
                                 <div class="row">
-                                    <div class="skills portfolio-info-card" style="width: 100%;margin-bottom: 15px;padding: 25px;">
-                                        <p class="text-uppercase text-left text-dark" data-toggle="tooltip" data-bs-tooltip="" style="margin: 0;text-align: left;font-weight: bold;width: 80%;float: left;" title="Organisme"><span style="text-decoration: underline;">CRÉDIT AGRICOLE
-                                                SEPA 84415641896748</span></p><span class="text-right text-success" style="width: 20%;float: right;">+300,00€</span>
-                                    </div>
                                     <div class="skills portfolio-info-card" style="width: 100%;padding: 25px;margin-bottom: 15px;">
-                                        <p class="text-uppercase text-left text-dark" data-toggle="tooltip" data-bs-tooltip="" style="margin: 0;text-align: left;font-weight: bold;width: 80%;float: left;" title="Organisme"><span style="text-decoration: underline;">INTérets année
-                                                2020</span></p><span class="text-right text-danger" style="width: 20%;float: right;">+0,00€</span>
+                                        <p class="text-uppercase text-left text-dark" data-toggle="tooltip" data-bs-tooltip="" style="margin: 0;text-align: left;font-weight: bold;width: 80%;float: left;" title="Impayés"><span style="text-decoration: underline;">Total impayés au cours du dernier mois
+                                            </span></p><span class="text-right text-danger" style="width: 20%;float: right;">
+                                            <?php
+                                            $a = date("Y-m-d");
+                                            $b = date("Y-m-d", strtotime('-1 months'));
+                                            $r = $db->query("SELECT SUM(montant_impaye) total_impaye FROM IMPAYE i JOIN REMISE r ON r.id_remise = i.id_remise WHERE r.id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu) AND date_vente <= '$a' AND date_vente >= '$b' ")->fetch();
+                                            echo number_format($r["total_impaye"], 2, ',', ' ') . "€";
+
+                                            ?>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
