@@ -1,11 +1,8 @@
 <?php
 session_start();
-if (!isset($_SESSION["logged"])) {
-    header("location: index.php");
-}
-//Vérifie si une session est en cours sinon renvoi à l'index
-require_once "includes/mysql.php";
-include 'includes/fonctions.php'
+if (!isset($_SESSION["logged"])) header("location: index.php"); //Vérifie si une session est en cours sinon renvoi à l'index
+require_once("includes/mysql.php");
+include('includes/fonctions.php')
 ?>
 
 <!DOCTYPE html>
@@ -29,6 +26,7 @@ include 'includes/fonctions.php'
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1cQRFi3dgfSVKpc1B9idTEuN3cBScszNHP9silYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style/style.css">
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
 
     <!-- CDN Datatable -->
@@ -47,6 +45,7 @@ include 'includes/fonctions.php'
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/rowreorder/1.2.7/js/dataTables.rowReorder.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.datatables.net/rowgroup/1.0.2/js/dataTables.rowGroup.min.js"></script>
 
     <!-- css pour l'option "column visibility" des plugins -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
@@ -57,7 +56,7 @@ include 'includes/fonctions.php'
 
 <body>
     <!-- Import de la nav-->
-    <?php include 'includes/nav.php';?>
+    <?php include('includes/nav.php'); ?>
     <main class="page cv-page">
         <section class="portfolio-block cv">
             <h2 class="text-center">Remises</h2>
@@ -111,66 +110,56 @@ include 'includes/fonctions.php'
                                                     <th>Devise</th>
                                                     <th>Montant total</th>
                                                     <th>Sens</th>
+                                                    <th class="none">Détails des transactions</th>
+
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php
 
-$id = $_SESSION["logged"];
-$requete = "SELECT * FROM REMISE,DEVISE ";
+                                                $id = $_SESSION["logged"];
+                                                $requete = "SELECT * FROM REMISE,DEVISE ";
 
-if (isset($_POST['siren'])) {
-    $siren = secure_sqlformat($_POST['siren']);
-}
+                                                if (isset($_POST['siren'])) $siren = secure_sqlformat($_POST['siren']);
+                                                if (isset($_POST['raison'])) $raison = secure_sqlformat(strip_tags($_POST['raison']));
+                                                if (isset($_POST['datedebut']))  $datedebut = $_POST['datedebut'];
+                                                if (isset($_POST['datefin']))  $datefin = $_POST['datefin'];
 
-if (isset($_POST['raison'])) {
-    $raison = secure_sqlformat(strip_tags($_POST['raison']));
-}
+                                                if ((!empty($siren)) || (!empty($raison)) || (!empty($datedebut)) || (!empty($datefin))) {
+                                                    $requete .= "WHERE";
+                                                } else {
+                                                    $requete .= " WHERE id_client=$id AND REMISE.id_devise = DEVISE.id_devise";
+                                                } // si un des champs du formulaire est remplis on met un WHERE
 
-if (isset($_POST['datedebut'])) {
-    $datedebut = $_POST['datedebut'];
-}
+                                                if (!empty($siren)) {
+                                                    $requete .= " REMISE.siren = '$siren'";
+                                                    if ((!empty($raison))  || (!empty($datedebut)) || (!empty($datefin))) $requete .= " AND"; // si le champ raison ou date existe on ajoute un AND
+                                                }
+                                                if (!empty($raison)) {
+                                                    $requete .= " REMISE.raison LIKE '%$raison%'";
+                                                    if (!empty($date)) $requete .= " AND"; // si le champ date existe on ajoute un AND
+                                                }
+                                                if (!empty($datedebut) && empty($datefin)) {
+                                                    $requete .= " REMISE.date_traitement >= '$datedebut'";
+                                                }
+                                                if (!empty($datefin) && empty($datedebut)) {
+                                                    $requete .= " REMISE.date_traitement <= '$datefin'";
+                                                }
+                                                if (!empty($datefin) && !empty($datedebut)) {
+                                                    $requete .= " REMISE.date_traitement <= '$datefin' AND REMISE.date_traitement >= '$datedebut'";
+                                                }
 
-if (isset($_POST['datefin'])) {
-    $datefin = $_POST['datefin'];
-}
+                                                $requete .= " AND id_client=$id AND REMISE.id_devise = DEVISE.id_devise";
 
-if ((!empty($siren)) || (!empty($raison)) || (!empty($datedebut)) || (!empty($datefin))) {
-    $requete .= "WHERE";
-} else {
-    $requete .= " WHERE id_client=$id AND REMISE.id_devise = DEVISE.id_devise";
-} // si un des champs du formulaire est remplis on met un WHERE
+                                                $resultat = $db->query($requete);
 
-if (!empty($siren)) {
-    $requete .= " REMISE.siren = '$siren'";
-    if ((!empty($raison)) || (!empty($datedebut)) || (!empty($datefin))) {
-        $requete .= " AND";
-    }
-    // si le champ raison ou date existe on ajoute un AND
-}
-if (!empty($raison)) {
-    $requete .= " REMISE.raison LIKE '%$raison%'";
-    if (!empty($date)) {
-        $requete .= " AND";
-    }
-    // si le champ date existe on ajoute un AND
-}
-if (!empty($datedebut) && empty($datefin)) {
-    $requete .= " REMISE.date_traitement >= '$datedebut'";
-}
-if (!empty($datefin) && empty($datedebut)) {
-    $requete .= " REMISE.date_traitement <= '$datefin'";
-}
-if (!empty($datefin) && !empty($datedebut)) {
-    $requete .= " REMISE.date_traitement <= '$datefin' AND REMISE.date_traitement >= '$datedebut'";
-}
+                                                while ($r = $resultat->fetch()) {
 
-$requete .= " AND id_client=$id AND REMISE.id_devise = DEVISE.id_devise";
+                                                    $idremise = $r["id_remise"];
 
-$resultat = $db->query($requete);
+                                                    $transaction = $db->query("SELECT * FROM TRANSACTION WHERE id_remise=$idremise;");
 
-while ($r = $resultat->fetch()) {
-    echo '<tr>
+                                                    echo '<tr>
                                                             <td>' . $r['siren'] . '</td>
                                                             <td>' . $r['raison'] . '</td>
                                                             <td>' . $r['num_remise'] . '</td>
@@ -179,9 +168,39 @@ while ($r = $resultat->fetch()) {
                                                             <td>' . $r['libelle_devise'] . '</td>
                                                             <td>' . $r['montant_remise'] . '</td>
                                                             <td>' . $r['sens'] . '</td>
+                                                            <td>
+                                                            <table style="width:100%;">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>N° SIREN</th>
+                                                                    <th>Date de vente</th>
+                                                                    <th>N° Carte</th>
+                                                                    <th>Réseau</th>
+                                                                    <th>N° Autorisation</th>
+                                                                    <th>Devise</th>
+                                                                    <th>Montant</th>
+                                                                    <th>Sens</th>
+                                                                  </tr>
+                                                            </thead>
+                                                              <tbody>';
+                                                              while ($t = $transaction->fetch()) {
+                                                              echo'
+                                                              <tr>
+                                                              <td>' . $t['siren'] . '</td>
+                                                              <td>' . $t['date_vente'] . '</td>
+                                                              <td>' . $t['num_carte'] . '</td>
+                                                              <td>' . $t['reseau'] . '</td>
+                                                              <td>' . $t['num_autorisation'] . '</td>
+                                                              <td>' . $r['libelle_devise'] . '</td>
+                                                              <td>' . $t['montant_transaction'] . '</td>
+                                                              <td>' . $t['sens'] . '</td>
+                                                              </tr>'; } echo'
+                                                              </tbody>
+                                                              </table>
+                                                            </td>
                                                             </tr>';
-}
-?>
+                                                }
+                                                ?>
                                             </tbody>
                                         </table>
                                         <script type=" text/javascript" charset="utf8" src="assets/js/tableplugins.js">
