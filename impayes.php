@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
 <?php
-require_once("includes/mysql.php");
+require_once "includes/mysql.php";
 session_start();
-if (!isset($_SESSION["logged"]) || $_SESSION["permission"] != "1") header("location: index.php"); //Vérifie si une session client est en cours sinon renvoi à l'index
+if (!isset($_SESSION["logged"]) || $_SESSION["permission"] != "1") {
+    header("location: index.php");
+}
+//Vérifie si une session client est en cours sinon renvoi à l'index
 ?>
 
 <head>
@@ -51,7 +54,7 @@ if (!isset($_SESSION["logged"]) || $_SESSION["permission"] != "1") header("locat
 
 <body>
     <!-- Import de la nav-->
-    <?php include('includes/nav.php'); ?>
+    <?php include 'includes/nav.php';?>
     <main class="page cv-page">
         <section class="portfolio-block cv">
             <h2 class="text-center">Impayés du compte bancaire n°XXXXXXXXX</h2>
@@ -93,50 +96,63 @@ if (!isset($_SESSION["logged"]) || $_SESSION["permission"] != "1") header("locat
                                     </div>
                                 </div>
                                 <?php
-                                $id = $_SESSION["logged"];
+$id = $_SESSION["logged"];
 
-                                if (isset($_POST['siren'])) {
-                                    if ($_POST['siren'] != "") {
-                                        $siren = $_POST['siren'];
-                                    }
-                                }
+if (isset($_POST['siren'])) {
+    if ($_POST['siren'] != "") {
+        $siren = $_POST['siren'];
+    }
+}
 
-                                if (isset($_POST['sociale'])) {
-                                    if ($_POST['sociale'] != "") {
-                                        $sociale = $_POST['sociale'];
-                                    }
-                                }
+if (isset($_POST['sociale'])) {
+    if ($_POST['sociale'] != "") {
+        $sociale = $_POST['sociale'];
+    }
+}
 
-                                if (isset($_POST['num_impaye'])) {
-                                    if ($_POST['num_impaye'] != "") {
-                                        $num_impaye = $_POST['num_impaye'];
-                                    }
-                                }
+if (isset($_POST['num_impaye'])) {
+    if ($_POST['num_impaye'] != "") {
+        $num_impaye = $_POST['num_impaye'];
+    }
+}
 
-                                if (isset($_POST['debut'])) {
-                                    if ($_POST['debut'] != "") {
-                                        $debut = $_POST['debut'];
-                                    }
-                                }
+if (isset($_POST['debut'])) {
+    if ($_POST['debut'] != "") {
+        $debut = $_POST['debut'];
+    }
+}
 
-                                if (isset($_POST['fin'])) {
-                                    if ($_POST['fin'] != "") {
-                                        $fin = $_POST['fin'];
-                                    }
-                                }
-                                $today = date("Y-m-d");
-                                $no_debut = "0000-01-01";
-                                $requete = "SELECT * FROM `IMPAYE` i JOIN DEVISE ON i.id_devise = DEVISE.id_devise, (SELECT * FROM `REMISE` WHERE id_client = (SELECT id_client FROM CLIENT WHERE id_user = $id)) r  WHERE r.id_remise = i.id_remise";
-                                if (isset($siren)) $requete .= " AND i.siren LIKE '%$siren%'";
-                                if (isset($sociale)) $requete .= " AND raison LIKE '%$sociale%'";
-                                if (isset($num_impaye)) $requete .= " AND num_dossier LIKE '%$num_impaye%'";
-                                if (isset($fin) && isset($debut)) $requete .= " AND date_vente BETWEEN '$debut' AND '$fin'";
-                                else if (isset($debut)) $requete .= " AND date_vente BETWEEN '$debut' AND '$today'";
-                                else if (isset($fin)) $requete .= " AND date_vente BETWEEN '$no_debut' AND '$fin'";
+if (isset($_POST['fin'])) {
+    if ($_POST['fin'] != "") {
+        $fin = $_POST['fin'];
+    }
+}
+$today = date("Y-m-d");
+$no_debut = "0000-01-01";
+$requete = "SELECT * FROM `IMPAYE` i JOIN DEVISE ON i.id_devise = DEVISE.id_devise, (SELECT * FROM `REMISE` WHERE id_client = (SELECT id_client FROM CLIENT WHERE id_user = $id)) r  WHERE r.id_remise = i.id_remise";
+if (isset($siren)) {
+    $requete .= " AND i.siren LIKE '%$siren%'";
+}
 
-                                $resultat = $db->query($requete);
+if (isset($sociale)) {
+    $requete .= " AND raison LIKE '%$sociale%'";
+}
 
-                                ?>
+if (isset($num_impaye)) {
+    $requete .= " AND num_dossier LIKE '%$num_impaye%'";
+}
+
+if (isset($fin) && isset($debut)) {
+    $requete .= " AND date_vente BETWEEN '$debut' AND '$fin'";
+} else if (isset($debut)) {
+    $requete .= " AND date_vente BETWEEN '$debut' AND '$today'";
+} else if (isset($fin)) {
+    $requete .= " AND date_vente BETWEEN '$no_debut' AND '$fin'";
+}
+
+$resultat = $db->query($requete);
+
+?>
                                 <!--
                                 <div class="row">
                                     <div class="col">
@@ -166,8 +182,8 @@ if (!isset($_SESSION["logged"]) || $_SESSION["permission"] != "1") header("locat
                                     </thead>
                                     <tbody>
                                         <?php
-                                        while ($r = $resultat->fetch()) {
-                                            echo '<tr>
+while ($r = $resultat->fetch()) {
+    echo '<tr>
                                                       <td>' . $r['siren'] . '</td>
                                                       <td>' . $r['date_vente'] . '</td>
                                                       <td>' . $r['date_remise'] . '</td>
@@ -178,8 +194,8 @@ if (!isset($_SESSION["logged"]) || $_SESSION["permission"] != "1") header("locat
                                                       <td>' . number_format($r['montant_impaye'], 2, '.', ' ') . '</td>
                                                       <td>' . $r['libelle'] . '</td>
                                                       </tr>';
-                                        }
-                                        ?>
+}
+?>
 
                                     </tbody>
                                 </table>

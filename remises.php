@@ -1,8 +1,11 @@
 <?php
 session_start();
-if (!isset($_SESSION["logged"])) header("location: index.php"); //Vérifie si une session est en cours sinon renvoi à l'index
-require_once("includes/mysql.php");
-include('includes/fonctions.php')
+if (!isset($_SESSION["logged"])) {
+    header("location: index.php");
+}
+//Vérifie si une session est en cours sinon renvoi à l'index
+require_once "includes/mysql.php";
+include 'includes/fonctions.php'
 ?>
 
 <!DOCTYPE html>
@@ -54,7 +57,7 @@ include('includes/fonctions.php')
 
 <body>
     <!-- Import de la nav-->
-    <?php include('includes/nav.php'); ?>
+    <?php include 'includes/nav.php';?>
     <main class="page cv-page">
         <section class="portfolio-block cv">
             <h2 class="text-center">Remises</h2>
@@ -113,44 +116,61 @@ include('includes/fonctions.php')
                                             <tbody>
                                                 <?php
 
-                                                $id = $_SESSION["logged"];
-                                                $requete = "SELECT * FROM REMISE,DEVISE ";
+$id = $_SESSION["logged"];
+$requete = "SELECT * FROM REMISE,DEVISE ";
 
-                                                if (isset($_POST['siren'])) $siren = secure_sqlformat($_POST['siren']);
-                                                if (isset($_POST['raison'])) $raison = secure_sqlformat(strip_tags($_POST['raison']));
-                                                if (isset($_POST['datedebut']))  $datedebut = $_POST['datedebut'];
-                                                if (isset($_POST['datefin']))  $datefin = $_POST['datefin'];
+if (isset($_POST['siren'])) {
+    $siren = secure_sqlformat($_POST['siren']);
+}
 
-                                                if ((!empty($siren)) || (!empty($raison)) || (!empty($datedebut)) || (!empty($datefin))) {
-                                                    $requete .= "WHERE";
-                                                } else {
-                                                    $requete .= " WHERE id_client=$id AND REMISE.id_devise = DEVISE.id_devise";
-                                                } // si un des champs du formulaire est remplis on met un WHERE
+if (isset($_POST['raison'])) {
+    $raison = secure_sqlformat(strip_tags($_POST['raison']));
+}
 
-                                                if (!empty($siren)) {
-                                                    $requete .= " REMISE.siren = '$siren'";
-                                                    if ((!empty($raison))  || (!empty($datedebut)) || (!empty($datefin))) $requete .= " AND"; // si le champ raison ou date existe on ajoute un AND
-                                                }
-                                                if (!empty($raison)) {
-                                                    $requete .= " REMISE.raison LIKE '%$raison%'";
-                                                    if (!empty($date)) $requete .= " AND"; // si le champ date existe on ajoute un AND
-                                                }
-                                                if (!empty($datedebut) && empty($datefin)) {
-                                                    $requete .= " REMISE.date_traitement >= '$datedebut'";
-                                                }
-                                                if (!empty($datefin) && empty($datedebut)) {
-                                                    $requete .= " REMISE.date_traitement <= '$datefin'";
-                                                }
-                                                if (!empty($datefin) && !empty($datedebut)) {
-                                                    $requete .= " REMISE.date_traitement <= '$datefin' AND REMISE.date_traitement >= '$datedebut'";
-                                                }
+if (isset($_POST['datedebut'])) {
+    $datedebut = $_POST['datedebut'];
+}
 
-                                                $requete .= " AND id_client=$id AND REMISE.id_devise = DEVISE.id_devise";
+if (isset($_POST['datefin'])) {
+    $datefin = $_POST['datefin'];
+}
 
-                                                $resultat = $db->query($requete);
+if ((!empty($siren)) || (!empty($raison)) || (!empty($datedebut)) || (!empty($datefin))) {
+    $requete .= "WHERE";
+} else {
+    $requete .= " WHERE id_client=$id AND REMISE.id_devise = DEVISE.id_devise";
+} // si un des champs du formulaire est remplis on met un WHERE
 
-                                                while ($r = $resultat->fetch()) {
-                                                    echo '<tr>
+if (!empty($siren)) {
+    $requete .= " REMISE.siren = '$siren'";
+    if ((!empty($raison)) || (!empty($datedebut)) || (!empty($datefin))) {
+        $requete .= " AND";
+    }
+    // si le champ raison ou date existe on ajoute un AND
+}
+if (!empty($raison)) {
+    $requete .= " REMISE.raison LIKE '%$raison%'";
+    if (!empty($date)) {
+        $requete .= " AND";
+    }
+    // si le champ date existe on ajoute un AND
+}
+if (!empty($datedebut) && empty($datefin)) {
+    $requete .= " REMISE.date_traitement >= '$datedebut'";
+}
+if (!empty($datefin) && empty($datedebut)) {
+    $requete .= " REMISE.date_traitement <= '$datefin'";
+}
+if (!empty($datefin) && !empty($datedebut)) {
+    $requete .= " REMISE.date_traitement <= '$datefin' AND REMISE.date_traitement >= '$datedebut'";
+}
+
+$requete .= " AND id_client=$id AND REMISE.id_devise = DEVISE.id_devise";
+
+$resultat = $db->query($requete);
+
+while ($r = $resultat->fetch()) {
+    echo '<tr>
                                                             <td>' . $r['siren'] . '</td>
                                                             <td>' . $r['raison'] . '</td>
                                                             <td>' . $r['num_remise'] . '</td>
@@ -160,8 +180,8 @@ include('includes/fonctions.php')
                                                             <td>' . $r['montant_remise'] . '</td>
                                                             <td>' . $r['sens'] . '</td>
                                                             </tr>';
-                                                }
-                                                ?>
+}
+?>
                                             </tbody>
                                         </table>
                                         <script type=" text/javascript" charset="utf8" src="assets/js/tableplugins.js">
