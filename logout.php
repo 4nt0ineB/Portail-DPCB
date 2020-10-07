@@ -2,9 +2,9 @@
 session_start();
 if (!isset($_SESSION['logged'])) // si la session n'est pas lancée
 {
-  header("location:index.php"); // si la personne n'est pas connecté redirection sur une page avec message d'erreur
+    header("location:index.php"); // si la personne n'est pas connecté redirection sur une page avec message d'erreur
 } else {
-  header("location:index.php"); // sinon redirection sur index
-  $_SESSION = array(); // on vide variables de session
-  session_destroy(); // et destruction de la session en cours.
+    header("location:index.php"); // sinon redirection sur index
+    $_SESSION = array(); // on vide variables de session
+    session_destroy(); // et destruction de la session en cours.
 }

@@ -1,8 +1,11 @@
 <?php
 session_start();
-if (!isset($_SESSION["logged"]) || $_SESSION["permission"] != "2") header("location: index.php"); //Vérifie si une session product owner est en cours sinon renvoi à l'index
-require_once("includes/mysql.php");
-include('includes/fonctions.php')
+if (!isset($_SESSION["logged"]) || $_SESSION["permission"] != "2") {
+    header("location: index.php");
+}
+//Vérifie si une session product owner est en cours sinon renvoi à l'index
+require_once "includes/mysql.php";
+include 'includes/fonctions.php'
 ?>
 
 <!DOCTYPE html>
@@ -57,7 +60,7 @@ include('includes/fonctions.php')
 <body>
 
     <!-- Import de la nav-->
-    <?php include('includes/nav.php'); ?>
+    <?php include 'includes/nav.php';?>
     <main class="page cv-page">
         <section class="portfolio-block cv">
             <h2 class="text-center">Trésorerie des comptes clients</h2>
@@ -95,33 +98,48 @@ include('includes/fonctions.php')
                                 </div>
                                 <?php
 
-                                $requete = "SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT` 
+$requete = "SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT`
                                 			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren";
 
+if (isset($_POST['siren'])) {
+    $siren = secure_sqlformat($_POST['siren']);
+}
 
-                                if (isset($_POST['siren'])) $siren = secure_sqlformat($_POST['siren']);
-                                if (isset($_POST['raison'])) $raison = secure_sqlformat(strip_tags($_POST['raison']));
-                                if (isset($_POST['date']))  $date = $_POST['date'];
+if (isset($_POST['raison'])) {
+    $raison = secure_sqlformat(strip_tags($_POST['raison']));
+}
 
+if (isset($_POST['date'])) {
+    $date = $_POST['date'];
+}
 
-                                if ((!empty($siren)) || (!empty($raison)) || (!empty($date))) $requete .= " WHERE"; // si un des champs du formulaire est remplis on met un WHERE
+if ((!empty($siren)) || (!empty($raison)) || (!empty($date))) {
+    $requete .= " WHERE";
+}
+// si un des champs du formulaire est remplis on met un WHERE
 
-                                if (!empty($siren)) {
-                                    $requete .= " CLIENT.siren = '$siren'";
-                                    if ((!empty($raison))  || (!empty($date))) $requete .= " AND"; // si le champ raison ou date existe on ajoute un AND
-                                }
-                                if (!empty($raison)) {
-                                    $requete .= " CLIENT.raison LIKE '%$raison%'";
-                                    if (!empty($date)) $requete .= " AND"; // si le champ date existe on ajoute un AND
-                                }
-                                if (!empty($date)) {
-                                    $requete .= " date_vente = '$date'";
-                                }
+if (!empty($siren)) {
+    $requete .= " CLIENT.siren = '$siren'";
+    if ((!empty($raison)) || (!empty($date))) {
+        $requete .= " AND";
+    }
+    // si le champ raison ou date existe on ajoute un AND
+}
+if (!empty($raison)) {
+    $requete .= " CLIENT.raison LIKE '%$raison%'";
+    if (!empty($date)) {
+        $requete .= " AND";
+    }
+    // si le champ date existe on ajoute un AND
+}
+if (!empty($date)) {
+    $requete .= " date_vente = '$date'";
+}
 
-                                $requete .= " GROUP BY CLIENT.siren";
-                                $resultat = $db->query($requete);
+$requete .= " GROUP BY CLIENT.siren";
+$resultat = $db->query($requete);
 
-                                ?>
+?>
                                 <!-- <div class="row">
                                     <div class="col">
                                         <div class="table-responsive"> -->
@@ -138,9 +156,9 @@ include('includes/fonctions.php')
                                     <tbody>
                                         <?php
 
-                                        while ($r = $resultat->fetch()) {
-                                            echo
-                                                '<tr
+while ($r = $resultat->fetch()) {
+    echo
+        '<tr
                                                 <td>' . "" . '</td>
                                                 <td>' . $r['siren'] . '</td>
                                                 <td>' . $r['raison'] . '</td>
@@ -148,8 +166,8 @@ include('includes/fonctions.php')
                                                 <td>EUR</td>
                                                 <td>' . $r['montantTransaction'] . '</td>
                                                 </tr>';
-                                        }
-                                        ?>
+}
+?>
                                     </tbody>
                                 </table>
 
