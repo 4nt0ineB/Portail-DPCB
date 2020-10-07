@@ -1,8 +1,11 @@
 <?php
+require_once("includes/mysql.php");
+
 session_start();
 if (!isset($_SESSION["logged"]) || $_SESSION["permission"] != "3") header("location: index.php"); //Vérifie si une session est en cours sinon renvoi à l'index
 require_once("includes/mysql.php");
 include('includes/fonctions.php')
+
 ?>
 
 <!DOCTYPE html>
@@ -44,7 +47,7 @@ include('includes/fonctions.php')
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <form method="post">
+                                                        <form method="post" name="creation">
 
                                                             <td><label style="font-style: normal;">Username :
                                                                     &nbsp;</label><input type="text" name="username"></td>
@@ -66,12 +69,45 @@ include('includes/fonctions.php')
                                         </div>
                                     </div>
                                 </div>
-                            <!--
-                            <div class="skills portfolio-info-card">
-                                <h2>Édition d'un compte</h2>
-                                
+
+                                <?php
+                                     $requete = "SELECT `id_client`,`siren`,`raison`,`username`,`password` FROM `CLIENT` NATURAL JOIN `USER` WHERE `permission` = 1";
+                                     $resultat = $db->query($requete);
+                                     
+                                ?>
+
+                                <table id="datatable" class="table table-striped table-bordered" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>id_client</th>
+                                            <th>N° SIREN</th>
+                                            <th>Raison sociale</th>
+                                            <th>Nom d'utilisateur</th>
+                                            <th>Mot de passe</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        while ($r = $resultat->fetch()) {
+                                            echo '<tr>
+                                                      <td>' . $r['id_client'] . '</td>
+                                                      <td>' . $r['siren'] . '</td>
+                                                      <td>' . $r['raison'] . '</td>
+                                                      <td>' . $r['username'] . '</td>
+                                                      <td>' . $r['password'] . '</td>';
+                                                      
+                                        }
+                                        ?>
+
+                                    </tbody>
+                                </table>
+
+                                <?php
+                                    //if (isset())
+                                ?>
+
+                            
                             </div>
-                            -->
                         </div>
                     </div>
                 </div>
@@ -81,17 +117,15 @@ include('includes/fonctions.php')
             </div>
         </section>
     </main>
+
+
     <footer class="page-footer">
         <div class="container">
             <div class="links"><a href="#">A propos</a><a href="#">Contactez-nous</a></div>
             <div class="social-icons"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i class="icon ion-social-instagram-outline"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a></div>
         </div>
     </footer>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/pikaday.min.js"></script>
-    <script src="assets/js/script.min.js"></script>
+
 </body>
 
 </html>
