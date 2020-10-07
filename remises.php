@@ -51,7 +51,6 @@ include('includes/fonctions.php')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.bootstrap4.min.css">
 
-
 </head>
 
 <body>
@@ -159,7 +158,13 @@ include('includes/fonctions.php')
 
                                                     $transaction = $db->query("SELECT * FROM TRANSACTION WHERE id_remise=$idremise;");
 
-                                                    echo '<tr>
+                                                    if ($r['sens'] == "-"){
+                                                      $color = "background-color: rgba(255, 0, 0, 0.35)";
+                                                    } else {
+                                                      $color = NULL;
+                                                    }
+
+                                                    echo '<tr style="'.$color.'">
                                                             <td>' . $r['siren'] . '</td>
                                                             <td>' . $r['raison'] . '</td>
                                                             <td>' . $r['num_remise'] . '</td>
@@ -184,8 +189,13 @@ include('includes/fonctions.php')
                                                             </thead>
                                                               <tbody>';
                                                               while ($t = $transaction->fetch()) {
+                                                                if ($t['sens'] == "-"){
+                                                                  $color = "background-color: rgba(255, 0, 0, 0.35)";
+                                                                } else {
+                                                                  $color = NULL;
+                                                                }
                                                               echo'
-                                                              <tr>
+                                                              <tr style="'.$color.'">
                                                               <td>' . $t['siren'] . '</td>
                                                               <td>' . $t['date_vente'] . '</td>
                                                               <td>' . $t['num_carte'] . '</td>
