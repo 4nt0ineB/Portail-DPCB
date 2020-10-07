@@ -41,12 +41,16 @@ echo $query['raison'];
                 <div class="group">
                     <div class="row">
                         <div class="col">
-                            <div class="skills portfolio-info-card" method="post">
-                                <h2>Résumé du compte <label>Solde au :&nbsp;</label><input type="date" name="date">
-                                        <button class="btn btn-primary" type="submit" style="text-align: center;background: rgba(255,255,255,0);color: rgb(0,0,0);box-shadow: 0px 0px 3px;border-style: none;">Rechercher</button>
-                                </h2>
-                                <form method="post">
-                                        
+                            <div class="skills portfolio-info-card">
+                              <h2 style="float: left;width: 45%;">Résumé du compte</h2>
+                              <div style="width: 55%;float: right;">
+                                <form method="post" style="box-shadow:none;max-width: none;margin:0 !important;padding:0 !important;">
+                                <label>Solde au :&nbsp;</label><input type="date" name="date">
+                                <button class="btn btn-primary" type="submit" style="text-align: center;background: rgba(255,255,255,0);color: rgb(0,0,0);box-shadow: 0px 0px 3px;border-style: none;">Rechercher</button>
+                              </div>
+                            <br>
+
+
                                     <?php
                                         $idu = $_SESSION['logged'];
                                         $no_debut = "0000-01-01";
@@ -58,7 +62,7 @@ echo $query['raison'];
                                         }
                                         if(isset($date)) $requete .= "AND date_traitement BETWEEN '$no_debut' AND '$date'";
                                         $r = $db->query($requete)->fetch();
-                                        if($r["solde"]>=0) echo '<p class="text-uppercase text-center text-success border-success" data-toggle="tooltip" data-bs-tooltip="" title="Votre solde" style="font-size: 40px;text-shadow: 0px 0px 4px rgb(150,150,150);">';
+                                        if($r["solde"]>=0) echo '<p class="text-uppercase text-center text-success border-success" data-toggle="tooltip" data-bs-tooltip="" title="Votre solde" style="width:100%;margin-top: 60px;float:left;line-height: 0px;font-size: 40px;text-shadow: 0px 0px 4px rgb(150,150,150);">';
                                         else echo '<p class="text-uppercase text-center text-danger border-success" data-toggle="tooltip" data-bs-tooltip="" title="Votre solde" style="font-size: 40px;text-shadow: 0px 0px 4px rgb(150,150,150);">';
                                         echo number_format($r["solde"], 2, ',', ' ') . "€";
                                     ?>
@@ -79,6 +83,7 @@ echo $query['raison'];
                                 -->
                                 <div class="row">
                                     <div class="skills"style="width: 100%;padding: 25px;margin-bottom: 15px;">
+                                      <br>
                                             <p class="text-uppercase text-center text-danger border-success" data-toggle="tooltip" data-bs-tooltip="" title="Votre solde" style="font-size: 40px;text-shadow: 0px 0px 4px rgb(150,150,150);">
                                             <?php
 $a = date("Y-m-d");
