@@ -171,7 +171,7 @@ include('includes/fonctions.php')
                                                             <td>' . date_format(date_create($r['date_traitement']), "d/m/yy") . '</td>
                                                             <td>' . $r['nbr_transaction'] . '</td>
                                                             <td>' . $r['libelle_devise'] . '</td>
-                                                            <td>' . $r['montant_remise'] . '</td>
+                                                            <td>' . abs($r['montant_remise']) . '</td>
                                                             <td>' . $r['sens'] . '</td>
                                                             <td>
                                                             <table style="width:100%;">
@@ -202,7 +202,7 @@ include('includes/fonctions.php')
                                                               <td>' . $t['reseau'] . '</td>
                                                               <td>' . $t['num_autorisation'] . '</td>
                                                               <td>' . $r['libelle_devise'] . '</td>
-                                                              <td>' . $t['montant_transaction'] . '</td>
+                                                              <td>' . abs($t['montant_transaction']) . '</td>
                                                               <td>' . $t['sens'] . '</td>
                                                               </tr>'; } echo'
                                                               </tbody>
