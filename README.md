@@ -13,8 +13,36 @@ Fonctionnalitées:
     - Exporter des tableaux de données banquaires en format PDF, Excel.
 
 Améliorations à apporter:
-    - Graphes des impayés
+
+    - Mettre en forme l'extraction PDF/Excel
+
+    ---------------------
+    | Date d'extraction: |
+    |                    |                       
+    |                    |
+    |     Tableau        |
+    |                    |
+    |                    |
+    |--------------------|
+    |  Zone commentaire* |  * Optionnel
+    ----------------------
+
+    - Graphes des impayés ( Trier par motif, Courbe)
     - Ajouter l'accès à toutes les infos pour le product owner
     - Création, Suppression et Modification de comptes par l'admin, potentielle création de comptes admin
+    - Afficher mot de passe lors du login
+
+
+    Optionnel:
+
+    - Graphe camembert en fonction des motifs des impayés
+    - Histogramme avec représentation proportionelle des impayés dans le chiffre d'affaire
+    ----
+    |  |
+    |CA|
+    |  |
+    |--|
+    |  |
+    | I|
 
 ![alt text](https://i.ibb.co/dDVq8Ft/vueportail.png)
