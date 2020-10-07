@@ -55,6 +55,36 @@ include 'includes/fonctions.php'
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.bootstrap4.min.css">
 
+    <style>
+    form.style {
+      padding: none;
+      max-width: none;
+      box-shadow: none;
+      padding: none;
+      margin: none;
+      padding: none;
+    }
+
+    .portfolio-block form {
+        padding: 0px !important;
+    }
+    .portfolio-block form {
+        max-width: none;
+        padding: none;
+        margin: auto;
+        box-shadow: none;
+    }
+    @media (min-width: 768px)
+    .portfolio-block form {
+        padding: 0px !important;
+    }
+    .portfolio-block form {
+        max-width: none;
+        padding: none;
+        margin: none;
+        box-shadow: none;
+    }
+    </style>
 </head>
 
 <body>
@@ -86,7 +116,6 @@ include 'includes/fonctions.php'
                                                             <td><label style="font-style: normal;">Raison sociale
                                                                     :&nbsp;<input type="text" name="raison"></label></td>
                                                             <td><label>Date :&nbsp;</label><input type="date" name="date"></td>
-
                                                     </tr>
                                                     <tr></tr>
                                                     <tr></tr>
@@ -98,7 +127,7 @@ include 'includes/fonctions.php'
                                 </div>
                                 <?php
 
-$requete = "SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction FROM `CLIENT`
+$requete = "SELECT DISTINCT(CLIENT.siren) AS siren,`raison`,COUNT(id_transaction) AS nombreTransaction,SUM(montant_transaction) AS montantTransaction, id_user FROM `CLIENT`
                                 			JOIN TRANSACTION ON CLIENT.siren = TRANSACTION.siren";
 
 if (isset($_POST['siren'])) {
@@ -137,6 +166,7 @@ if (!empty($date)) {
 }
 
 $requete .= " GROUP BY CLIENT.siren";
+echo $requete;
 $resultat = $db->query($requete);
 
 ?>
@@ -151,6 +181,7 @@ $resultat = $db->query($requete);
                                             <th>Nombre de transactions</th>
                                             <th>Devise</th>
                                             <th>Montant total</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -159,13 +190,20 @@ $resultat = $db->query($requete);
 while ($r = $resultat->fetch()) {
     echo
         '<tr
-                                                <td>' . "" . '</td>
-                                                <td>' . $r['siren'] . '</td>
-                                                <td>' . $r['raison'] . '</td>
-                                                <td>' . $r['nombreTransaction'] . '</td>
-                                                <td>EUR</td>
-                                                <td>' . $r['montantTransaction'] . '</td>
-                                                </tr>';
+        <td>' . "" . '</td>
+        <td>' . $r['siren'] . '</td>
+        <td>' . $r['raison'] . '</td>
+        <td>' . $r['nombreTransaction'] . '</td>
+        <td>EUR</td>
+        <td>' . $r['montantTransaction'] . '</td>
+        <td>
+          <form method="post" action="?">
+              <input type="hidden" name="user_to_see" value="' . $r['id_user'] . '" >
+              <input type="submit" name="delUser" value="voir" style="background-color:#61b7e2 !important;border:hidden;">
+
+          </form>
+        </td>
+        </tr>';
 }
 ?>
                                     </tbody>
