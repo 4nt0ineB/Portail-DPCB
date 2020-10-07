@@ -4,7 +4,12 @@ $(document).ready(function () {
         /* scrollY: 500,
         paging: false, */ // pour mettre une scroll bar à la place
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-        buttons: ['copy', 'excel', {
+        buttons: ['copy', {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3,4,5,6,7 ]
+                }
+            },, {
                 extend: 'pdfHtml5',
                 exportOptions: {
                     columns: [ 0, 1, 2, 3,4,5,6,7 ]
