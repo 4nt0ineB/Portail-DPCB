@@ -1,11 +1,11 @@
 <?php
 require_once("includes/mysql.php");
-/*
+
 session_start();
 if (!isset($_SESSION["logged"]) || $_SESSION["permission"] != "3") header("location: index.php"); //Vérifie si une session est en cours sinon renvoi à l'index
 require_once("includes/mysql.php");
 include('includes/fonctions.php')
-*/
+
 ?>
 
 <!DOCTYPE html>
@@ -118,7 +118,7 @@ include('includes/fonctions.php')
         </section>
     </main>
 
-    
+
     <footer class="page-footer">
         <div class="container">
             <div class="links"><a href="#">A propos</a><a href="#">Contactez-nous</a></div>
