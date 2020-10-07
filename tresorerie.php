@@ -86,12 +86,14 @@ echo $query['raison'];
                                       <br>
                                             <p class="text-uppercase text-center text-danger border-success" data-toggle="tooltip" data-bs-tooltip="" title="Votre solde" style="font-size: 40px;text-shadow: 0px 0px 4px rgb(150,150,150);">
                                             <?php
-$a = date("Y-m-d");
-$b = date("Y-m-d", strtotime('-1 months'));
-$r = $db->query("SELECT SUM(montant_impaye) total_impaye FROM IMPAYE i JOIN REMISE r ON r.id_remise = i.id_remise WHERE r.id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu) AND date_vente <= '$a' AND date_vente >= '$b' ")->fetch();
-echo number_format($r["total_impaye"], 2, ',', ' ') . "€";
+                                                $today = date("Y-m-d");
+                                                $req = "SELECT SUM(montant_impaye) total_impaye FROM IMPAYE i JOIN REMISE r ON r.id_remise = i.id_remise WHERE r.id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu)";
+                                                if(isset($date)) $req .= "AND date_vente BETWEEN '$no_debut' AND '$date'";
+                                                else $req .= "AND date_vente BETWEEN '$no_debut' AND '$today'";
+                                                $r = $db->query($req)->fetch();
+                                                echo number_format($r["total_impaye"], 2, ',', ' ') . "€";
 
-?>
+                                            ?>
                                         <p class="text-center" style="height: 23px;margin-top: -24px;font-size: 14px;"><em>Vos impayés</em><br></p>
                                         </span>
                                     </div>
