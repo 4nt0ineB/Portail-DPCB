@@ -1,8 +1,11 @@
 <?php
 session_start();
-if (!isset($_SESSION["logged"])) header("location: index.php"); //Vérifie si une session est en cours sinon renvoi à l'index
-require_once("includes/mysql.php");
-include('includes/fonctions.php')
+if (!isset($_SESSION["logged"])) {
+    header("location: index.php");
+}
+//Vérifie si une session est en cours sinon renvoi à l'index
+require_once "includes/mysql.php";
+include 'includes/fonctions.php'
 ?>
 
 
@@ -24,15 +27,15 @@ include('includes/fonctions.php')
 
 <body>
     <!-- Import de la nav-->
-    <?php include('includes/nav.php'); ?>
+    <?php include 'includes/nav.php';?>
     <main class="page cv-page">
         <section class="portfolio-block cv">
             <h2 class="text-center"><span style="color: #7C71F5;">
                     <?php
-                    $id = $_SESSION["logged"];
-                    $query = $db->query("SELECT raison FROM USER NATURAL JOIN CLIENT WHERE id_user = $id")->fetch();
-                    echo $query['raison'];
-                    ?>
+$id = $_SESSION["logged"];
+$query = $db->query("SELECT raison FROM USER NATURAL JOIN CLIENT WHERE id_user = $id")->fetch();
+echo $query['raison'];
+?>
                 </span></h2>
             <div class="container">
                 <div class="group">
@@ -42,11 +45,11 @@ include('includes/fonctions.php')
                                 <h2>Résumé du compte</h2>
                                 <p class="text-uppercase text-center text-success border-success" data-toggle="tooltip" data-bs-tooltip="" title="Votre solde" style="font-size: 40px;text-shadow: 0px 0px 4px rgb(150,150,150);">
                                     <?php
-                                    $idu = $_SESSION['logged'];
-                                    $r = $db->query("SELECT SUM(montant_remise) solde FROM REMISE WHERE id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu)")->fetch();
-                                    echo number_format($r["solde"], 2, ',', ' ') . "€";
+$idu = $_SESSION['logged'];
+$r = $db->query("SELECT SUM(montant_remise) solde FROM REMISE WHERE id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu)")->fetch();
+echo number_format($r["solde"], 2, ',', ' ') . "€";
 
-                                    ?>
+?>
                                 </p>
                                 <p class="text-center" style="height: 23px;margin-top: -24px;font-size: 14px;"><em>Votre
                                         solde</em><br></p>
@@ -69,12 +72,12 @@ include('includes/fonctions.php')
                                         <p class="text-uppercase text-left text-dark" data-toggle="tooltip" data-bs-tooltip="" style="margin: 0;text-align: left;font-weight: bold;width: 80%;float: left;" title="Impayés"><span style="text-decoration: underline;">Total impayés au cours du dernier mois
                                             </span></p><span class="text-right text-danger" style="width: 20%;float: right;">
                                             <?php
-                                            $a = date("Y-m-d");
-                                            $b = date("Y-m-d", strtotime('-1 months'));
-                                            $r = $db->query("SELECT SUM(montant_impaye) total_impaye FROM IMPAYE i JOIN REMISE r ON r.id_remise = i.id_remise WHERE r.id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu) AND date_vente <= '$a' AND date_vente >= '$b' ")->fetch();
-                                            echo number_format($r["total_impaye"], 2, ',', ' ') . "€";
+$a = date("Y-m-d");
+$b = date("Y-m-d", strtotime('-1 months'));
+$r = $db->query("SELECT SUM(montant_impaye) total_impaye FROM IMPAYE i JOIN REMISE r ON r.id_remise = i.id_remise WHERE r.id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu) AND date_vente <= '$a' AND date_vente >= '$b' ")->fetch();
+echo number_format($r["total_impaye"], 2, ',', ' ') . "€";
 
-                                            ?>
+?>
                                         </span>
                                     </div>
                                 </div>
