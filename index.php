@@ -50,7 +50,7 @@
                     </div>
                     <div class="form-group">
                         <div class="input-group">
-                            <input type="password" name="user_password" id="user_password" class="form-control" data-toggle="password">
+                            <input type="password" name="pass" id="email" class="form-control" data-toggle="password">
                             <span class="input-group-text"><i class="fa fa-eye"></i></span>
                         </div>
                     </div>
