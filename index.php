@@ -16,6 +16,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css">
     <link rel="stylesheet" href="style/style.css">
+
+    <!-- Pour l'oeil qui affiche fait disparaitre le mot de passe -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="assets/js/bootstrap-show-password.js"></script>
+
 </head>
 
 <body>
@@ -36,7 +42,19 @@
                 </div>
                 <form method="POST">
                     <div class="form-group"><label for="name">Nom d'utilisateur</label><input class="form-control item" type="text" id="name" name="username"></div>
-                    <div class="form-group"><label for="email">Mot de passe</label><input class="form-control item" type="password" id="email" name="pass"></div>
+                    <!-- <div class="form-group"><label for="email">Mot de passe</label><input class="form-control item" type="password" id="email" name="pass"></div> -->
+                    
+
+                    <div class="form-group">
+                        <label for="email">Mot de passe 
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="password" name="user_password" id="user_password" class="form-control" data-toggle="password">
+                            <span class="input-group-text"><i class="fa fa-eye"></i></span>
+                        </div>
+                    </div>
+
                     <div class="form-group"><button id="connection-button" class="btn btn-primary btn-block btn-lg" type="submit" name="send">SE CONNECTER</button></div>
                     <div id="box">
                         <?php
