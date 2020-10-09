@@ -27,75 +27,63 @@ include 'includes/fonctions.php'
 
 <body>
     <!-- Import de la nav-->
-    <?php include 'includes/nav.php';?>
+    <?php include 'includes/nav.php'; ?>
     <main class="page cv-page">
         <section class="portfolio-block cv">
             <h2 class="text-center"><span style="color: #7C71F5;">
                     <?php
-$id = $_SESSION["logged"];
-$query = $db->query("SELECT raison FROM USER NATURAL JOIN CLIENT WHERE id_user = $id")->fetch();
-echo $query['raison'];
-?>
+                    $id = $_SESSION["logged"];
+                    $query = $db->query("SELECT raison FROM USER NATURAL JOIN CLIENT WHERE id_user = $id")->fetch();
+                    echo $query['raison'];
+                    ?>
                 </span></h2>
             <div class="container">
                 <div class="group">
                     <div class="row">
                         <div class="col">
                             <div class="skills portfolio-info-card">
-                              <h2 style="float: left;width: 45%;">Résumé du compte</h2>
-                              <div style="width: 55%;float: right;">
-                                <form method="post" style="box-shadow:none;max-width: none;margin:0 !important;padding:0 !important;">
-                                <label>Solde au :&nbsp;</label><input type="date" name="date">
-                                <button class="btn btn-primary" type="submit" style="text-align: center;background: rgba(255,255,255,0);color: rgb(0,0,0);box-shadow: 0px 0px 3px;border-style: none;">Rechercher</button>
-                              </div>
-                            <br>
+                                <h2 style="float: left;width: 45%;">Résumé du compte</h2>
+                                <div style="width: 55%;float: right;">
+                                    <form method="post" style="box-shadow:none;max-width: none;margin:0 !important;padding:0 !important;">
+                                        <label>Solde au :&nbsp;</label><input type="date" name="date">
+                                        <button class="btn btn-primary" type="submit" style="text-align: center;background: rgba(255,255,255,0);color: rgb(0,0,0);box-shadow: 0px 0px 3px;border-style: none;">Rechercher</button>
+                                </div>
+                                <br>
 
 
-                                    <?php
-                                        $idu = $_SESSION['logged'];
-                                        $no_debut = "0000-01-01";
-                                        $requete = "SELECT SUM(montant_remise) solde FROM REMISE WHERE id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu)";
-                                        if (isset($_POST['date'])) {
-                                            if ($_POST['date'] != "") {
-                                                $date = $_POST['date'];
-                                            }
-                                        }
-                                        if(isset($date)) $requete .= "AND date_traitement BETWEEN '$no_debut' AND '$date'";
-                                        $r = $db->query($requete)->fetch();
-                                        if($r["solde"]>=0) echo '<p class="text-uppercase text-center text-success border-success" data-toggle="tooltip" data-bs-tooltip="" title="Votre solde" style="width:100%;margin-top: 60px;float:left;line-height: 0px;font-size: 40px;text-shadow: 0px 0px 4px rgb(150,150,150);">';
-                                        else echo '<p class="text-uppercase text-center text-danger border-success" data-toggle="tooltip" data-bs-tooltip="" title="Votre solde" style="font-size: 40px;text-shadow: 0px 0px 4px rgb(150,150,150);">';
-                                        echo number_format($r["solde"], 2, ',', ' ') . "€";
-                                    ?>
+                                <?php
+                                $idu = $_SESSION['logged'];
+                                $no_debut = "0000-01-01";
+                                $requete = "SELECT SUM(montant_remise) solde FROM REMISE WHERE id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu)";
+                                if (isset($_POST['date'])) {
+                                    if ($_POST['date'] != "") {
+                                        $date = $_POST['date'];
+                                    }
+                                }
+                                if (isset($date)) $requete .= "AND date_traitement BETWEEN '$no_debut' AND '$date'";
+                                $r = $db->query($requete)->fetch();
+                                if ($r["solde"] >= 0) echo '<p class="text-uppercase text-center text-success border-success" data-toggle="tooltip" data-bs-tooltip="" title="Votre solde" style="width:100%;margin-top: 60px;float:left;line-height: 0px;font-size: 40px;text-shadow: 0px 0px 4px rgb(150,150,150);">';
+                                else echo '<p class="text-uppercase text-center text-danger border-success" data-toggle="tooltip" data-bs-tooltip="" title="Votre solde" style="font-size: 40px;text-shadow: 0px 0px 4px rgb(150,150,150);">';
+                                echo number_format($r["solde"], 2, ',', ' ') . "€";
+                                ?>
                                 </p>
                                 <p class="text-center" style="height: 23px;margin-top: -24px;font-size: 14px;"><em>Votre
                                         solde</em><br></p>
-
-                                <!--
                                 <div class="row">
-                                    <div class="col" style="text-align: center;">
-                                        <div class="btn-group open" style="border-style: none;"><button class="btn btn-primary" type="button" style="background: rgb(255,255,255);color: rgb(0,0,0);border: 1px solid rgb(0,0,0) ;">Actions</button><button class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-expanded="true" type="button" style="background: rgb(255,255,255);color: rgb(0,0,0);border-style: solid;border-color: rgb(0,0,0);"></button>
-                                            <div class="dropdown-menu"><a class="dropdown-item" href="#">Voir les
-                                                    impayés</a><a class="dropdown-item" href="#">Voir le résumé de
-                                                    toutes les transactions</a><a class="dropdown-item" href="#">Autre</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                -->
-                                <div class="row">
-                                    <div class="skills"style="width: 100%;padding: 25px;margin-bottom: 15px;">
-                                      <br>
-                                            <p class="text-uppercase text-center text-danger border-success" data-toggle="tooltip" data-bs-tooltip="" title="Votre solde" style="font-size: 40px;text-shadow: 0px 0px 4px rgb(150,150,150);">
+                                    <div class="skills" style="width: 100%;padding: 25px;margin-bottom: 15px;">
+                                        <br>
+                                        <p class="text-uppercase text-center text-danger border-success" data-toggle="tooltip" data-bs-tooltip="" title="Votre solde" style="font-size: 40px;text-shadow: 0px 0px 4px rgb(150,150,150);">
                                             <?php
-                                                $today = date("Y-m-d");
-                                                $req = "SELECT SUM(montant_impaye) total_impaye FROM IMPAYE i JOIN REMISE r ON r.id_remise = i.id_remise WHERE r.id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu)";
-                                                if(isset($date)) $req .= "AND date_vente BETWEEN '$no_debut' AND '$date'";
-                                                else $req .= "AND date_vente BETWEEN '$no_debut' AND '$today'";
-                                                $r = $db->query($req)->fetch();
-                                                echo number_format($r["total_impaye"], 2, ',', ' ') . "€";
+                                            $today = date("Y-m-d");
+                                            $req = "SELECT SUM(montant_impaye) total_impaye FROM IMPAYE i JOIN REMISE r ON r.id_remise = i.id_remise WHERE r.id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu)";
+                                            if (isset($date)) $req .= "AND date_vente BETWEEN '$no_debut' AND '$date'";
+                                            else $req .= "AND date_vente BETWEEN '$no_debut' AND '$today'";
+                                            $r = $db->query($req)->fetch();
+                                            echo number_format($r["total_impaye"], 2, ',', ' ') . "€";
 
                                             ?>
-                                        <p class="text-center" style="height: 23px;margin-top: -24px;font-size: 14px;"><em>Vos impayés</em><br></p>
-                                        </span>
+                                            <p class="text-center" style="height: 23px;margin-top: -24px;font-size: 14px;"><em>Vos impayés</em><br></p>
+                                            </span>
                                     </div>
                                 </div>
                             </div>

@@ -1,5 +1,5 @@
-<?php include "includes/mysql.php";?>
-<?php session_start();?>
+<?php include "includes/mysql.php"; ?>
+<?php session_start(); ?>
 
 <!DOCTYPE html>
 <html>
@@ -33,7 +33,7 @@
     </script>
 
     <!-- Import de la nav-->
-    <?php include 'includes/nav.php';?>
+    <?php include 'includes/nav.php'; ?>
     <main class="page contact-page">
         <section class="portfolio-block contact">
             <div class="container">
@@ -43,10 +43,10 @@
                 <form method="POST">
                     <div class="form-group"><label for="name">Nom d'utilisateur</label><input class="form-control item" type="text" id="name" name="username"></div>
                     <!-- <div class="form-group"><label for="email">Mot de passe</label><input class="form-control item" type="password" id="email" name="pass"></div> -->
-                    
+
 
                     <div class="form-group">
-                        <label for="email">Mot de passe 
+                        <label for="email">Mot de passe
                     </div>
                     <div class="form-group">
                         <div class="input-group">
@@ -58,99 +58,99 @@
                     <div class="form-group"><button id="connection-button" class="btn btn-primary btn-block btn-lg" type="submit" name="send">SE CONNECTER</button></div>
                     <div id="box">
                         <?php
-if (isset($_SESSION["logged"]) && $_SESSION["permission"] == 1) {
-    header("location: tresorerie.php");
-}
-//si une session client est déjà lancée redirige vers la page de tresorerie
-
-elseif (isset($_SESSION["logged"]) && $_SESSION["permission"] == 2) {
-    header("location: product_owner.php");
-}
-//si une session product owner est déjà lancée redirige vers la page du product_owner
-
-elseif (isset($_SESSION["logged"]) && $_SESSION["permission"] == 3) {
-    header("location: admin.php");
-}
-//si une session admin est déjà lancée redirige vers la page admin
-
-if (isset($_REQUEST['send'])) //si le formulaire est envoyé avec un clic bouton -> "submitBtnLogin"
-{
-
-    $username = strip_tags($_REQUEST["username"]);
-    $password = strip_tags($_REQUEST["pass"]);
-
-    if (empty($username)) { // si le nom est vide
-        $errorMsg[] = "Veuillez saisir un login"; // on inscrit un message d'erreur dans un tableau (si il y en a plusieurs)
-    } else if (empty($password)) { // si le mdp est vide
-        $errorMsg[] = "Veuillez saisir un mot de passe "; // on inscrit un message d'erreur dans un tableau (si il y en a plusieurs)
-    } else {
-        try {
-            $select_registered_users = $db->prepare("SELECT * FROM USER WHERE username=:username"); // on selectionne les utilisateurs avec ce pseudo ou cet email
-            $select_registered_users->execute(array(':username' => $username)); // et on execute la requete avec les champs rentrés par l'utilisateur
-            $row = $select_registered_users->fetch(PDO::FETCH_ASSOC); // avec la methode de recherche
-
-            if ($select_registered_users->rowCount() > 0) // si la requête compte plus de zéro lignes alors
-            {
-                if ($username == $row["username"]) // on vérifie si la ligne est bien égale avec le pseudo et l'email rentré par l'utilisateur
-                {
-                    if (password_verify($password, $row["password"])) // on compare le mdp encrypté stocké en base de donné et le mdp rentré par l'utilisateur
-                    {
-                        $_SESSION["logged"] = $row["id_user"]; // on démarre une session avec l'id user_login qui correspondra à l'id de l'utilisateur
-                        $_SESSION["username"] = $row["username"];
-                        $_SESSION["permission"] = $row['permission'];
-
-                        $loginMsg = "Connecté avec succès ! Redirection..."; // on initialise un message de succès
-                        if ($_SESSION["permission"] == "1") {
-                            header("refresh:2; tresorerie.php"); // après 2 secondes on redirige le client sur sa trésorerie
-                        } else if ($_SESSION["permission"] == "2") {
-                            header("refresh:2; product_owner.php"); // en redirige le product owner sur la page de vue des trésorerie client
-                        } else if ($_SESSION["permission"] == "3") {
-                            header("refresh:2; admin.php"); // cette page n'existe pas encore
+                        if (isset($_SESSION["logged"]) && $_SESSION["permission"] == 1) {
+                            header("location: tresorerie.php");
                         }
-                    } else // si la vérification du mot de passe échoue
-                    {
-                        $errorMsg[] = "Mauvais mot de passe"; // on inscrit un msg d'erreur
-                    }
-                } else // si la comparaison avec l'entrée de l'utilisateur et la db echoue
-                {
-                    $errorMsg[] = "Mauvais login"; // on inscrit un msg d'erreur
-                }
-            } else // si la comparaison avec l'entrée de l'utilisateur et la db echoue
-            {
-                $errorMsg[] = "Mauvais login"; // on inscrit un msg d'erreur
-            }
-        } catch (PDOException $e) {
-            $e->getMessage();
-        }
-    }
-}
-?>
+                        //si une session client est déjà lancée redirige vers la page de tresorerie
+
+                        elseif (isset($_SESSION["logged"]) && $_SESSION["permission"] == 2) {
+                            header("location: product_owner.php");
+                        }
+                        //si une session product owner est déjà lancée redirige vers la page du product_owner
+
+                        elseif (isset($_SESSION["logged"]) && $_SESSION["permission"] == 3) {
+                            header("location: admin.php");
+                        }
+                        //si une session admin est déjà lancée redirige vers la page admin
+
+                        if (isset($_REQUEST['send'])) //si le formulaire est envoyé avec un clic bouton -> "submitBtnLogin"
+                        {
+
+                            $username = strip_tags($_REQUEST["username"]);
+                            $password = strip_tags($_REQUEST["pass"]);
+
+                            if (empty($username)) { // si le nom est vide
+                                $errorMsg[] = "Veuillez saisir un login"; // on inscrit un message d'erreur dans un tableau (si il y en a plusieurs)
+                            } else if (empty($password)) { // si le mdp est vide
+                                $errorMsg[] = "Veuillez saisir un mot de passe "; // on inscrit un message d'erreur dans un tableau (si il y en a plusieurs)
+                            } else {
+                                try {
+                                    $select_registered_users = $db->prepare("SELECT * FROM USER WHERE username=:username"); // on selectionne les utilisateurs avec ce pseudo ou cet email
+                                    $select_registered_users->execute(array(':username' => $username)); // et on execute la requete avec les champs rentrés par l'utilisateur
+                                    $row = $select_registered_users->fetch(PDO::FETCH_ASSOC); // avec la methode de recherche
+
+                                    if ($select_registered_users->rowCount() > 0) // si la requête compte plus de zéro lignes alors
+                                    {
+                                        if ($username == $row["username"]) // on vérifie si la ligne est bien égale avec le pseudo et l'email rentré par l'utilisateur
+                                        {
+                                            if (password_verify($password, $row["password"])) // on compare le mdp encrypté stocké en base de donné et le mdp rentré par l'utilisateur
+                                            {
+                                                $_SESSION["logged"] = $row["id_user"]; // on démarre une session avec l'id user_login qui correspondra à l'id de l'utilisateur
+                                                $_SESSION["username"] = $row["username"];
+                                                $_SESSION["permission"] = $row['permission'];
+
+                                                $loginMsg = "Connecté avec succès ! Redirection..."; // on initialise un message de succès
+                                                if ($_SESSION["permission"] == "1") {
+                                                    header("refresh:2; tresorerie.php"); // après 2 secondes on redirige le client sur sa trésorerie
+                                                } else if ($_SESSION["permission"] == "2") {
+                                                    header("refresh:2; product_owner.php"); // en redirige le product owner sur la page de vue des trésorerie client
+                                                } else if ($_SESSION["permission"] == "3") {
+                                                    header("refresh:2; admin.php"); // cette page n'existe pas encore
+                                                }
+                                            } else // si la vérification du mot de passe échoue
+                                            {
+                                                $errorMsg[] = "Mauvais mot de passe"; // on inscrit un msg d'erreur
+                                            }
+                                        } else // si la comparaison avec l'entrée de l'utilisateur et la db echoue
+                                        {
+                                            $errorMsg[] = "Mauvais login"; // on inscrit un msg d'erreur
+                                        }
+                                    } else // si la comparaison avec l'entrée de l'utilisateur et la db echoue
+                                    {
+                                        $errorMsg[] = "Mauvais login"; // on inscrit un msg d'erreur
+                                    }
+                                } catch (PDOException $e) {
+                                    $e->getMessage();
+                                }
+                            }
+                        }
+                        ?>
                         <?php
-if (isset($errorMsg)) // si le tableau errorMsg est initialisé
-{
-    foreach ($errorMsg as $error) // pour chaque ligne du tableau on initalise une variable
-    {
-        ?>
+                        if (isset($errorMsg)) // si le tableau errorMsg est initialisé
+                        {
+                            foreach ($errorMsg as $error) // pour chaque ligne du tableau on initalise une variable
+                            {
+                        ?>
                                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
                                     <strong>Oups !</strong> <?php echo $error // on affiche la variable ;
-         ?>
+                                                            ?>
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                             <?php
-}
-}
-if (isset($loginMsg)) // si un message de succès est initialisé
-{
-    ?>
+                            }
+                        }
+                        if (isset($loginMsg)) // si un message de succès est initialisé
+                        {
+                            ?>
                             <div class="alert alert-success" role="alert">
                                 <?php echo $loginMsg; // on affiche ce message
-     ?>
+                                ?>
                             </div>
                         <?php
-}
-?>
+                        }
+                        ?>
                     </div>
                 </form>
 
