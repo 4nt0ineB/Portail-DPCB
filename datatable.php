@@ -1,4 +1,4 @@
-<?php include "includes/mysql.php";?>
+<?php include "includes/mysql.php"; ?>
 
 <!DOCTYPE html>
 <html>
@@ -52,18 +52,18 @@
             <div class="container">
 
                 <?php
-session_start();
-//imaginons qu'on a cette session :
-$_SESSION["id_user"] = 4;
-$_SESSIOn["username"] = "Tincidunt";
-$_SESSION["permission"] = 1;
+                session_start();
+                //imaginons qu'on a cette session :
+                $_SESSION["id_user"] = 4;
+                $_SESSIOn["username"] = "Tincidunt";
+                $_SESSION["permission"] = 1;
 
-//par exemple on veut tous les impayés auquel cette pauvre entreprise fait face
+                //par exemple on veut tous les impayés auquel cette pauvre entreprise fait face
 
-$id = $_SESSION['id_user'];
-$resultat = $db->query("SELECT * FROM `IMPAYE` i JOIN DEVISE ON i.id_devise = DEVISE.id_devise, (SELECT * FROM `REMISE` WHERE id_client = (SELECT id_client FROM CLIENT WHERE id_user = $id)) r  WHERE r.id_remise = i.id_remise");
+                $id = $_SESSION['id_user'];
+                $resultat = $db->query("SELECT * FROM `IMPAYE` i JOIN DEVISE ON i.id_devise = DEVISE.id_devise, (SELECT * FROM `REMISE` WHERE id_client = (SELECT id_client FROM CLIENT WHERE id_user = $id)) r  WHERE r.id_remise = i.id_remise");
 
-?>
+                ?>
 
                 <table id="datatable" class="table table-striped table-bordered"">
                     <thead>
@@ -81,8 +81,8 @@ $resultat = $db->query("SELECT * FROM `IMPAYE` i JOIN DEVISE ON i.id_devise = DE
                     </thead>
                     <tbody>
                         <?php
-while ($r = $resultat->fetch()) {
-    echo '<tr>
+                        while ($r = $resultat->fetch()) {
+                            echo '<tr>
                             <td>' . $r['siren'] . '</td>
                             <td>' . $r['date_vente'] . '</td>
                             <td>' . $r['date_remise'] . '</td>
@@ -93,8 +93,8 @@ while ($r = $resultat->fetch()) {
                             <td>' . number_format($r['montant_impaye'], 2, '.', ' ') . '</td>
                             <td>' . $r['libelle'] . '</td>
                             </tr>';
-}
-?>
+                        }
+                        ?>
                     </tbody>
                 </table>
 

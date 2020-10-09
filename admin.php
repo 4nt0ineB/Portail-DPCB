@@ -58,12 +58,12 @@ include('includes/fonctions.php')
                                                                     &nbsp;<input type="text" name="raison"></label></td>
                                                     </tr>
                                                     <tr>
-                                                            <td style="text-align: center;"><button class="btn btn-primary" type="submit" style="text-align: center;background: rgba(255,255,255,0);color: rgb(0,0,0);box-shadow: 0px 0px 3px;border-style: none;">Créer</button>
-                                                            </td>
+                                                        <td style="text-align: center;"><button class="btn btn-primary" type="submit" style="text-align: center;background: rgba(255,255,255,0);color: rgb(0,0,0);box-shadow: 0px 0px 3px;border-style: none;">Créer</button>
+                                                        </td>
                                                         </form>
                                                     </tr>
                                                     <tr></tr>
-                                                    
+
                                                 </tbody>
                                             </table>
                                         </div>
@@ -71,9 +71,9 @@ include('includes/fonctions.php')
                                 </div>
 
                                 <?php
-                                     $requete = "SELECT `id_client`,`siren`,`raison`,`username`,`password` FROM `CLIENT` NATURAL JOIN `USER` WHERE `permission` = 1";
-                                     $resultat = $db->query($requete);
-                                     
+                                $requete = "SELECT `id_client`,`siren`,`raison`,`username`,`password` FROM `CLIENT` NATURAL JOIN `USER` WHERE `permission` = 1";
+                                $resultat = $db->query($requete);
+
                                 ?>
 
                                 <table id="datatable" class="table table-striped table-bordered" width="100%">
@@ -95,7 +95,6 @@ include('includes/fonctions.php')
                                                       <td>' . $r['raison'] . '</td>
                                                       <td>' . $r['username'] . '</td>
                                                       <td>' . $r['password'] . '</td>';
-                                                      
                                         }
                                         ?>
 
@@ -103,10 +102,10 @@ include('includes/fonctions.php')
                                 </table>
 
                                 <?php
-                                    //if (isset())
+                                //if (isset())
                                 ?>
 
-                            
+
                             </div>
                         </div>
                     </div>
