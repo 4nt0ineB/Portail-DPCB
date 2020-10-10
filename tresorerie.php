@@ -1,11 +1,20 @@
 <?php
 session_start();
-if (!isset($_SESSION["logged"])) {
+if (!isset($_SESSION["logged"])) { //Vérifie si une session client est en cours sinon renvoi à l'index
     header("location: index.php");
 }
+if ($_SESSION["permission"] == "1") { // 
+    if (isset($_GET["req"])) {
+        unset($_GET["req"]);
+        header("refresh:0; impayes.php");
+    }
+}
+if ($_SESSION["permission"] == "2" && !(isset($_GET["req"]))) { // owner mais pas de get req (id client) -> retour owner
+    header("location: product_owner.php");
+}
 //Vérifie si une session est en cours sinon renvoi à l'index
-require_once "includes/mysql.php";
-include 'includes/fonctions.php'
+require_once("includes/mysql.php");
+include('includes/fonctions.php');
 ?>
 
 
@@ -32,7 +41,7 @@ include 'includes/fonctions.php'
         <section class="portfolio-block cv">
             <h2 class="text-center"><span style="color: #7C71F5;">
                     <?php
-                    $id = $_SESSION["logged"];
+                    $id = (isset($_GET["req"])) ? $_GET["req"] : $_SESSION["logged"];
                     $query = $db->query("SELECT raison FROM USER NATURAL JOIN CLIENT WHERE id_user = $id")->fetch();
                     echo $query['raison'];
                     ?>
@@ -52,7 +61,7 @@ include 'includes/fonctions.php'
 
 
                                 <?php
-                                $idu = $_SESSION['logged'];
+                                $idu = (isset($_GET["req"])) ? $_GET["req"] : $_SESSION["logged"];
                                 $no_debut = "0000-01-01";
                                 $requete = "SELECT SUM(montant_remise) solde FROM REMISE WHERE id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu)";
                                 if (isset($_POST['date'])) {
