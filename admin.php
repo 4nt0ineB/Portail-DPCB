@@ -1,5 +1,5 @@
 <?php
-require_once("includes/mysql.php");
+
 
 session_start();
 if (!isset($_SESSION["logged"]) || $_SESSION["permission"] != "3") header("location: index.php"); //Vérifie si une session est en cours sinon renvoi à l'index
@@ -15,13 +15,8 @@ include('includes/fonctions.php')
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Portail</title>
-    <link rel="icon" href="assets/img/favicon2.png">
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css">
+    <?php require_once("includes/head.php"); ?>
+
 </head>
 
 <body>
@@ -76,7 +71,7 @@ include('includes/fonctions.php')
 
                                 ?>
 
-                                <table id="datatable" class="table table-striped table-bordered" width="100%">
+                                <table id="" class="table table-striped table-bordered" width="100%">
                                     <thead>
                                         <tr>
                                             <th>id_client</th>

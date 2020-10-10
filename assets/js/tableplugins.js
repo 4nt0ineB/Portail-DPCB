@@ -1,27 +1,27 @@
 $(document).ready(function () {
-  var collapsedGroups = {};
+    var collapsedGroups = {};
     var table = $('#datatable').DataTable({
         /* scrollY: 500,
         paging: false, */ // pour mettre une scroll bar à la place
-        "lengthMenu": [[5,10,20,50,100,200,-1], [5,10,20,50,100,200,"All"]],
+        "lengthMenu": [[5, 10, 20, 50, 100, 200, -1], [5, 10, 20, 50, 100, 200, "Tous"]],
         buttons: ['copy', {
-                extend: 'excelHtml5',
-                exportOptions: {
-                    columns: [ 0, 1, 2, 3,4,5,6,7 ]
-                }
-            },, {
+            extend: 'excelHtml5',
+            exportOptions: {
+                columns: [0, 1, 2, 3, 4, 5, 6, 7]
+            }
+        }, , {
                 extend: 'pdfHtml5',
                 exportOptions: {
-                    columns: [ 0, 1, 2, 3,4,5,6,7 ]
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7]
                 }
-            },, 'colvis'],
+            }, , 'colvis'],
         "language": { // traduction en français de la table
-          buttons: {
-				"copy": "Copier",
-				"colvis": "Visibilité des colonnes",
-				"testbutt": "Test Translated",
-				"coldemo": "Collection Demo Translated"
-			},
+            buttons: {
+                "copy": "Copier",
+                "colvis": "Visibilité des colonnes",
+                "testbutt": "Test Translated",
+                "coldemo": "Collection Demo Translated"
+            },
             "sEmptyTable": "Aucune donnée disponible dans le tableau",
             "sInfo": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
             "sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
@@ -56,9 +56,9 @@ $(document).ready(function () {
         },
         responsive: true,
         columnDefs: [{
-          className: 'control',
-          orderable: false,
-          targets: 0
+            className: 'control',
+            orderable: false,
+            targets: 0
         }]
 
     });
@@ -66,14 +66,14 @@ $(document).ready(function () {
     table.buttons().container()
         .appendTo('#datatable_wrapper .col-md-6:eq(0)');
 
-        $('#btn-show-all-doc').on('click', expandCollapseAll);
+    $('#btn-show-all-doc').on('click', expandCollapseAll);
 
-function expandCollapseAll() {
-  table.rows('.parent').nodes().to$().find('td:first-child').trigger('click').length ||
-  table.rows(':not(.parent)').nodes().to$().find('td:first-child').trigger('click')
-}
+    function expandCollapseAll() {
+        table.rows('.parent').nodes().to$().find('td:first-child').trigger('click').length ||
+            table.rows(':not(.parent)').nodes().to$().find('td:first-child').trigger('click')
+    }
 
-$('#datatable tbody').on('click', 'tr.group-start', function () {
+    $('#datatable tbody').on('click', 'tr.group-start', function () {
         var name = $(this).data('name');
         collapsedGroups[name] = !collapsedGroups[name];
         table.draw(false);

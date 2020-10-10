@@ -58,24 +58,24 @@
                     <div class="form-group"><button id="connection-button" class="btn btn-primary btn-block btn-lg" type="submit" name="send">SE CONNECTER</button></div>
                     <div id="box">
                         <?php
-                        if (isset($_SESSION["logged"]) && $_SESSION["permission"] == 1) {
-                            header("location: tresorerie.php");
+                        if (isset($_SESSION["logged"])) {
+                            //session client  lancée redirige vers la page de tresorerie
+                            if ($_SESSION["permission"] == 1) {
+                                header("location: tresorerie.php");
+                            }
+                            //session product owner lancée redirige vers la page du product_owner
+                            if ($_SESSION["permission"] == 2) {
+                                header("location: product_owner.php");
+                            }
+                            //session admin est lancée redirige vers la page admin
+                            if ($_SESSION["permission"] == 3) {
+                                header("location: admin.php");
+                            }
                         }
-                        //si une session client est déjà lancée redirige vers la page de tresorerie
 
-                        elseif (isset($_SESSION["logged"]) && $_SESSION["permission"] == 2) {
-                            header("location: product_owner.php");
-                        }
-                        //si une session product owner est déjà lancée redirige vers la page du product_owner
-
-                        elseif (isset($_SESSION["logged"]) && $_SESSION["permission"] == 3) {
-                            header("location: admin.php");
-                        }
-                        //si une session admin est déjà lancée redirige vers la page admin
 
                         if (isset($_REQUEST['send'])) //si le formulaire est envoyé avec un clic bouton -> "submitBtnLogin"
                         {
-
                             $username = strip_tags($_REQUEST["username"]);
                             $password = strip_tags($_REQUEST["pass"]);
 
