@@ -40,7 +40,11 @@ include('includes/fonctions.php');
       google.charts.load('current', {'packages':['bar']});
       google.charts.setOnLoadCallback(drawChart);
 
+      <?php
+        $idu = (isset($_GET["req"])) ? $_GET["req"] : $_SESSION["logged"];
+        $countColumns = $db->query("SELECT COUNT(`date_traitement`) col FROM `REMISE` WHERE id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu)")->fetch();
 
+      ?>
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
           ['Année', 'Solde total','Impayés'],
@@ -56,7 +60,9 @@ include('includes/fonctions.php');
         var options = {
 
             title: 'Histogramme Solde et Impayés',
-            width: 1500,
+            width: <?php
+            if(($countColumns["col"])>4) echo "1500";
+            else echo "300+300*".$countColumns["col"]; ?>,
             height: 400,
             isStacked: 'percent',
         };
@@ -100,7 +106,7 @@ include('includes/fonctions.php');
 
 
                                 <?php
-                                $idu = (isset($_GET["req"])) ? $_GET["req"] : $_SESSION["logged"];
+
                                 $no_debut = "0000-01-01";
                                 $requete = "SELECT SUM(montant_remise) solde FROM REMISE WHERE id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu)";
                                 if (isset($_POST['date'])) {
