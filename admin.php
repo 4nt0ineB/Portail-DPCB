@@ -88,30 +88,30 @@ include('includes/fonctions.php')
 
                                                         <?php
 
-                                                        if (!($statusDelete)) {
-                                                            if($statusModify){
+                                                        if (!($statusDelete)) { // formulaire de suppression non choisi
+                                                            if($statusModify){ // formulaire de modification choisi
                                                                 $id_modify_client = $_POST['id_modify_client'];
                                                                 $udata = $db->query("SELECT * FROM `CLIENT` NATURAL JOIN `USER` WHERE `permission` = 1 AND id_client = $id_modify_client")->fetch();
 
                                                             }
 
                                                             ?>
-                                                            <form method="post" name="creation">
+                                                            <form method="post">
 
                                                                 <td>
                                                                     <label style="font-style: normal;">Username :&nbsp;</label>
-                                                                    <input type="text" name="username" value=<?php if ($statusModify) echo $udata["username"] . ""; ?> >
+                                                                    <input type="text" name="username" required pattern="[A-Za-z0-9]{1,20}" value=<?php if ($statusModify) echo $udata["username"] . ""; ?> >
                                                                 </td>
                                                                 <td>
                                                                     <label style="font-style: normal;">Mot de passe :&nbsp;</label>
-                                                                    <input type="text" name="mdp"></td>
+                                                                    <input type="text" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" placeholder="laisser vide si inchangé" name="mdp"></td>
                                                                 <td>
                                                                     <label>N° SIREN :&nbsp;</label>
-                                                                    <input type="text" name="siren" value=<?php if ($statusModify) echo $udata["siren"] . ""; ?> >
+                                                                    <input type="text" name="siren" required pattern="{1,20}" value=<?php if ($statusModify) echo $udata["siren"] . ""; ?> >
                                                                 </td>
                                                                 <td>
                                                                     <label style="font-style: normal;">Raison sociale :&nbsp;</label>
-                                                                    <input type="text" name="raison" value="<?php if ($statusModify) echo ($udata["raison"]) ; ?>" > <!-- Problème ?! raison coupé -->
+                                                                    <input type="text" name="raison" required pattern="[A-Za-z0-9 ]{1,20}" value="<?php if ($statusModify) echo ($udata["raison"]) ; ?>" > <!-- Problème ?! raison coupé -->
                                                                 </td>
                                                                 </tr>
                                                                 <tr>
@@ -126,7 +126,7 @@ include('includes/fonctions.php')
                                                             $id_modify_client = $_POST['id_delete_client'];
                                                             $udata = $db->query("SELECT * FROM `CLIENT` NATURAL JOIN `USER` WHERE `permission` = 1 AND id_client = $id_modify_client")->fetch();
                                                             ?>
-                                                            <form method="post" name="creation">
+                                                            <form method="post">
 
                                                                 <td>
                                                                     <label style="font-style: normal;">Suppression du compte :&nbsp;</label>
@@ -148,6 +148,7 @@ include('includes/fonctions.php')
                                                                 <td>
                                                                     <label style="font-style: normal;">La demande de suppression sera associé à votre nom et le product owner devra la valider:&nbsp;</label>
                                                                 </td>
+                                                                <input hiden type="text" value=<?php echo $id_modify_client ?>>
                                                                 <td colspan="4" style="text-align: center;">
 
                                                                     <button class="btn btn-primary" name="subdelete" type="submit" style="text-align: center;background: rgba(255,255,255,0);color: rgb(0,0,0);box-shadow: 0px 0px 3px;border-style: none;">
@@ -158,20 +159,22 @@ include('includes/fonctions.php')
                                                             <?php
                                                         }
 
-                                                        if(isset($_POST["submodify"])){
+                                                        if(isset($_POST["submodify"]))
+                                                        {
+
+                                                            
+                                                            
+                                                            $r = $db->prepare("SELECT `id_client`,`siren`,`raison`,`username`,`password` FROM `CLIENT` NATURAL JOIN `USER` WHERE `permission` = 1");
+                                                            $r = $r->execute(array());
+                                                            if($r != 0){
+
+                                                            }
 
 
-                                                            if()
+
 
 
                                                         }
-
-
-
-
-
-
-
                                                         ?>
 
 
