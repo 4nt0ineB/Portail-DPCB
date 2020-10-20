@@ -11,9 +11,8 @@ if ($_SESSION["permission"] == "1") { //
 }
 if ($_SESSION["permission"] == "2" && !(isset($_GET["req"]))) { // owner mais pas de get req (id client) -> retour owner
     header("location: product_owner.php");
-} else {
-    header("location: index.php");
 }
+
 //Vérifie si une session est en cours sinon renvoi à l'index
 require_once("includes/mysql.php");
 include('includes/fonctions.php');
