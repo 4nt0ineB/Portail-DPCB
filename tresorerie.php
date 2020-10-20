@@ -34,6 +34,7 @@ include('includes/fonctions.php');
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css">
 
+    <!--Histogramme du solde total et des impayés en fonction des années-->
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -42,29 +43,27 @@ include('includes/fonctions.php');
 
       <?php
         $idu = (isset($_GET["req"])) ? $_GET["req"] : $_SESSION["logged"];
+        //Renvoi le nombres de barres qui vont être nécessaire à l'histogramme
         $countColumns = $db->query("SELECT COUNT(`date_traitement`) col FROM `REMISE` WHERE id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu)")->fetch();
-
+        //Renvoi le montant total du solde selon l'année ainsi que les impayés selon l'année puis l'année
+        $solde = $db->query("SELECT SUM(montant_remise) solde,YEAR(`date_traitement`)annee,SUM(montant_impaye) total_impaye FROM REMISE r,IMPAYE i WHERE id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu) AND r.id_remise = i.id_remise AND r.id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user =$idu) GROUP BY YEAR(`date_traitement`)");
       ?>
+
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
           ['Année', 'Solde total','Impayés'],
-          ['2014', 1000, 400],
-          ['2015', 1050, 500],
-          ['2016', 1500, 800],
-          ['2017', 2000, 1000],
-          ['2018', 2500, 1500],
-          ['2019', 3000, 4000],
-          ['2020', 10000, 5000],
+          <?php while ($s = $solde->fetch()) {
+            echo "['".$s['annee']."',".$s['solde'].",".abs($s['total_impaye'])."],";
+          } ?>
         ]);
 
         var options = {
 
             title: 'Histogramme Solde et Impayés',
             width: <?php
-            if(($countColumns["col"])>4) echo "1500";
-            else echo "300+300*".$countColumns["col"]; ?>,
+            if(($countColumns["col"])>4) echo "1500";  // Change la largeur d'affichage de l'histogramme en fonction du nombres de barres à afficher
+            else echo "300+300*".$countColumns["col"]; ?>, //à partir d'un certain nombre de barres affiche l'histogramme avec la même largeur
             height: 400,
-            isStacked: 'percent',
         };
 
         var chart = new google.charts.Bar(document.getElementById('columnchart_values'));
@@ -129,7 +128,7 @@ include('includes/fonctions.php');
                                         <p class="text-uppercase text-center text-danger border-success" data-toggle="tooltip" data-bs-tooltip="" title="Votre solde" style="font-size: 40px;text-shadow: 0px 0px 4px rgb(150,150,150);">
                                             <?php
                                             $today = date("Y-m-d");
-                                            $req = "SELECT SUM(montant_impaye) total_impaye FROM IMPAYE i JOIN REMISE r ON r.id_remise = i.id_remise WHERE r.id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu)";
+                                              $req = "SELECT SUM(montant_impaye) total_impaye FROM IMPAYE i JOIN REMISE r ON r.id_remise = i.id_remise WHERE r.id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu)";
                                             if (isset($date)) $req .= "AND date_vente BETWEEN '$no_debut' AND '$date'";
                                             else $req .= "AND date_vente BETWEEN '$no_debut' AND '$today'";
                                             $r = $db->query($req)->fetch();
@@ -149,7 +148,6 @@ include('includes/fonctions.php');
                 </div>
             </div>
         </section>
-
     <center><div id="columnchart_values" style="width: 2000px; height: 600px;"></div>
 
 
