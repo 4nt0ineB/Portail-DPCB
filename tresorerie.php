@@ -33,6 +33,40 @@ include('includes/fonctions.php');
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css">
+
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['bar']});
+      google.charts.setOnLoadCallback(drawChart);
+
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Année', 'Solde total','Impayés'],
+          ['2014', 1000, 400],
+          ['2015', 1050, 500],
+          ['2016', 1500, 800],
+          ['2017', 2000, 1000],
+          ['2018', 2500, 1500],
+          ['2019', 3000, 4000],
+          ['2020', 10000, 5000],
+        ]);
+
+        var options = {
+
+            title: 'Histogramme Solde et Impayés',
+            width: 1500,
+            height: 400,
+            isStacked: 'percent',
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('columnchart_values'));
+
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+      }
+    </script>
+
 </head>
 
 <body>
@@ -105,6 +139,10 @@ include('includes/fonctions.php');
                 </div>
             </div>
         </section>
+
+    <center><div id="columnchart_values" style="width: 2000px; height: 600px;"></div>
+
+
     </main>
     <?php  require_once("includes/footer.php");?>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
