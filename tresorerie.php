@@ -33,44 +33,57 @@ include('includes/fonctions.php');
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/pikaday.min.js"></script>
+    <script src="assets/js/script.min.js"></script>
 
     <!--Histogramme du solde total et des impayés en fonction des années-->
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-      google.charts.load('current', {'packages':['bar']});
-      google.charts.setOnLoadCallback(drawChart);
+        google.charts.load('current', {
+            'packages': ['bar']
+        });
+        google.charts.setOnLoadCallback(drawChart);
 
-      <?php
+        <?php
         $idu = (isset($_GET["req"])) ? $_GET["req"] : $_SESSION["logged"];
         //Renvoi le nombres de barres qui vont être nécessaire à l'histogramme
         $countColumns = $db->query("SELECT COUNT(`date_traitement`) col FROM `REMISE` WHERE id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu)")->fetch();
         //Renvoi le montant total du solde selon l'année ainsi que les impayés selon l'année puis l'année
         $solde = $db->query("SELECT SUM(montant_remise) solde,YEAR(`date_traitement`)annee,SUM(montant_impaye) total_impaye FROM REMISE r,IMPAYE i WHERE id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu) AND r.id_remise = i.id_remise AND r.id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user =$idu) GROUP BY YEAR(`date_traitement`)");
-      ?>
+        ?>
 
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Année', 'Solde total','Impayés'],
-          <?php while ($s = $solde->fetch()) {
-            echo "['".$s['annee']."',".$s['solde'].",".abs($s['total_impaye'])."],";
-          } ?>
-        ]);
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Année', 'Solde total', 'Impayés'],
+                <?php while ($s = $solde->fetch()) {
+                    echo "['" . $s['annee'] . "'," . $s['solde'] . "," . abs($s['total_impaye']) . "],";
+                } ?>
+            ]);
 
-        var options = {
+            var options = {
 
-            title: 'Histogramme Solde et Impayés',
-            width: <?php
-            if(($countColumns["col"])>4) echo "1500";  // Change la largeur d'affichage de l'histogramme en fonction du nombres de barres à afficher
-            else echo "300+300*".$countColumns["col"]; ?>, //à partir d'un certain nombre de barres affiche l'histogramme avec la même largeur
-            height: 400,
-        };
+                title: 'Histogramme Solde et Impayés'
 
-        var chart = new google.charts.Bar(document.getElementById('columnchart_values'));
+            };
 
-        chart.draw(data, google.charts.Bar.convertOptions(options));
-      }
+            var chart = new google.charts.Bar(document.getElementById('columnchart_values'));
+
+            chart.draw(data, google.charts.Bar.convertOptions(options));
+        }
+        $(window).resize(function() {
+            drawChart();
+        });
     </script>
+    <style>
+        .chart {
+            width: 100%;
+            min-height: 450px;
+        }
+    </style>
 
 </head>
 
@@ -82,9 +95,8 @@ include('includes/fonctions.php');
             <h2 class="text-center"><span style="color: #7C71F5;">
                     <?php
                     $id = (isset($_GET["req"])) ? secure_sqlformat($_GET["req"]) : $_SESSION["logged"];
-                    if(empty($id) || !is_numeric($id)){
+                    if (empty($id) || !is_numeric($id)) {
                         header("location: index.php");
-
                     }
                     $query = $db->query("SELECT raison FROM USER NATURAL JOIN CLIENT WHERE id_user = $id")->fetch();
                     echo $query['raison'];
@@ -128,7 +140,7 @@ include('includes/fonctions.php');
                                         <p class="text-uppercase text-center text-danger border-success" data-toggle="tooltip" data-bs-tooltip="" title="Votre solde" style="font-size: 40px;text-shadow: 0px 0px 4px rgb(150,150,150);">
                                             <?php
                                             $today = date("Y-m-d");
-                                              $req = "SELECT SUM(montant_impaye) total_impaye FROM IMPAYE i JOIN REMISE r ON r.id_remise = i.id_remise WHERE r.id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu)";
+                                            $req = "SELECT SUM(montant_impaye) total_impaye FROM IMPAYE i JOIN REMISE r ON r.id_remise = i.id_remise WHERE r.id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu)";
                                             if (isset($date)) $req .= "AND date_vente BETWEEN '$no_debut' AND '$date'";
                                             else $req .= "AND date_vente BETWEEN '$no_debut' AND '$today'";
                                             $r = $db->query($req)->fetch();
@@ -142,22 +154,24 @@ include('includes/fonctions.php');
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+
+                        <div class="clearfix"></div>
+                        <div class="col-md-12">
+                            <div class="skills portfolio-info-card">
+                                <div id="columnchart_values" class="chart"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="hobbies group">
-                    <div class="heading"></div>
-                </div>
+
             </div>
         </section>
-    <center><div id="columnchart_values"></div></center>
+
 
 
     </main>
-    <?php  require_once("includes/footer.php");?>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/pikaday.min.js"></script>
-    <script src="assets/js/script.min.js"></script>
+    <?php require_once("includes/footer.php"); ?>
 </body>
 
 </html>
