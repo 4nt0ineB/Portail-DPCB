@@ -64,10 +64,10 @@ include('includes/fonctions.php')
                     <div class="row">
                         <div class="col">
                             <div class="skills portfolio-info-card">
-                                <?php 
-                                $statusModify = isset($_POST['id_modify_client']); 
+                                <?php
+                                $statusModify = isset($_POST['id_modify_client']);
                                 $statusDelete = isset($_POST['id_delete_client']);
-                                
+
                                 ?>
                                 <h2><?php if ($statusModify) echo "Modification de compte";
                                     elseif ($statusDelete) {
@@ -92,14 +92,14 @@ include('includes/fonctions.php')
                                                             if($statusModify){
                                                                 $id_modify_client = $_POST['id_modify_client'];
                                                                 $udata = $db->query("SELECT * FROM `CLIENT` NATURAL JOIN `USER` WHERE `permission` = 1 AND id_client = $id_modify_client")->fetch();
-                                                                
+
                                                             }
-                                                           
+
                                                             ?>
                                                             <form method="post" name="creation">
 
                                                                 <td>
-                                                                    <label style="font-style: normal;">Username :&nbsp;</label>          
+                                                                    <label style="font-style: normal;">Username :&nbsp;</label>
                                                                     <input type="text" name="username" value=<?php if ($statusModify) echo $udata["username"] . ""; ?> >
                                                                 </td>
                                                                 <td>
@@ -129,13 +129,13 @@ include('includes/fonctions.php')
                                                             <form method="post" name="creation">
 
                                                                 <td>
-                                                                    <label style="font-style: normal;">Suppression du compte :&nbsp;</label>          
+                                                                    <label style="font-style: normal;">Suppression du compte :&nbsp;</label>
                                                                 </td>
                                                                 <td>
-                                                                    <label style="font-style: normal;">Username :&nbsp;</label>          
+                                                                    <label style="font-style: normal;">Username :&nbsp;</label>
                                                                     <input type="text" name="username" disabled value=<?php if ($statusDelete) echo $udata["username"] . ""; ?> >
                                                                 </td>
-                                                                
+
                                                                 <td>
                                                                     <label>N° SIREN :&nbsp;</label>
                                                                     <input type="text" name="siren" disabled value=<?php if ($statusDelete) echo $udata["siren"] . ""; ?> ></td>
@@ -146,10 +146,10 @@ include('includes/fonctions.php')
                                                                 </tr>
                                                                 <tr>
                                                                 <td>
-                                                                    <label style="font-style: normal;">La demande de suppression sera associé à votre nom et le product owner devra la valider:&nbsp;</label>          
+                                                                    <label style="font-style: normal;">La demande de suppression sera associé à votre nom et le product owner devra la valider:&nbsp;</label>
                                                                 </td>
                                                                 <td colspan="4" style="text-align: center;">
-                                                                
+
                                                                     <button class="btn btn-primary" name="subdelete" type="submit" style="text-align: center;background: rgba(255,255,255,0);color: rgb(0,0,0);box-shadow: 0px 0px 3px;border-style: none;">
                                                                         Supprimer
                                                                     </button>
@@ -159,7 +159,7 @@ include('includes/fonctions.php')
                                                         }
 
                                                         if(isset($_POST["submodify"])){
-                                                            
+
 
                                                             if()
 
@@ -174,7 +174,7 @@ include('includes/fonctions.php')
 
                                                         ?>
 
-                                                        
+
                                                     </tr>
                                                     <tr></tr>
 
@@ -203,9 +203,9 @@ include('includes/fonctions.php')
                                     <tbody>
                                         <?php
                                         while ($r = $resultat->fetch()) {
-                                            
 
-                                            
+
+
                                             $h = '';
                                             if($statusModify){
                                                 if($r['id_client'] == $_POST['id_modify_client']){
@@ -246,7 +246,7 @@ include('includes/fonctions.php')
                                                                     <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
                                                                 </svg>
                                                             </button>
-                                                              
+
                                                             </form>
                                                         </div>
                                                     </div>
@@ -276,12 +276,7 @@ include('includes/fonctions.php')
     </main>
 
 
-    <footer class="page-footer">
-        <div class="container">
-            <div class="links"><a href="#">A propos</a><a href="#">Contactez-nous</a></div>
-            <div class="social-icons"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i class="icon ion-social-instagram-outline"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a></div>
-        </div>
-    </footer>
+    <?php  require_once("includes/footer.php");?>
 
 </body>
 
