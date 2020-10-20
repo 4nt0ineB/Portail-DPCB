@@ -113,6 +113,7 @@ include('includes/fonctions.php')
                                                                     <label style="font-style: normal;">Raison sociale :&nbsp;</label>
                                                                     <input type="text" name="raison" required pattern="[A-Za-z0-9 ]{1,20}" value="<?php if ($statusModify) echo ($udata["raison"]) ; ?>" > <!-- Problème ?! raison coupé -->
                                                                 </td>
+                                                                <input type="hidden" name="client_a_modif" value="<?php echo $id_modify_client ?>">
                                                                 </tr>
                                                                 <tr>
                                                                 <td colspan="4" style="text-align: center;">
@@ -123,8 +124,8 @@ include('includes/fonctions.php')
                                                             </form>
                                                             <?php
                                                         }elseif($statusDelete){
-                                                            $id_modify_client = $_POST['id_delete_client'];
-                                                            $udata = $db->query("SELECT * FROM `CLIENT` NATURAL JOIN `USER` WHERE `permission` = 1 AND id_client = $id_modify_client")->fetch();
+                                                            $id_delete_client = $_POST['id_delete_client'];
+                                                            $udata = $db->query("SELECT * FROM `CLIENT` NATURAL JOIN `USER` WHERE `permission` = 1 AND id_client = $id_delete_client")->fetch();
                                                             ?>
                                                             <form method="post">
 
@@ -133,22 +134,22 @@ include('includes/fonctions.php')
                                                                 </td>
                                                                 <td>
                                                                     <label style="font-style: normal;">Username :&nbsp;</label>
-                                                                    <input type="text" name="username" disabled value=<?php if ($statusDelete) echo $udata["username"] . ""; ?> >
+                                                                    <input type="text" name="username" disabled value="<?php if ($statusDelete) echo $udata["username"] ?>" >
                                                                 </td>
 
                                                                 <td>
                                                                     <label>N° SIREN :&nbsp;</label>
-                                                                    <input type="text" name="siren" disabled value=<?php if ($statusDelete) echo $udata["siren"] . ""; ?> ></td>
+                                                                    <input type="text" name="siren" disabled value="<?php if ($statusDelete) echo $udata["siren"]; ?>"></td>
                                                                 <td>
                                                                     <label style="font-style: normal;">Raison sociale :&nbsp;</label>
-                                                                    <input type="text" name="raison" disabled value=<?php if ($statusDelete) echo $udata["raison"] . ""; ?> > <!-- Problème ?! raison coupé -->
+                                                                    <input type="text" name="raison" disabled value="<?php if ($statusDelete) echo $udata["raison"] ?>"> <!-- Problème ?! raison coupé -->
                                                                 </td>
                                                                 </tr>
                                                                 <tr>
                                                                 <td>
                                                                     <label style="font-style: normal;">La demande de suppression sera associé à votre nom et le product owner devra la valider:&nbsp;</label>
                                                                 </td>
-                                                                <input hiden type="text" value=<?php echo $id_modify_client ?>>
+                                                                <input type="hidden" name="client_a_suppr" value="<?php echo $id_modify_client ?>">
                                                                 <td colspan="4" style="text-align: center;">
 
                                                                     <button class="btn btn-primary" name="subdelete" type="submit" style="text-align: center;background: rgba(255,255,255,0);color: rgb(0,0,0);box-shadow: 0px 0px 3px;border-style: none;">
@@ -162,12 +163,27 @@ include('includes/fonctions.php')
                                                         if(isset($_POST["submodify"]))
                                                         {
 
-                                                            
-                                                            
-                                                            $r = $db->prepare("SELECT `id_client`,`siren`,`raison`,`username`,`password` FROM `CLIENT` NATURAL JOIN `USER` WHERE `permission` = 1");
-                                                            $r = $r->execute(array());
-                                                            if($r != 0){
+                                                            $username = $_POST["username"];
+                                                            $siren = $_POST["siren"];
+                                                            $raison = $_POST["raison"];
+                                                            $id_client = $_POST["client_a_modif"];
 
+                                                            $r = $db->query("SELECT * FROM `CLIENT` NATURAL JOIN `USER` WHERE `permission` = 1 AND `username`=\"$username\" AND `siren`=\"$siren\" AND `raison`=\"$raison\"");
+
+                                                            if ($r->rowCount() > 0){
+                                                                $errorMsg[] = "Une des informations que vous avez rentré est déjà renseignée dans notre base de donnée.";
+                                                            } else {
+                                                                if (!empty($username)){
+                                                                    $db->query("UPDATE USER SET username=\"$username\" WHERE id_user = $id_client");
+                                                                }
+                                                                if (!empty($siren)){
+                                                                    $db->query("UPDATE CLIENT SET siren=\"$siren\" WHERE id_user = $id_client");
+                                                                }
+                                                                if (!empty($raison)){
+                                                                    $db->query("UPDATE CLIENT SET raison=\"$raison\" WHERE id_user = $id_client");
+                                                                }
+                                                                $successMsg = "Le client a été modifié avec succès. Redirection...";
+                                                                header("location: admin.php; refresh:2;");
                                                             }
 
 
@@ -192,6 +208,32 @@ include('includes/fonctions.php')
                                 $resultat = $db->query($requete);
 
                                 ?>
+
+                                 <?php
+                                    if (isset($errorMsg)) // si tableau errorMsg initialisé
+                                    {
+                                        foreach ($errorMsg as $error) {
+                                    ?>
+                                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                                <strong>Oups !</strong> <?php echo $error // on affiche la variable ; 
+                                                                        ?>
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        <?php
+                                        }
+                                    }
+                                    if (isset($successMsg)) // si un message de succès est initialisé
+                                    {
+                                        ?>
+                                        <div class="alert alert-success" role="alert">
+                                            <?php echo $successMsg; // on affiche le msg 
+                                            ?>
+                                        </div>
+                                    <?php
+                                    }
+                                    ?>
 
                                 <table id="datatable" class="table table-striped table-bordered" width="100%">
                                     <thead>
