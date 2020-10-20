@@ -148,7 +148,7 @@ include('includes/fonctions.php');
                 </div>
             </div>
         </section>
-    <center><div id="columnchart_values" style="width: 2000px; height: 600px;"></div>
+    <center><div id="columnchart_values"></div></center>
 
 
     </main>
