@@ -89,7 +89,11 @@ include('includes/fonctions.php')
                                             <tbody>
                                                 <?php
 
-                                                $id = (isset($_GET["req"])) ? $_GET["req"] : $_SESSION["logged"];
+                                                $id = (isset($_GET["req"])) ? secure_sqlformat($_GET["req"]) : $_SESSION["logged"];
+                                                if(empty($id) || !is_numeric($id)){
+                                                    header("location: index.php");
+                            
+                                                }
                                                 $requete = "SELECT * FROM REMISE,DEVISE ";
 
                                                 if (isset($_POST['siren'])) $siren = secure_sqlformat($_POST['siren']);
