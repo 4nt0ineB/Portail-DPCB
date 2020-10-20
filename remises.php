@@ -90,9 +90,8 @@ include('includes/fonctions.php')
                                                 <?php
 
                                                 $id = (isset($_GET["req"])) ? secure_sqlformat($_GET["req"]) : $_SESSION["logged"];
-                                                if(empty($id) || !is_numeric($id)){
+                                                if (empty($id) || !is_numeric($id)) {
                                                     header("location: index.php");
-                            
                                                 }
                                                 $requete = "SELECT * FROM REMISE,DEVISE ";
 
@@ -208,7 +207,7 @@ include('includes/fonctions.php')
             </div>
         </section>
     </main>
-    <?php  require_once("includes/footer.php");?>
+    <?php require_once("includes/footer.php"); ?>
 </body>
 
 </html>
