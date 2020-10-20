@@ -3,7 +3,7 @@ session_start();
 if (!isset($_SESSION["logged"])) { //Vérifie si une session client est en cours sinon renvoi à l'index
     header("location: index.php");
 }
-if ($_SESSION["permission"] == "1") { // 
+if ($_SESSION["permission"] == "1") { //
     if (isset($_GET["req"])) {
         unset($_GET["req"]);
         header("refresh:0; impayes.php");
@@ -107,12 +107,7 @@ include('includes/fonctions.php');
             </div>
         </section>
     </main>
-    <footer class="page-footer">
-        <div class="container">
-            <div class="links"><a href="#">A propos</a><a href="#">Contactez-nous</a></div>
-            <div class="social-icons"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i class="icon ion-social-instagram-outline"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a></div>
-        </div>
-    </footer>
+    <?php  require_once("includes/footer.php");?>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
