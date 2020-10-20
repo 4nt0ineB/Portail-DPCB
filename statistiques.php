@@ -1,3 +1,13 @@
+<?php
+
+
+session_start();
+if (!isset($_SESSION["logged"]) || $_SESSION["permission"] != "3") header("location: index.php"); //Vérifie si une session est en cours sinon renvoi à l'index
+require_once("includes/mysql.php");
+include('includes/fonctions.php');
+
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -11,37 +21,13 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css" />
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 
+
 <body>
-  <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient" style="
-        border-bottom-style: solid;
-        border-bottom-color: rgba(0, 0, 0, 0.16);
-        text-shadow: 0px 0px 3px rgb(0, 0, 0);
-        background: linear-gradient(
-          87deg,
-          rgb(92, 214, 230),
-          rgb(151, 65, 236)
-        );
-      ">
-    <div class="container">
-      <a class="navbar-brand logo" data-bs-hover-animate="bounce" href="#"
-        style="font-family: 'Alegreya Sans SC', sans-serif">UGE MANAGER</a><button data-toggle="collapse"
-        class="navbar-toggler" data-target="#navbarNav">
-        <span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="nav navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link" data-bs-hover-animate="pulse" href="index.html">Se connecter</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-bs-hover-animate="pulse" href="hire-me.html">En savoir +</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <!-- Import de la nav-->
+  <?php include('includes/nav.php'); ?>
   <main class="page cv-page">
     <section class="portfolio-block cv">
       <h2 class="text-center">Statistiques de vos comptes</h2>
@@ -69,11 +55,40 @@
                         </thead>
                         <tbody>
                           <tr>
+                          <?php
+
+                          if (isset($_POST["datedebut"]) && isset($_POST["datefin"])){
+                            $datedebut = $_POST["datedebut"];
+                            $datefin = $_POST["datefin"];
+                            
+                            if(!empty($_POST["datedebut"])){
+                              $query = "SELECT COUNT(*) compteur,libelle FROM `IMPAYE` WHERE date_remise>=$datedebut GROUP BY libelle"; // select column
+                            } 
+
+                            if(!empty($_POST["datefin"])){
+                              $query = "SELECT COUNT(*) compteur,libelle FROM `IMPAYE` WHERE date_remise<=$datefin GROUP BY libelle"; // select column
+                            } 
+
+                            if(!empty($_POST["datefin"]) && !empty($_POST["datedebut"])){
+                              $query = "SELECT COUNT(*) compteur,libelle FROM `IMPAYE` WHERE date_remise>=$datedebut AND date_remise<=$datefin GROUP BY libelle"; // select column
+                           } 
+
+
+                        } else {
+                          $query = "SELECT COUNT(*) compteur,libelle FROM `IMPAYE` WHERE 1 GROUP BY libelle"; // select column
+                        }
+                          echo $query;
+
+                          $aresult = $db->query($query);
+                          ?>
+
+
+                            <form method="post">
                             <td>
-                              <label>Date de début :&nbsp;</label><input type="date" />
+                              <label>Date de début :&nbsp;</label><input type="date" name="datedebut" />
                             </td>
                             <td>
-                              <label>Date de fin :&nbsp;</label><input type="date" />
+                              <label>Date de fin :&nbsp;</label><input type="date" name="datefin" />
                             </td>
                           </tr>
                           <tr></tr>
@@ -81,7 +96,7 @@
                         </tbody>
                       </table>
                     </div>
-                    <button class="btn btn-primary" type="button" style="
+                    <button class="btn btn-primary" type="submit" style="
                           text-align: center;
                           background: rgba(255, 255, 255, 0);
                           color: rgb(0, 0, 0);
@@ -90,8 +105,10 @@
                         ">
                       Rechercher
                     </button>
+                    </form>
                   </div>
                 </div>
+
                 <div class="row">
                   <div class="col">
                     <div class="btn-toolbar" style="
@@ -133,10 +150,36 @@
                 </div>
                 <div class="row">
                   <div class="col">
-                    <div>
-                      <canvas
-                        data-bs-chart='{"type":"bar","data":{"labels":["January","February","March","April","May","June"],"datasets":[{"label":"Revenue","backgroundColor":"#4e73df","borderColor":"#4e73df","data":["4500","5300","6250","7800","9800","15000"]}]},"options":{"maintainAspectRatio":true,"legend":{"display":false},"title":{}}}'></canvas>
-                    </div>
+
+       
+
+
+                  <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+                ['motif','compteur'],
+                <?php
+                    while($row = $aresult->fetch()){
+                        echo "['".strtoupper($row["libelle"])."', ".$row["compteur"]."],";
+                    }
+                ?>
+               ]);
+
+        var options = {
+          title: 'Statistiques motifs d\'impayés'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+
+    <div id="piechart" style="width: 100%; height: 400px;"></div>
                   </div>
                 </div>
               </div>
