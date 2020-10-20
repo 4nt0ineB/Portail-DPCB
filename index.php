@@ -95,29 +95,91 @@
                                         {
                                             if (password_verify($password, $row["password"])) // on compare le mdp encrypté stocké en base de donné et le mdp rentré par l'utilisateur
                                             {
-                                                $_SESSION["logged"] = $row["id_user"]; // on démarre une session avec l'id user_login qui correspondra à l'id de l'utilisateur
-                                                $_SESSION["username"] = $row["username"];
-                                                $_SESSION["permission"] = $row['permission'];
+                                                if(time() - $_SESSION['LOCK_TIME'] >= 30){
+                                                    $_SESSION['LOG_COUNTS'] = 0;
 
-                                                $loginMsg = "Connecté avec succès ! Redirection..."; // on initialise un message de succès
-                                                if ($_SESSION["permission"] == "1") {
-                                                    header("refresh:2; tresorerie.php"); // après 2 secondes on redirige le client sur sa trésorerie
-                                                } else if ($_SESSION["permission"] == "2") {
-                                                    header("refresh:2; product_owner.php"); // en redirige le product owner sur la page de vue des trésorerie client
-                                                } else if ($_SESSION["permission"] == "3") {
-                                                    header("refresh:2; admin.php"); // cette page n'existe pas encore
+                                                    $_SESSION["logged"] = $row["id_user"]; // on démarre une session avec l'id user_login qui correspondra à l'id de l'utilisateur
+                                                    $_SESSION["username"] = $row["username"];
+                                                    $_SESSION["permission"] = $row['permission'];
+
+                                                    $loginMsg = "Connecté avec succès ! Redirection..."; // on initialise un message de succès
+                                                    if ($_SESSION["permission"] == "1") {
+                                                        header("refresh:2; tresorerie.php"); // après 2 secondes on redirige le client sur sa trésorerie
+                                                    } else if ($_SESSION["permission"] == "2") {
+                                                        header("refresh:2; product_owner.php"); // en redirige le product owner sur la page de vue des trésorerie client
+                                                    } else if ($_SESSION["permission"] == "3") {
+                                                        header("refresh:2; admin.php"); // cette page n'existe pas encore
+                                                    }
+                                                }
+                                                else{
+                                                    $time_left = 30 - (time() - $_SESSION['LOCK_TIME']);
+                                                    $errorMsg[] = "Trop de tentatives veuillez attendre ".$time_left." secondes";
                                                 }
                                             } else // si la vérification du mot de passe échoue
                                             {
-                                                $errorMsg[] = "Mauvais mot de passe"; // on inscrit un msg d'erreur
+                                                
+                                                //Tentative échouée
+                                                if (isset($_SESSION['LOCK_TIME'])){
+                                                    $_SESSION['LOG_COUNTS'] += 1;
+
+                                                    if ($_SESSION['LOG_COUNTS'] == 2){
+                                                        $errorMsg[] = "Il vous reste une tentative avant d'avoir de gros soucis";
+                                                    }
+
+                                                    if ($_SESSION['LOG_COUNTS'] == 3){
+                                                        $_SESSION['LOCK_TIME'] = time();
+                                                        $errorMsg[] = "Vous devez attendre 30 secondes avant de réessayer";
+                                                    }
+                                                }
+                                                else {
+                                                    $errorMsg[] = "Mauvais mot de passe"; // on inscrit un msg d'erreur
+                                                    $_SESSION['LOCK_TIME'] = 0;
+                                                    $_SESSION['LOG_COUNTS'] = 1;
+                                                }
                                             }
                                         } else // si la comparaison avec l'entrée de l'utilisateur et la db echoue
                                         {
-                                            $errorMsg[] = "Mauvais login"; // on inscrit un msg d'erreur
+                                            
+                                            //Tentative échouée
+                                            if (isset($_SESSION['LOCK_TIME'])){
+                                                $_SESSION['LOG_COUNTS'] += 1;
+
+                                                if ($_SESSION['LOG_COUNTS'] == 2){
+                                                    $errorMsg[] = "Il vous reste une tentative avant d'avoir un timeout";
+                                                }
+
+                                                if ($_SESSION['LOG_COUNTS'] == 3){
+                                                    $_SESSION['LOCK_TIME'] = time();
+                                                    $errorMsg[] = "Vous devez attendre 30 secondes avant de réessayer";
+                                                }
+                                            }
+                                            else {
+                                                $_SESSION['LOCK_TIME'] = 0;
+                                                $_SESSION['LOG_COUNTS'] = 1;
+                                                $errorMsg[] = "Mauvais login"; // on inscrit un msg d'erreur
+                                            }
                                         }
                                     } else // si la comparaison avec l'entrée de l'utilisateur et la db echoue
                                     {
-                                        $errorMsg[] = "Mauvais login"; // on inscrit un msg d'erreur
+                                        
+                                        //Tentative échouée
+                                        if (isset($_SESSION['LOCK_TIME'])){
+                                            $_SESSION['LOG_COUNTS'] += 1;
+
+                                            if ($_SESSION['LOG_COUNTS'] == 2){
+                                                $errorMsg[] = "Il vous reste une tentative avant d'avoir de gros soucis";
+                                            }
+
+                                            if ($_SESSION['LOG_COUNTS'] == 3){
+                                                $_SESSION['LOCK_TIME'] = time();
+                                                $errorMsg[] = "Vous devez attendre 30 secondes avant de réessayer";
+                                            }
+                                        }
+                                        else {
+                                            $_SESSION['LOCK_TIME'] = 0;
+                                            $_SESSION['LOG_COUNTS'] = 1;
+                                            $errorMsg[] = "Mauvais login"; // on inscrit un msg d'erreur
+                                        }
                                     }
                                 } catch (PDOException $e) {
                                     $e->getMessage();
