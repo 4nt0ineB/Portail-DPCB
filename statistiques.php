@@ -62,22 +62,21 @@ include('includes/fonctions.php');
                             $datefin = $_POST["datefin"];
                             
                             if(!empty($_POST["datedebut"])){
-                              $query = "SELECT COUNT(*) compteur,libelle FROM `IMPAYE` WHERE date_remise>=$datedebut GROUP BY libelle"; // select column
+                              $query = "SELECT COUNT(*) compteur,libelle FROM `IMPAYE` WHERE date_remise>='$datedebut' GROUP BY libelle"; // select column
                             } 
 
                             if(!empty($_POST["datefin"])){
-                              $query = "SELECT COUNT(*) compteur,libelle FROM `IMPAYE` WHERE date_remise<=$datefin GROUP BY libelle"; // select column
+                              $query = "SELECT COUNT(*) compteur,libelle FROM `IMPAYE` WHERE date_remise<='$datefin' GROUP BY libelle"; // select column
                             } 
 
                             if(!empty($_POST["datefin"]) && !empty($_POST["datedebut"])){
-                              $query = "SELECT COUNT(*) compteur,libelle FROM `IMPAYE` WHERE date_remise>=$datedebut AND date_remise<=$datefin GROUP BY libelle"; // select column
+                              $query = "SELECT COUNT(*) compteur,libelle FROM `IMPAYE` WHERE date_remise>='$datedebut' AND date_remise<='$datefin' GROUP BY libelle"; // select column
                            } 
 
 
                         } else {
                           $query = "SELECT COUNT(*) compteur,libelle FROM `IMPAYE` WHERE 1 GROUP BY libelle"; // select column
                         }
-                          echo $query;
 
                           $aresult = $db->query($query);
                           ?>
