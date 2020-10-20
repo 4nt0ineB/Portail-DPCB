@@ -111,7 +111,7 @@ include('includes/fonctions.php')
                                                                 </td>
                                                                 <td>
                                                                     <label style="font-style: normal;">Raison sociale :&nbsp;</label>
-                                                                    <input type="text" name="raison" value=<?php if ($statusModify) echo $udata["raison"] . ""; ?> > <!-- Problème ?! raison coupé -->
+                                                                    <input type="text" name="raison" value="<?php if ($statusModify) echo ($udata["raison"]) ; ?>" > <!-- Problème ?! raison coupé -->
                                                                 </td>
                                                                 </tr>
                                                                 <tr>
