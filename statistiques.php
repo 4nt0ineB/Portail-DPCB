@@ -55,40 +55,38 @@ include('includes/fonctions.php');
                         </thead>
                         <tbody>
                           <tr>
-                          <?php
+                            <?php
 
-                          if (isset($_POST["datedebut"]) && isset($_POST["datefin"])){
-                            $datedebut = $_POST["datedebut"];
-                            $datefin = $_POST["datefin"];
-                            
-                            if(!empty($_POST["datedebut"])){
-                              $query = "SELECT COUNT(*) compteur,libelle FROM `IMPAYE` WHERE date_remise>='$datedebut' GROUP BY libelle"; // select column
-                            } 
+                            if (isset($_POST["datedebut"]) && isset($_POST["datefin"])) {
+                              $datedebut = $_POST["datedebut"];
+                              $datefin = $_POST["datefin"];
 
-                            if(!empty($_POST["datefin"])){
-                              $query = "SELECT COUNT(*) compteur,libelle FROM `IMPAYE` WHERE date_remise<='$datefin' GROUP BY libelle"; // select column
-                            } 
+                              if (!empty($_POST["datedebut"])) {
+                                $query = "SELECT COUNT(*) compteur,libelle FROM `IMPAYE` WHERE date_remise>='$datedebut' GROUP BY libelle"; // select column
+                              }
 
-                            if(!empty($_POST["datefin"]) && !empty($_POST["datedebut"])){
-                              $query = "SELECT COUNT(*) compteur,libelle FROM `IMPAYE` WHERE date_remise>='$datedebut' AND date_remise<='$datefin' GROUP BY libelle"; // select column
-                           } 
+                              if (!empty($_POST["datefin"])) {
+                                $query = "SELECT COUNT(*) compteur,libelle FROM `IMPAYE` WHERE date_remise<='$datefin' GROUP BY libelle"; // select column
+                              }
 
+                              if (!empty($_POST["datefin"]) && !empty($_POST["datedebut"])) {
+                                $query = "SELECT COUNT(*) compteur,libelle FROM `IMPAYE` WHERE date_remise>='$datedebut' AND date_remise<='$datefin' GROUP BY libelle"; // select column
+                              }
+                            } else {
+                              $query = "SELECT COUNT(*) compteur,libelle FROM `IMPAYE` WHERE 1 GROUP BY libelle"; // select column
+                            }
 
-                        } else {
-                          $query = "SELECT COUNT(*) compteur,libelle FROM `IMPAYE` WHERE 1 GROUP BY libelle"; // select column
-                        }
-
-                          $aresult = $db->query($query);
-                          ?>
+                            $aresult = $db->query($query);
+                            ?>
 
 
                             <form method="post">
-                            <td>
-                              <label>Date de début :&nbsp;</label><input type="date" name="datedebut" />
-                            </td>
-                            <td>
-                              <label>Date de fin :&nbsp;</label><input type="date" name="datefin" />
-                            </td>
+                              <td>
+                                <label>Date de début :&nbsp;</label><input type="date" name="datedebut" />
+                              </td>
+                              <td>
+                                <label>Date de fin :&nbsp;</label><input type="date" name="datefin" />
+                              </td>
                           </tr>
                           <tr></tr>
                           <tr></tr>
@@ -150,35 +148,37 @@ include('includes/fonctions.php');
                 <div class="row">
                   <div class="col">
 
-       
 
 
-                  <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
 
-      function drawChart() {
+                    <script type="text/javascript">
+                      google.charts.load('current', {
+                        'packages': ['corechart']
+                      });
+                      google.charts.setOnLoadCallback(drawChart);
 
-        var data = google.visualization.arrayToDataTable([
-                ['motif','compteur'],
-                <?php
-                    while($row = $aresult->fetch()){
-                        echo "['".strtoupper($row["libelle"])."', ".$row["compteur"]."],";
-                    }
-                ?>
-               ]);
+                      function drawChart() {
 
-        var options = {
-          title: 'Statistiques motifs d\'impayés'
-        };
+                        var data = google.visualization.arrayToDataTable([
+                          ['motif', 'compteur'],
+                          <?php
+                          while ($row = $aresult->fetch()) {
+                            echo "['" . strtoupper($row["libelle"]) . "', " . $row["compteur"] . "],";
+                          }
+                          ?>
+                        ]);
 
-        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                        var options = {
+                          title: 'Statistiques motifs d\'impayés'
+                        };
 
-        chart.draw(data, options);
-      }
-    </script>
+                        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
 
-    <div id="piechart" style="width: 100%; height: 400px;"></div>
+                        chart.draw(data, options);
+                      }
+                    </script>
+
+                    <div id="piechart" style="width: 100%; height: 400px;"></div>
                   </div>
                 </div>
               </div>
@@ -197,8 +197,7 @@ include('includes/fonctions.php');
         <a href="#">A propos</a><a href="#">Contactez-nous</a>
       </div>
       <div class="social-icons">
-        <a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i
-            class="icon ion-social-instagram-outline"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a>
+        <a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i class="icon ion-social-instagram-outline"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a>
       </div>
     </div>
   </footer>
