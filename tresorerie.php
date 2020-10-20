@@ -11,8 +11,6 @@ if ($_SESSION["permission"] == "1") { //
 }
 if ($_SESSION["permission"] == "2" && !(isset($_GET["req"]))) { // owner mais pas de get req (id client) -> retour owner
     header("location: product_owner.php");
-} else {
-    header("location: index.php");
 }
 //Vérifie si une session est en cours sinon renvoi à l'index
 require_once("includes/mysql.php");
@@ -43,7 +41,11 @@ include('includes/fonctions.php');
         <section class="portfolio-block cv">
             <h2 class="text-center"><span style="color: #7C71F5;">
                     <?php
-                    $id = (isset($_GET["req"])) ? $_GET["req"] : $_SESSION["logged"];
+                    $id = (isset($_GET["req"])) ? secure_sqlformat($_GET["req"]) : $_SESSION["logged"];
+                    if(empty($id) || !is_numeric($id)){
+                        header("location: index.php");
+
+                    }
                     $query = $db->query("SELECT raison FROM USER NATURAL JOIN CLIENT WHERE id_user = $id")->fetch();
                     echo $query['raison'];
                     ?>

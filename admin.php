@@ -116,7 +116,7 @@ include('includes/fonctions.php')
                                                                 </tr>
                                                                 <tr>
                                                                 <td colspan="4" style="text-align: center;">
-                                                                    <button class="btn btn-primary" type="submit" style="text-align: center;background: rgba(255,255,255,0);color: rgb(0,0,0);box-shadow: 0px 0px 3px;border-style: none;">
+                                                                    <button class="btn btn-primary" name="submodify" type="submit" style="text-align: center;background: rgba(255,255,255,0);color: rgb(0,0,0);box-shadow: 0px 0px 3px;border-style: none;">
                                                                         <?php if ($statusModify) echo "Modifier"; else echo "Créer"; ?>
                                                                     </button>
                                                             </td>
@@ -150,13 +150,26 @@ include('includes/fonctions.php')
                                                                 </td>
                                                                 <td colspan="4" style="text-align: center;">
                                                                 
-                                                                    <button class="btn btn-primary" type="submit" style="text-align: center;background: rgba(255,255,255,0);color: rgb(0,0,0);box-shadow: 0px 0px 3px;border-style: none;">
+                                                                    <button class="btn btn-primary" name="subdelete" type="submit" style="text-align: center;background: rgba(255,255,255,0);color: rgb(0,0,0);box-shadow: 0px 0px 3px;border-style: none;">
                                                                         Supprimer
                                                                     </button>
                                                             </td>
                                                             </form>
                                                             <?php
                                                         }
+
+                                                        if(isset($_POST["submodify"])){
+                                                            
+
+                                                            if()
+
+
+                                                        }
+
+
+
+
+
 
 
                                                         ?>
