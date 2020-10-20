@@ -33,7 +33,11 @@ if ($_SESSION["permission"] == "2" && !(isset($_GET["req"]))) { // owner mais pa
         <section class="portfolio-block cv">
             <h2 class="text-center">Impayés du compte de<span style="color: #7C71F5;">
                     <?php
-                    $id = (isset($_GET["req"])) ? $_GET["req"] : $_SESSION["logged"];
+                    $id = (isset($_GET["req"])) ? secure_sqlformat($_GET["req"]) : $_SESSION["logged"];
+                    if(empty($id) || !is_numeric($id)){
+                        header("location: index.php");
+
+                    }
                     $query = $db->query("SELECT raison FROM USER NATURAL JOIN CLIENT WHERE id_user = $id")->fetch();
                     echo $query['raison'];
                     ?>
