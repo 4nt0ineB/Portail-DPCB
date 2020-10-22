@@ -48,12 +48,17 @@ include('includes/fonctions.php');
         });
         google.charts.setOnLoadCallback(drawChart);
 
+        google.charts.load('current', {packages: ['corechart', 'line']});
+		google.charts.setOnLoadCallback(drawBasic);
+
         <?php
         $idu = (isset($_GET["req"])) ? $_GET["req"] : $_SESSION["logged"];
         //Renvoi le nombres de barres qui vont être nécessaire à l'histogramme
         $countColumns = $db->query("SELECT COUNT(`date_traitement`) col FROM `REMISE` WHERE id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu)")->fetch();
         //Renvoi le montant total du solde selon l'année ainsi que les impayés selon l'année puis l'année
         $solde = $db->query("SELECT SUM(montant_remise) solde,YEAR(`date_traitement`)annee,SUM(montant_impaye) total_impaye FROM REMISE r,IMPAYE i WHERE id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu) AND r.id_remise = i.id_remise AND r.id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user =$idu) GROUP BY YEAR(`date_traitement`)");
+
+        $solde_evolution = $db->query("SELECT SUM(montant_remise) solde,YEAR(`date_traitement`)annee FROM REMISE r,IMPAYE i WHERE id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = 10) AND r.id_remise = i.id_remise AND r.id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user =10) GROUP BY YEAR(`date_traitement`)");
         ?>
 
         function drawChart() {
@@ -77,6 +82,41 @@ include('includes/fonctions.php');
         $(window).resize(function() {
             drawChart();
         });
+
+function drawBasic() {
+
+      var data = new google.visualization.DataTable();
+
+      
+
+
+      data.addColumn('date', 'Année');
+      data.addColumn('number', 'Trésorerie');
+
+      data.addRows([
+<?php while ($s = $solde_evolution->fetch()) {
+	$date = 'new Date('.$s['annee'].',01,01)'; ?>
+
+	<?php
+                    echo "[" . $date . "," . $s['solde'] . "],";
+                } ?>
+      ]);
+
+      var options = {
+      	title: 'Évolution de la trésorerie ces 4 dernières années',
+        hAxis: {
+          title: 'Années'
+        },
+        vAxis: {
+          title: 'Trésorerie'
+        }
+      };
+
+      var chart = new google.visualization.LineChart(document.getElementById('evolution'));
+
+      chart.draw(data, options);
+    }
+
     </script>
     <style>
         .chart {
@@ -160,6 +200,14 @@ include('includes/fonctions.php');
                         <div class="col-md-12">
                             <div class="skills portfolio-info-card">
                                 <div id="columnchart_values" class="chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="clearfix"></div>
+                        <div class="col-md-12">
+                            <div class="skills portfolio-info-card">
+                                <div id="evolution" class="chart"></div>
                             </div>
                         </div>
                     </div>
