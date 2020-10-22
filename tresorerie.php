@@ -116,6 +116,9 @@ function drawBasic() {
 
       chart.draw(data, options);
     }
+    $(window).resize(function() {
+            drawBasic();
+        });
 
     </script>
     <style>
