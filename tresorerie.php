@@ -57,8 +57,6 @@ include('includes/fonctions.php');
         $countColumns = $db->query("SELECT COUNT(`date_traitement`) col FROM `REMISE` WHERE id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu)")->fetch();
         //Renvoi le montant total du solde selon l'année ainsi que les impayés selon l'année puis l'année
         $solde = $db->query("SELECT SUM(montant_remise) solde,YEAR(`date_traitement`)annee,SUM(montant_impaye) total_impaye FROM REMISE r,IMPAYE i WHERE id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu) AND r.id_remise = i.id_remise AND r.id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user =$idu) GROUP BY YEAR(`date_traitement`)");
-
-        $solde_evolution = $db->query("SELECT SUM(montant_remise) solde,YEAR(`date_traitement`)annee FROM REMISE r,IMPAYE i WHERE id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = 10) AND r.id_remise = i.id_remise AND r.id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user =10) GROUP BY YEAR(`date_traitement`)");
         ?>
 
         function drawChart() {
@@ -94,11 +92,12 @@ function drawBasic() {
       data.addColumn('number', 'Trésorerie');
 
       data.addRows([
-<?php while ($s = $solde_evolution->fetch()) {
-	$date = 'new Date('.$s['annee'].',01,01)'; ?>
+<?php 
 
-	<?php
-                    echo "[" . $date . "," . $s['solde'] . "],";
+$solde_evolution = $db->query("SELECT SUM(montant_remise) solde,YEAR(`date_traitement`)annee FROM REMISE r,IMPAYE i WHERE id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu) AND r.id_remise = i.id_remise AND r.id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu) GROUP BY YEAR(`date_traitement`)");
+while ($donnee = $solde_evolution->fetch()) {
+	$dateGraph = 'new Date('.$donnee['annee'].',01,01)'; 
+                    echo "[" . $dateGraph . "," . $donnee['solde'] . "],";
                 } ?>
       ]);
 
