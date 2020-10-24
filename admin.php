@@ -69,10 +69,7 @@ include('includes/fonctions.php')
                                 $statusDelete = isset($_POST['id_delete_client']);
 
                                 ?>
-                                <h2><?php if ($statusModify) echo "Modification de compte";
-                                    elseif ($statusDelete) {
-                                        echo "Suppression de compte";
-                                    } else echo  "Création de compte"; ?></h2>
+                                <h2>Suppresion de compte</h2>
                                 <div class="row">
                                     <div class="skills portfolio-info-card" style="width: 100%;margin-bottom: 15px;padding: 25px;">
                                         <p class="text-uppercase text-left text-dark" style="margin: 0;text-align: left;font-weight: bold;width: 100%;float: left;">
@@ -133,22 +130,22 @@ include('includes/fonctions.php')
                                                             </td>
                                                             <td>
                                                                 <label style="font-style: normal;">Username :&nbsp;</label>
-                                                                <input type="text" name="username" disabled value="<?php if ($statusDelete) echo $udata["username"] ?>">
+                                                                <input type="text" name="username" readonly value="<?php if ($statusDelete) echo $udata["username"] ?>">
                                                             </td>
 
                                                             <td>
                                                                 <label>N° SIREN :&nbsp;</label>
-                                                                <input type="text" name="siren" disabled value="<?php if ($statusDelete) echo $udata["siren"]; ?>"></td>
+                                                                <input type="text" name="siren" readonly value="<?php if ($statusDelete) echo $udata["siren"]; ?>"></td>
                                                             <td>
                                                                 <label style="font-style: normal;">Raison sociale :&nbsp;</label>
-                                                                <input type="text" name="raison" disabled value="<?php if ($statusDelete) echo $udata["raison"] ?>"> <!-- Problème ?! raison coupé -->
+                                                                <input type="text" name="raison" readonly value="<?php if ($statusDelete) echo $udata["raison"] ?>"> <!-- Problème ?! raison coupé -->
                                                             </td>
                                                     </tr>
                                                     <tr>
                                                         <td>
                                                             <label style="font-style: normal;">La demande de suppression sera associé à votre nom et le product owner devra la valider:&nbsp;</label>
                                                         </td>
-                                                        <input type="hidden" name="client_a_suppr" value="<?php echo $id_modify_client ?>">
+                                                        <input type="hidden" name="client_a_suppr" value="<?php echo $id_delete_client ?>">
                                                         <td colspan="4" style="text-align: center;">
 
                                                             <button class="btn btn-primary" name="subdelete" type="submit" style="text-align: center;background: rgba(255,255,255,0);color: rgb(0,0,0);box-shadow: 0px 0px 3px;border-style: none;">
@@ -195,6 +192,21 @@ include('includes/fonctions.php')
                                                                 echo '<meta http-equiv="refresh" content="1;URL="">';
                                                             }
                                                         } elseif (isset($_POST["subdelete"])) {
+
+                                                            
+                                                            $id_client = $_POST["client_a_suppr"];
+                                                            $s_client = $db->query("SELECT id_client FROM REQUETE_SUPP WHERE id_client = $id_client")->rowCount();
+                                                            if($s_client != 0){
+                                                                $errorSuppMsg = "Vous avez déjà fait une requête de suppression pour ce client !";
+                                                            }
+                                                            else {
+                                                                $requete = $db->prepare("INSERT INTO REQUETE_SUPP (id_client) VALUES (:id_client)");
+                                                                $requete->bindParam(':id_client',$id_client);
+                                                                $requete->execute();
+
+                                                                $successSuppMsg = "La demande de suppression du client à été envoyé avec succès.";
+                                                                echo '<meta http-equiv="refresh" content="1;URL="">';
+                                                            }
                                                         }
                                                     ?>
 
@@ -235,6 +247,26 @@ include('includes/fonctions.php')
                                     <div class="alert alert-success" role="alert">
                                         <?php echo $successMsg; // on affiche le msg 
                                         ?>
+                                    </div>
+                                <?php
+                                }
+                                if (isset($successSuppMsg))
+                                {
+                                    ?>
+                                    <div class="alert alert-success" role="alert">
+                                        <?php echo $successSuppMsg; 
+                                        ?>
+                                    </div>
+                                <?php
+                                }
+                                if (isset($errorSuppMsg)){
+                                    ?>
+                                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                        <?php echo $errorSuppMsg;
+                                        ?>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
                                     </div>
                                 <?php
                                 }
