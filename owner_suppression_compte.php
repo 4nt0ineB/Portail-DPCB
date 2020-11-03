@@ -72,10 +72,10 @@ include 'includes/fonctions.php'
                                 $statusDelete = isset($_POST['id_delete_client']);
 
                                 ?>
-                                <h2>Suppresion de compte</h2>
+                                <h2>Suppression de compte</h2>
 
                                 <div class="row">
-                                    
+
                                     <div class="skills portfolio-info-card" style="width: 100%;margin-bottom: 15px;padding: 25px;">
                                         <div class="table-responsive">
                                             <table class="table">
@@ -84,29 +84,29 @@ include 'includes/fonctions.php'
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                    
-                                                    <?php if ($statusDelete) { 
-                                                        $id_delete_client = $_POST['id_delete_client'];
-                                                        $udata = $db->query("SELECT * FROM `CLIENT` NATURAL JOIN `USER` WHERE `permission` = 1 AND id_client = $id_delete_client")->fetch();
-                                                    ?>
 
-                                                        <form method="post">
+                                                        <?php if ($statusDelete) {
+                                                            $id_delete_client = $_POST['id_delete_client'];
+                                                            $udata = $db->query("SELECT * FROM `CLIENT` NATURAL JOIN `USER` WHERE `permission` = 1 AND id_client = $id_delete_client")->fetch();
+                                                        ?>
 
-                                                            <td>
-                                                                <label style="font-style: normal;">Suppression du compte :&nbsp;</label>
-                                                            </td>
-                                                            <td>
-                                                                <label style="font-style: normal;">Username :&nbsp;</label>
-                                                                <input type="text" name="username" readonly value="<?php if ($statusDelete) echo $udata["username"] ?>">
-                                                            </td>
+                                                            <form method="post">
 
-                                                            <td>
-                                                                <label>N° SIREN :&nbsp;</label>
-                                                                <input type="text" name="siren" readonly value="<?php if ($statusDelete) echo $udata["siren"]; ?>"></td>
-                                                            <td>
-                                                                <label style="font-style: normal;">Raison sociale :&nbsp;</label>
-                                                                <input type="text" name="raison" readonly value="<?php if ($statusDelete) echo $udata["raison"] ?>"> <!-- Problème ?! raison coupé -->
-                                                            </td>
+                                                                <td>
+                                                                    <label style="font-style: normal;">Suppression du compte :&nbsp;</label>
+                                                                </td>
+                                                                <td>
+                                                                    <label style="font-style: normal;">Username :&nbsp;</label>
+                                                                    <input type="text" name="username" readonly value="<?php if ($statusDelete) echo $udata["username"] ?>">
+                                                                </td>
+
+                                                                <td>
+                                                                    <label>N° SIREN :&nbsp;</label>
+                                                                    <input type="text" name="siren" readonly value="<?php if ($statusDelete) echo $udata["siren"]; ?>"></td>
+                                                                <td>
+                                                                    <label style="font-style: normal;">Raison sociale :&nbsp;</label>
+                                                                    <input type="text" name="raison" readonly value="<?php if ($statusDelete) echo $udata["raison"] ?>"> <!-- Problème ?! raison coupé -->
+                                                                </td>
                                                     </tr>
                                                     <tr>
                                                         <td>
@@ -121,14 +121,14 @@ include 'includes/fonctions.php'
                                                         </td>
                                                         </form>
 
-                                                        
+
                                                     <?php
-                                                    
+
                                                         }
                                                         if (isset($_POST["subdelete"])) {
 
                                                             $id_client = $_POST["client_a_suppr"];
-                                                            
+
                                                             $requete = $db->query($requete = "SELECT id_user FROM `CLIENT` WHERE `id_client` = $id_client")->fetch();
                                                             $id_user = $requete["id_user"];
                                                             $requete2 = $db->prepare("DELETE FROM USER WHERE id_user = $id_user");
