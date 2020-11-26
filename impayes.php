@@ -16,7 +16,7 @@ if ($_SESSION["permission"] == "2" && !(isset($_GET["req"]))) { // owner mais pa
     header("location: product_owner.php");
 }
 
-
+include('includes/fonctions.php');
 ?>
 
 <head>
