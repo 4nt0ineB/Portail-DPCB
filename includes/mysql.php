@@ -1,9 +1,9 @@
 <?php
 
-define('HOST', '***');
+define('HOST', '51.210.15.73');
 define('DB_NAME', 'portail_dpcb');
-define('USER', '***');
-define('PASS', '***');
+define('USER', 'uge4');
+define('PASS', 'scrum77');
 
 
 try {
