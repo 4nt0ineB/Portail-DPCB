@@ -36,7 +36,7 @@ include('includes/fonctions.php');
           <div class="row">
             <div class="col">
               <div class="skills portfolio-info-card">
-                <h2>Statistiques sous forme de graphiques</h2>
+                <h2>Statistiques</h2>
                 <div class="row">
                   <div class="skills portfolio-info-card" style="width: 100%; margin-bottom: 15px; padding: 25px">
                     <p class="text-uppercase text-left text-dark" style="
@@ -46,7 +46,7 @@ include('includes/fonctions.php');
                           width: 100%;
                           float: left;
                         ">
-                      <span style="text-decoration: underline">CRItère DE SéLECTION</span>
+                      <span style="text-decoration: underline">CRITèRES DE SéLECTION</span>
                     </p>
                     <div class="table-responsive">
                       <table class="table">
@@ -78,7 +78,6 @@ include('includes/fonctions.php');
 
                             $aresult = $db->query($query);
                             ?>
-
 
                             <form method="post">
                               <td>
@@ -113,7 +112,9 @@ include('includes/fonctions.php');
                           float: right;
                           border-style: none;
                         ">
+
                       <div class="btn-group" role="group" style="border-width: 0px; border-style: none">
+                        <!--
                         <button class="btn btn-primary" type="button" style="
                               color: rgb(0, 0, 0);
                               background: rgb(255, 255, 255);
@@ -141,15 +142,13 @@ include('includes/fonctions.php');
                             ">
                           PDF
                         </button>
+                          -->
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col">
-
-
-
 
                     <script type="text/javascript">
                       google.charts.load('current', {
@@ -163,13 +162,13 @@ include('includes/fonctions.php');
                           ['motif', 'compteur'],
                           <?php
                           while ($row = $aresult->fetch()) {
-                            echo "['" . strtoupper($row["libelle"]) . "', " . $row["compteur"] . "],";
+                            echo "['" . strtolower($row["libelle"]) . "', " . $row["compteur"] . "],";
                           }
                           ?>
                         ]);
 
                         var options = {
-                          title: 'Statistiques motifs d\'impayés'
+                          title: 'Répartition des motifs d\'impayés'
                         };
 
                         var chart = new google.visualization.PieChart(document.getElementById('piechart'));
