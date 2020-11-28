@@ -168,13 +168,13 @@ if ($_SESSION["permission"] == "2" && !(isset($_GET["req"]))) { // owner mais pa
                                         while ($r = $resultat->fetch()) {
                                             echo '<tr>
                                                       <td>' . $r['siren'] . '</td>
-                                                      <td>' . $r['date_vente'] . '</td>
-                                                      <td>' . $r['date_remise'] . '</td>
+                                                      <td>' . date('d/m/Y', strtotime($r['date_vente'])) . '</td>
+                                                      <td>' . date('d/m/Y', strtotime($r['date_remise'])) . '</td>
                                                       <td>' . $r['num_carte'] . '</td>
                                                       <td>' . $r['reseau'] . '</td>
                                                       <td>' . $r['num_dossier'] . '</td>
                                                       <td>' . $r['libelle_devise'] . '</td>
-                                                      <td>' . number_format($r['montant_impaye'], 2, '.', ' ') . '</td>
+                                                      <td>' . number_format(abs($r['montant_impaye']), 2, ',', ' ') . '</td>
                                                       <td>' . $r['libelle'] . '</td>
                                                       </tr>';
                                         }
