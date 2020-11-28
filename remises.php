@@ -147,7 +147,7 @@ include('includes/fonctions.php')
                                                             <td>' . date_format(date_create($r['date_traitement']), "d/m/yy") . '</td>
                                                             <td>' . $r['nbr_transaction'] . '</td>
                                                             <td>' . $r['libelle_devise'] . '</td>
-                                                            <td>' . abs($r['montant_remise']) . '</td>
+                                                            <td>' . number_format(abs($r['montant_remise']), 2, ',', ' ') . '</td>
                                                             <td>' . $r['sens'] . '</td>
                                                             <td>
                                                             <table style="width:100%;">
@@ -173,12 +173,12 @@ include('includes/fonctions.php')
                                                         echo '
                                                               <tr style="' . $color . '">
                                                               <td>' . $t['siren'] . '</td>
-                                                              <td>' . $t['date_vente'] . '</td>
+                                                              <td>' . date('d/m/Y', strtotime($t['date_vente'])) . '</td>
                                                               <td>' . $t['num_carte'] . '</td>
                                                               <td>' . $t['reseau'] . '</td>
                                                               <td>' . $t['num_autorisation'] . '</td>
                                                               <td>' . $r['libelle_devise'] . '</td>
-                                                              <td>' . abs($t['montant_transaction']) . '</td>
+                                                              <td>' . number_format(abs($t['montant_transaction']), 2, ',', ' ') . '</td>
                                                               <td>' . $t['sens'] . '</td>
                                                               </tr>';
                                                     }
