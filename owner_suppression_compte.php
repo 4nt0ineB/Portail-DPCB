@@ -163,11 +163,17 @@ include 'includes/fonctions.php'
                                                         if (isset($_POST["subdelete"])) {
 
                                                             $id_client = $_POST["client_a_suppr"];
+                                                            $s_client = $db->query("SELECT id_client FROM REQUETE_SUPP WHERE id_client = $id_client")->rowCount();
+                                                            if ($s_client != 0) {
+                                                                $errorSuppMsg = "Vous avez déjà fait une requête de suppression pour ce client !";
+                                                            } else {
+                                                                $requete = $db->prepare("INSERT INTO REQUETE_SUPP (id_client) VALUES (:id_client)");
+                                                                $requete->bindParam(':id_client', $id_client);
+                                                                $requete->execute();
 
-                                                            $requete = $db->query($requete = "SELECT id_user FROM `CLIENT` WHERE `id_client` = $id_client")->fetch();
-                                                            $id_user = $requete["id_user"];
-                                                            $requete2 = $db->prepare("DELETE FROM USER WHERE id_user = $id_user");
-                                                            $requete2->execute();
+                                                                $successSuppMsg = "La demande de suppression du client à été envoyé avec succès.";
+                                                                echo '<meta http-equiv="refresh" content="1;URL="">';
+                                                            }
                                                         }
                                                     ?>
 
@@ -182,15 +188,15 @@ include 'includes/fonctions.php'
                                 </div>
 
                                 <?php
-                                $requete = "SELECT `id_client`,`siren`,`raison`,`username`,`password` FROM `REQUETE_SUPP` NATURAL JOIN `CLIENT` NATURAL JOIN `USER`";
+                                $requete = "SELECT `id_client`,`siren`,`raison`,`username`,`password` FROM `CLIENT` NATURAL JOIN `USER` WHERE `permission` = 1";
                                 $resultat = $db->query($requete);
 
                                 ?>
 
                                 <?php
-                                if (isset($errorMsg)) // si tableau errorMsg initialisé
+                                if (isset($errorSuppMsg)) // si tableau errorMsg initialisé
                                 {
-                                    foreach ($errorMsg as $error) {
+                                    foreach ($errorSuppMsg as $error) {
                                 ?>
                                         <div class="alert alert-warning alert-dismissible fade show" role="alert">
                                             <strong>Oups !</strong> <?php echo $error // on affiche la variable ; 
@@ -202,11 +208,11 @@ include 'includes/fonctions.php'
                                     <?php
                                     }
                                 }
-                                if (isset($successMsg)) // si un message de succès est initialisé
+                                if (isset($successSuppMsg)) // si un message de succès est initialisé
                                 {
                                     ?>
                                     <div class="alert alert-success" role="alert">
-                                        <?php echo $successMsg; // on affiche le msg 
+                                        <?php echo $successSuppMsg; // on affiche le msg 
                                         ?>
                                     </div>
                                 <?php

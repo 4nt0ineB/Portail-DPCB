@@ -37,6 +37,9 @@ $curPageName = substr($_SERVER["SCRIPT_NAME"], strrpos($_SERVER["SCRIPT_NAME"], 
                         if ($curPageName != "admin.php") {
                             echo '<li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="admin.php">Utilisateurs</a></li>';
                         }
+                        if ($curPageName != "admin_suppression.php"){
+                            echo '<li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="admin_suppression.php">Suppression</a></li>';
+                        }
                     }
 
                     if ($_SESSION['permission'] == "1" || $permOwner) { // si l'utilisateur est un client
