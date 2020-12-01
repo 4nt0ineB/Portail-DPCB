@@ -24,7 +24,10 @@ $curPageName = substr($_SERVER["SCRIPT_NAME"], strrpos($_SERVER["SCRIPT_NAME"], 
                             echo '<li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="product_owner.php">Clients</a></li>';
                         }
                         if ($curPageName != "remises.php") {
-                            echo '<li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="remises.php?all">Remises</a></li>';
+                            echo '<li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="remises.php?all">Remises(Toutes)</a></li>';
+                        }
+                        if ($curPageName != "impayes.php") {
+                            echo '<li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="impayes.php?all">Impayés(Toutes)</a></li>';
                         }
                         if ($curPageName != "owner_suppression_compte.php") {
                             echo '<li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="owner_suppression_compte.php">Suppression</a></li>';
@@ -37,7 +40,7 @@ $curPageName = substr($_SERVER["SCRIPT_NAME"], strrpos($_SERVER["SCRIPT_NAME"], 
                         if ($curPageName != "admin.php") {
                             echo '<li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="admin.php">Utilisateurs</a></li>';
                         }
-                        if ($curPageName != "admin_suppression.php"){
+                        if ($curPageName != "admin_suppression.php") {
                             echo '<li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="admin_suppression.php">Suppression</a></li>';
                         }
                     }

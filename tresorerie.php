@@ -1,15 +1,15 @@
 <?php
 session_start();
-if (!isset($_SESSION["logged"])) { //Vérifie si une session client est en cours sinon renvoi à l'index
+if (!isset($_SESSION["logged"])) {
     header("location: index.php");
 }
-if ($_SESSION["permission"] == "1") { //
+if ($_SESSION["permission"] == "1") {
     if (isset($_GET["req"])) {
         unset($_GET["req"]);
         header("refresh:0; impayes.php");
     }
 }
-if ($_SESSION["permission"] == "2" && !(isset($_GET["req"]))) { // owner mais pas de get req (id client) -> retour owner
+if ($_SESSION["permission"] == "2" && !(isset($_GET["req"]))) {
     header("location: product_owner.php");
 }
 
@@ -50,8 +50,10 @@ include('includes/fonctions.php');
         });
         google.charts.setOnLoadCallback(drawChart);
 
-        google.charts.load('current', {packages: ['corechart', 'line']});
-		google.charts.setOnLoadCallback(drawBasic);
+        google.charts.load('current', {
+            packages: ['corechart', 'line']
+        });
+        google.charts.setOnLoadCallback(drawBasic);
 
         <?php
         $idu = (isset($_GET["req"])) ? $_GET["req"] : $_SESSION["logged"];
@@ -83,68 +85,67 @@ include('includes/fonctions.php');
             drawChart();
         });
 
-function drawBasic() {
+        function drawBasic() {
 
-      var data = new google.visualization.DataTable();
-
-      
+            var data = new google.visualization.DataTable();
 
 
-      data.addColumn('date', 'Année');
-      data.addColumn('number', 'Trésorerie');
 
-      data.addRows([
-<?php 
 
-$solde_evolution = $db->query("SELECT SUM(montant_remise) solde,YEAR(`date_traitement`)annee FROM REMISE r,IMPAYE i WHERE id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu) AND r.id_remise = i.id_remise AND r.id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu) GROUP BY YEAR(`date_traitement`)");
-while ($donnee = $solde_evolution->fetch()) {
-	$dateGraph = 'new Date('.$donnee['annee'].',01,01)'; 
+            data.addColumn('date', 'Année');
+            data.addColumn('number', 'Trésorerie');
+
+            data.addRows([
+                <?php
+
+                $solde_evolution = $db->query("SELECT SUM(montant_remise) solde,YEAR(`date_traitement`)annee FROM REMISE r,IMPAYE i WHERE id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu) AND r.id_remise = i.id_remise AND r.id_client = (SELECT id_client FROM USER NATURAL JOIN CLIENT WHERE id_user = $idu) GROUP BY YEAR(`date_traitement`)");
+                while ($donnee = $solde_evolution->fetch()) {
+                    $dateGraph = 'new Date(' . $donnee['annee'] . ',01,01)';
                     echo "[" . $dateGraph . "," . $donnee['solde'] . "],";
                 } ?>
-      ]);
+            ]);
 
-      var options = {
-      	title: 'Évolution de la trésorerie ces 4 dernières années',
-        hAxis: {
-          title: 'Années'
-        },
-        vAxis: {
-          title: 'Trésorerie'
-        }
-      };
+            var options = {
+                title: 'Évolution de la trésorerie ces 4 dernières années',
+                hAxis: {
+                    title: 'Années'
+                },
+                vAxis: {
+                    title: 'Trésorerie'
+                }
+            };
 
-      var chart = new google.visualization.LineChart(document.getElementById('evolution'));
-      var btnSave2 = document.getElementById('save-pdf-chart2');
-      
-            google.visualization.events.addListener(chart, 'ready', function () {
+            var chart = new google.visualization.LineChart(document.getElementById('evolution'));
+            var btnSave2 = document.getElementById('save-pdf-chart2');
+
+            google.visualization.events.addListener(chart, 'ready', function() {
                 btnSave2.disabled = false;
             });
 
-            btnSave2.addEventListener('click', function () {
-                          var divHeight = 400;
-                          var divWidth = 730;
-                          var ratio = divHeight / divWidth;
-                          html2canvas(document.getElementById("chart_container"), {
-                              height: divHeight,
-                              width: divWidth,
-                              onrendered: function(canvas) {
-                                    var image = canvas.toDataURL("image/jpeg");
-                                    var doc = new jsPDF(); // using defaults: orientation=portrait, unit=mm, size=A4
-                                    var width = doc.internal.pageSize.width;    
-                                    var height = doc.internal.pageSize.height;
-                                    height = ratio * width;
-                                    doc.addImage(chart.getImageURI(), 'JPEG', 0, 0, width-20, height-10);
-                                    doc.save('Graphique_Evolution.pdf'); //Download the rendered PDF.
-                              }
-                          });
-                        }, false);
+            btnSave2.addEventListener('click', function() {
+                var divHeight = 400;
+                var divWidth = 730;
+                var ratio = divHeight / divWidth;
+                html2canvas(document.getElementById("chart_container"), {
+                    height: divHeight,
+                    width: divWidth,
+                    onrendered: function(canvas) {
+                        var image = canvas.toDataURL("image/jpeg");
+                        var doc = new jsPDF(); // using defaults: orientation=portrait, unit=mm, size=A4
+                        var width = doc.internal.pageSize.width;
+                        var height = doc.internal.pageSize.height;
+                        height = ratio * width;
+                        doc.addImage(chart.getImageURI(), 'JPEG', 0, 0, width - 20, height - 10);
+                        doc.save('Graphique_Evolution.pdf'); //Download the rendered PDF.
+                    }
+                });
+            }, false);
 
-      chart.draw(data, options);
-    }
-    $(window).resize(function() {
+            chart.draw(data, options);
+        }
+        $(window).resize(function() {
             drawBasic();
         });
-
     </script>
     <style>
         .chart {
@@ -223,23 +224,23 @@ while ($donnee = $solde_evolution->fetch()) {
                         </div>
                     </div>
                     <div id="chart_container">
-                    <div class="row">
-                        <div class="clearfix"></div>
-                        <div class="col-md-12">
-                            <div class="skills portfolio-info-card">
-                                <div id="columnchart_values" class="chart"></div>
+                        <div class="row">
+                            <div class="clearfix"></div>
+                            <div class="col-md-12">
+                                <div class="skills portfolio-info-card">
+                                    <div id="columnchart_values" class="chart"></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="clearfix"></div>
-                        <div class="col-md-12">
-                            <div class="skills portfolio-info-card">
-                                <input id="save-pdf-chart2" type="button" value="Télécharger en PDF" disabled />
-                                <div id="evolution" class="chart"></div>
+                        <div class="row">
+                            <div class="clearfix"></div>
+                            <div class="col-md-12">
+                                <div class="skills portfolio-info-card">
+                                    <input id="save-pdf-chart2" type="button" value="Télécharger en PDF" disabled />
+                                    <div id="evolution" class="chart"></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     </div>
                 </div>
 
