@@ -21,6 +21,7 @@ include('includes/fonctions.php');
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 
@@ -114,42 +115,14 @@ include('includes/fonctions.php');
                         ">
 
                       <div class="btn-group" role="group" style="border-width: 0px; border-style: none">
-                        <!--
-                        <button class="btn btn-primary" type="button" style="
-                              color: rgb(0, 0, 0);
-                              background: rgb(255, 255, 255);
-                              border: 1px solid rgb(0, 0, 0);
-                              border-bottom-left-radius: 10px;
-                              border-top-left-radius: 10px;
-                              box-shadow: 0px 0px 2px;
-                            ">
-                          XLS
-                        </button>
-                        <button class="btn btn-primary" type="button" style="
-                              background: rgb(255, 255, 255);
-                              color: rgb(0, 0, 0);
-                              border-style: solid;
-                              border-color: rgb(0, 0, 0);
-                              box-shadow: 0px 0px 3px;
-                            ">
-                          CSV</button><button class="btn btn-primary" type="button" style="
-                              background: rgb(255, 255, 255);
-                              color: rgb(0, 0, 0);
-                              border-color: rgb(0, 0, 0);
-                              border-top-right-radius: 10px;
-                              border-bottom-right-radius: 10px;
-                              box-shadow: 0px 0px 3px;
-                            ">
-                          PDF
-                        </button>
-                          -->
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col">
-
+                  <div id="chart_container">
+                  <input id="save-pdf" type="button" value="Télécharger en PDF" disabled />
                     <script type="text/javascript">
                       google.charts.load('current', {
                         'packages': ['corechart']
@@ -172,12 +145,37 @@ include('includes/fonctions.php');
                         };
 
                         var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                        var btnSave = document.getElementById('save-pdf');
+
+                        google.visualization.events.addListener(chart, 'ready', function () {
+                          btnSave.disabled = false;
+                        });
+
+                        btnSave.addEventListener('click', function () {
+                          var divHeight = $('#chart_container').height();
+                          var divWidth = $('#chart_container').width();
+                          var ratio = divHeight / divWidth;
+                          html2canvas(document.getElementById("chart_container"), {
+                              height: divHeight,
+                              width: divWidth,
+                              onrendered: function(canvas) {
+                                    var image = canvas.toDataURL("image/jpeg");
+                                    var doc = new jsPDF(); // using defaults: orientation=portrait, unit=mm, size=A4
+                                    var width = doc.internal.pageSize.width;    
+                                    var height = doc.internal.pageSize.height;
+                                    height = ratio * width;
+                                    doc.addImage(chart.getImageURI(), 'JPEG', 0, 0, width-20, height-10);
+                                    doc.save('Stat_Libelle.pdf'); //Download the rendered PDF.
+                              }
+                          });
+                        }, false);
 
                         chart.draw(data, options);
                       }
                     </script>
 
                     <div id="piechart" style="width: 100%; height: 400px;"></div>
+                    </div>
                   </div>
                 </div>
               </div>
