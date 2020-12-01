@@ -23,6 +23,9 @@ $curPageName = substr($_SERVER["SCRIPT_NAME"], strrpos($_SERVER["SCRIPT_NAME"], 
                         if ($curPageName != "product_owner.php") {
                             echo '<li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="product_owner.php">Clients</a></li>';
                         }
+                        if ($curPageName != "remises.php") {
+                            echo '<li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="remises.php?all">Remises</a></li>';
+                        }
 
                         if ($curPageName != "owner_suppression_compte.php") {
                             echo '<li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="owner_suppression_compte.php">Suppression</a></li>';
