@@ -34,6 +34,8 @@ include('includes/fonctions.php');
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="http://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/pikaday.min.js"></script>
@@ -41,7 +43,7 @@ include('includes/fonctions.php');
 
     <!--Histogramme du solde total et des impayés en fonction des années-->
 
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
     <script type="text/javascript">
         google.charts.load('current', {
             'packages': ['bar']
@@ -112,6 +114,30 @@ while ($donnee = $solde_evolution->fetch()) {
       };
 
       var chart = new google.visualization.LineChart(document.getElementById('evolution'));
+      var btnSave2 = document.getElementById('save-pdf-chart2');
+      
+            google.visualization.events.addListener(chart, 'ready', function () {
+                btnSave2.disabled = false;
+            });
+
+            btnSave2.addEventListener('click', function () {
+                          var divHeight = 400;
+                          var divWidth = 730;
+                          var ratio = divHeight / divWidth;
+                          html2canvas(document.getElementById("chart_container"), {
+                              height: divHeight,
+                              width: divWidth,
+                              onrendered: function(canvas) {
+                                    var image = canvas.toDataURL("image/jpeg");
+                                    var doc = new jsPDF(); // using defaults: orientation=portrait, unit=mm, size=A4
+                                    var width = doc.internal.pageSize.width;    
+                                    var height = doc.internal.pageSize.height;
+                                    height = ratio * width;
+                                    doc.addImage(chart.getImageURI(), 'JPEG', 0, 0, width-20, height-10);
+                                    doc.save('Graphique_Evolution.pdf'); //Download the rendered PDF.
+                              }
+                          });
+                        }, false);
 
       chart.draw(data, options);
     }
@@ -196,8 +222,8 @@ while ($donnee = $solde_evolution->fetch()) {
                             </div>
                         </div>
                     </div>
+                    <div id="chart_container">
                     <div class="row">
-
                         <div class="clearfix"></div>
                         <div class="col-md-12">
                             <div class="skills portfolio-info-card">
@@ -209,9 +235,11 @@ while ($donnee = $solde_evolution->fetch()) {
                         <div class="clearfix"></div>
                         <div class="col-md-12">
                             <div class="skills portfolio-info-card">
+                                <input id="save-pdf-chart2" type="button" value="Télécharger en PDF" disabled />
                                 <div id="evolution" class="chart"></div>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
 
