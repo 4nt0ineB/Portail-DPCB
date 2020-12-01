@@ -9,7 +9,7 @@ if ($_SESSION["permission"] == "1") { //
         header("refresh:0; impayes.php");
     }
 }
-if ($_SESSION["permission"] == "2" && !(isset($_GET["req"]))) { // owner mais pas de get req (id client) -> retour owner
+if ($_SESSION["permission"] == "2" && !((isset($_GET["req"])) || (isset($_GET["all"])))) { // owner mais pas de get req (id client) -> retour owner
     header("location: product_owner.php");
 }
 require_once("includes/mysql.php");
@@ -88,11 +88,16 @@ include('includes/fonctions.php')
                                             </thead>
                                             <tbody>
                                                 <?php
-
-                                                $id = (isset($_GET["req"])) ? secure_sqlformat($_GET["req"]) : $_SESSION["logged"];
-                                                if (empty($id) || !is_numeric($id)) {
-                                                    header("location: index.php");
+                                                if (($_SESSION["permission"] == "2" && isset($_GET["all"]))) {;
+                                                } else {
+                                                    $id = (isset($_GET["req"])) ? secure_sqlformat($_GET["req"]) : $_SESSION["logged"];
                                                 }
+                                                if (!($_SESSION["permission"] == "2" && isset($_GET["all"]))) {
+                                                    if (empty($id) || !is_numeric($id)) {
+                                                        header("location: index.php");
+                                                    }
+                                                }
+
                                                 $requete = "SELECT * FROM REMISE,DEVISE ";
 
                                                 if (isset($_POST['siren'])) $siren = secure_sqlformat($_POST['siren']);
@@ -101,9 +106,13 @@ include('includes/fonctions.php')
                                                 if (isset($_POST['datefin']))  $datefin = $_POST['datefin'];
 
                                                 if ((!empty($siren)) || (!empty($raison)) || (!empty($datedebut)) || (!empty($datefin))) {
-                                                    $requete .= "WHERE";
+                                                    $requete .= " WHERE";
                                                 } else {
-                                                    $requete .= " WHERE id_client=$id AND REMISE.id_devise = DEVISE.id_devise";
+                                                    if (($_SESSION["permission"] == "2" && isset($_GET["all"]))) {
+                                                        $requete .= " WHERE REMISE.id_devise = DEVISE.id_devise";
+                                                    } else {
+                                                        $requete .= " WHERE id_client=$id AND REMISE.id_devise = DEVISE.id_devise";
+                                                    }
                                                 } // si un des champs du formulaire est remplis on met un WHERE
 
                                                 if (!empty($siren)) {
@@ -124,7 +133,12 @@ include('includes/fonctions.php')
                                                     $requete .= " REMISE.date_traitement <= '$datefin' AND REMISE.date_traitement >= '$datedebut'";
                                                 }
 
-                                                $requete .= " AND id_client=$id AND REMISE.id_devise = DEVISE.id_devise";
+                                                if (($_SESSION["permission"] == "2" && isset($_GET["all"]))) {
+                                                    $requete .= " AND REMISE.id_devise = DEVISE.id_devise LIMIT 500";
+                                                } else {
+                                                    $requete .= " AND id_client=$id AND REMISE.id_devise = DEVISE.id_devise";
+                                                }
+
 
                                                 $resultat = $db->query($requete);
 
