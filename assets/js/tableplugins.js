@@ -1,4 +1,10 @@
 $(document).ready(function () {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    
+    today = mm + '/' + dd + '/' + yyyy;
     var collapsedGroups = {};
     var table = $('#datatable').DataTable({
         /* scrollY: 500,
@@ -11,10 +17,11 @@ $(document).ready(function () {
             }
         }, , {
                 extend: 'pdfHtml5',
+                title: 'Export PDF du '+today,
                 exportOptions: {
                     columns: [0, 1, 2, 3, 4, 5, 6, 7]
                 }
-            }, , 'colvis'],
+            }, , 'colvis'  ],
         "language": { // traduction en français de la table
             buttons: {
                 "copy": "Copier",
