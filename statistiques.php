@@ -2,7 +2,7 @@
 
 
 session_start();
-if (!isset($_SESSION["logged"]) || $_SESSION["permission"] != "3") header("location: index.php"); //Vérifie si une session est en cours sinon renvoi à l'index
+if (!isset($_SESSION["logged"]) || $_SESSION["permission"] != "2") header("location: index.php"); //Vérifie si une session est en cours sinon renvoi à l'index
 require_once("includes/mysql.php");
 include('includes/fonctions.php');
 
@@ -122,60 +122,60 @@ include('includes/fonctions.php');
                 </div>
                 <div class="row">
                   <div class="col">
-                  <div id="chart_container">
-                  <input id="save-pdf" type="button" value="Télécharger en PDF" disabled />
-                    <script type="text/javascript">
-                      google.charts.load('current', {
-                        'packages': ['corechart']
-                      });
-                      google.charts.setOnLoadCallback(drawChart);
-
-                      function drawChart() {
-
-                        var data = google.visualization.arrayToDataTable([
-                          ['motif', 'compteur'],
-                          <?php
-                          while ($row = $aresult->fetch()) {
-                            echo "['" . strtolower($row["libelle"]) . "', " . $row["compteur"] . "],";
-                          }
-                          ?>
-                        ]);
-
-                        var options = {
-                          title: 'Répartition des motifs d\'impayés'
-                        };
-
-                        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-                        var btnSave = document.getElementById('save-pdf');
-
-                        google.visualization.events.addListener(chart, 'ready', function () {
-                          btnSave.disabled = false;
+                    <div id="chart_container">
+                      <input id="save-pdf" type="button" value="Télécharger en PDF" disabled />
+                      <script type="text/javascript">
+                        google.charts.load('current', {
+                          'packages': ['corechart']
                         });
+                        google.charts.setOnLoadCallback(drawChart);
 
-                        btnSave.addEventListener('click', function () {
-                          var divHeight = $('#chart_container').height();
-                          var divWidth = $('#chart_container').width();
-                          var ratio = divHeight / divWidth;
-                          html2canvas(document.getElementById("chart_container"), {
+                        function drawChart() {
+
+                          var data = google.visualization.arrayToDataTable([
+                            ['motif', 'compteur'],
+                            <?php
+                            while ($row = $aresult->fetch()) {
+                              echo "['" . strtolower($row["libelle"]) . "', " . $row["compteur"] . "],";
+                            }
+                            ?>
+                          ]);
+
+                          var options = {
+                            title: 'Répartition des motifs d\'impayés'
+                          };
+
+                          var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                          var btnSave = document.getElementById('save-pdf');
+
+                          google.visualization.events.addListener(chart, 'ready', function() {
+                            btnSave.disabled = false;
+                          });
+
+                          btnSave.addEventListener('click', function() {
+                            var divHeight = $('#chart_container').height();
+                            var divWidth = $('#chart_container').width();
+                            var ratio = divHeight / divWidth;
+                            html2canvas(document.getElementById("chart_container"), {
                               height: divHeight,
                               width: divWidth,
                               onrendered: function(canvas) {
-                                    var image = canvas.toDataURL("image/jpeg");
-                                    var doc = new jsPDF(); // using defaults: orientation=portrait, unit=mm, size=A4
-                                    var width = doc.internal.pageSize.width;    
-                                    var height = doc.internal.pageSize.height;
-                                    height = ratio * width;
-                                    doc.addImage(chart.getImageURI(), 'JPEG', 0, 0, width-20, height-10);
-                                    doc.save('Stat_Libelle.pdf'); //Download the rendered PDF.
+                                var image = canvas.toDataURL("image/jpeg");
+                                var doc = new jsPDF(); // using defaults: orientation=portrait, unit=mm, size=A4
+                                var width = doc.internal.pageSize.width;
+                                var height = doc.internal.pageSize.height;
+                                height = ratio * width;
+                                doc.addImage(chart.getImageURI(), 'JPEG', 0, 0, width - 20, height - 10);
+                                doc.save('Stat_Libelle.pdf'); //Download the rendered PDF.
                               }
-                          });
-                        }, false);
+                            });
+                          }, false);
 
-                        chart.draw(data, options);
-                      }
-                    </script>
+                          chart.draw(data, options);
+                        }
+                      </script>
 
-                    <div id="piechart" style="width: 100%; height: 400px;"></div>
+                      <div id="piechart" style="width: 100%; height: 400px;"></div>
                     </div>
                   </div>
                 </div>

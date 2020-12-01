@@ -26,15 +26,14 @@ $curPageName = substr($_SERVER["SCRIPT_NAME"], strrpos($_SERVER["SCRIPT_NAME"], 
                         if ($curPageName != "remises.php") {
                             echo '<li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="remises.php?all">Remises</a></li>';
                         }
-
                         if ($curPageName != "owner_suppression_compte.php") {
                             echo '<li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="owner_suppression_compte.php">Suppression</a></li>';
                         }
-                    }
-                    if ($_SESSION['permission'] == "3") {
-                        if ($curPageName == "admin.php") {
+                        if ($curPageName != "statistiques.php") {
                             echo '<li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="statistiques.php">Stats</a></li>';
                         }
+                    }
+                    if ($_SESSION['permission'] == "3") {
                         if ($curPageName != "admin.php") {
                             echo '<li class="nav-item"><a class="nav-link" data-bs-hover-animate="pulse" href="admin.php">Utilisateurs</a></li>';
                         }
