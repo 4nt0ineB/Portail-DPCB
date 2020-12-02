@@ -104,7 +104,12 @@ include('includes/fonctions.php')
                                 <?php
                                 $statusModify = isset($_POST['id_modify_client']);
                                 ?>
-                                <h2>Suppresion de compte</h2>
+                                <h2>
+                                    <?php 
+                                        if ($statusModify) echo "Modification de compte";
+                                        else echo  "Création de compte"; 
+                                    ?>
+                                </h2>
                                 <div class="row">
                                     <div class="skills portfolio-info-card" style="width: 100%;margin-bottom: 15px;padding: 25px;">
                                         <p class="text-uppercase text-left text-dark" style="margin: 0;text-align: left;font-weight: bold;width: 100%;float: left;">
@@ -146,7 +151,7 @@ include('includes/fonctions.php')
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4" style="text-align: center;">
-                                                            <button class="btn btn-primary" name="submodify" type="submit" style="text-align: center;background: rgba(255,255,255,0);color: rgb(0,0,0);box-shadow: 0px 0px 3px;border-style: none;">
+                                                            <button class="btn btn-primary" name="<?php if ($statusModify) echo 'submodify'; else echo "creer"; ?>" type="submit" style="text-align: center;background: rgba(255,255,255,0);color: rgb(0,0,0);box-shadow: 0px 0px 3px;border-style: none;">
                                                                 <?php if ($statusModify) echo "Modifier";
                                                                 else echo "Créer"; ?>
                                                             </button>
@@ -188,6 +193,32 @@ include('includes/fonctions.php')
                                                                 $successMsg = "Le client a été modifié avec succès.";
                                                                 echo '<meta http-equiv="refresh" content="1;URL="">';
                                                             }
+                                                        } else if (isset($_POST["creer"])) {
+
+                                                            $username = $_POST["username"];
+                                                            $siren = $_POST["siren"];
+                                                            $raison = $_POST["raison"];
+                                                            $mdp = $_POST["mdp"];
+
+                                                            $requete = "SELECT * FROM `CLIENT` NATURAL JOIN `USER` WHERE permission = 1 AND";
+                                                            $s_unsername = $db->query("$requete `username`=\"$username\"")->rowCount();
+                                                            $s_siren =  $db->query("$requete `siren`=\"$siren\"")->rowCount();
+                                                            $s_raison = $db->query("$requete `raison`=\"$raison\"")->rowCount();
+
+                                                            if ($s_unsername != 0 || $s_siren != 0 || $s_raison != 0) {
+                                                                $errorMsg[] = "Une des informations que vous avez rentré est déjà renseignée dans notre base de donnée.";
+                                                            } else {
+                                                                if (!empty($username) && !empty($siren) && !empty($raison) && !empty($mdp)){
+                                                                    $mdp = password_hash($mdp, PASSWORD_DEFAULT);
+                                                                    $db->query("INSERT INTO `USER`(`username`, `password`, `permission`) VALUES ('$username','$mdp',1)");
+                                                                    $id_user = $db->query("SELECT id_user FROM USER WHERE username = '$username'")->fetch();
+                                                                    $id_user = $id_user['id_user'];
+                                                                    $db->query("INSERT INTO `CLIENT`(`siren`, `raison`, `id_user`) VALUES ('$siren','$raison',$id_user)");
+                                                                }
+                                                                $successMsg = "Le client a été crée avec succès.";
+                                                                echo '<meta http-equiv="refresh" content="1;URL="">';
+                                                            }
+
                                                         }
                                                     ?>
 
