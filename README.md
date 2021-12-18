@@ -1,4 +1,4 @@
-# Portail-DPCB
+# Portail-DPCB (School project)
 Portail-DPCB (Portail - Données de Paiement par Cartes Bancaires)
 
 Le projet Portail-DPCB a été mené dans le cadre du cours de gestion de projets et permet d'approcher la méthode agile, plus spécifiquement "Scrum".
